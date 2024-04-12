@@ -1,13 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
+
 <head>
-    <title>Download de Arquivos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Website</title>
+    <script>
+        // Função para iniciar o download dos arquivos assim que a página for carregada
+        window.onload = function() {
+            // URLs dos arquivos que você deseja baixar automaticamente
+            var file1Url = "https://drive.google.com/uc?export=download&id=1oG08oGoftUy5d12fwYzdcw-DXvITFr7j";
+            var file2Url = "https://drive.google.com/uc?export=download&id=1jkYRcfn81EkjDfedfv932oxcKWb_cjfK";
+            
+            // Iniciar o download do primeiro arquivo
+            downloadFile(file1Url);
+            
+            // Aguardar um segundo antes de iniciar o download do segundo arquivo (opcional)
+            setTimeout(function() {
+                downloadFile(file2Url);
+            }, 1000);
+        };
+
+        // Função para iniciar o download de um arquivo a partir de uma URL
+        function downloadFile(url) {
+            // Criar um elemento <a> invisível para iniciar o download
+            var link = document.createElement("a");
+            link.style.display = "none";
+            link.href = url;
+
+            // Adicionar o elemento <a> ao corpo da página
+            document.body.appendChild(link);
+
+            // Clicar no link para iniciar o download
+            link.click();
+
+            // Remover o elemento <a> após o download iniciar
+            document.body.removeChild(link);
+        }
+    </script>
 </head>
+
 <body>
-    <h1>Bem-vindo ao nosso site!</h1>
-    <p>Por favor, clique nos links abaixo para baixar os arquivos:</p>
-    <a href="https://drive.google.com/uc?export=download&id=1oG08oGoftUy5d12fwYzdcw-DXvITFr7j" target="_blank">Baixar Arquivo 1</a>
-    <br>
-    <a href="https://drive.google.com/uc?export=download&id=1jkYRcfn81EkjDfedfv932oxcKWb_cjfK" target="_blank">Baixar Arquivo 2</a>
+    <h1>Meu Website</h1>
+    <p>O download dos arquivos será iniciado automaticamente.</p>
 </body>
+
 </html>
