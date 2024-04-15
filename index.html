@@ -18,47 +18,26 @@
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('renderCanvas');
-            const engine = new BABYLON.Engine(canvas, true);
+        var createScene = async function () {
 
-            // Criar uma cena Babylon.js
-            const scene = new BABYLON.Scene(engine);
+        var scene = new BABYLON.Scene(engine);
+        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+        camera.setTarget(BABYLON.Vector3.Zero());
+        camera.attachControl(canvas, true);
+        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+        light.intensity = 0.7;
+        var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
+        sphere.position.y = 2;
+        sphere.position.z = 5;
 
-            // Verificar se o navegador suporta WebXR
-            if (!BABYLON.WebXRExperienceHelper.IsAvailable(scene)) {
-                console.error('WebXR não é suportado neste navegador.');
-                return;
+        const xr = await scene.createDefaultXRExperienceAsync({
+            uiOptions: {
+                sessionMode: 'immersive-ar'
             }
-
-            // Criar uma experiência WebXR
-            const xrHelper = awaqit.scene.createDefaultXRExperienceAsync({floorMeshes: []});
-
-            // Obter a câmera da experiência WebXR
-            const camera = xrHelper.baseExperience.camera;
-            if (!camera) {
-                console.error('Não foi possível encontrar a câmera da experiência WebXR.');
-                return;
-            }
-
-            // Carregar um modelo 3D
-            BABYLON.SceneLoader.ImportMesh('', 'path/to/your/3d/model/', 'model.gltf', scene, (meshes) => {
-                // Posicionar o modelo em frente à câmera
-                meshes.forEach(mesh => {
-                    mesh.position = new BABYLON.Vector3(0, 0, -1); // Ajuste a posição conforme necessário
-                });
-            });
-
-            // Iniciar renderização da cena
-            engine.runRenderLoop(() => {
-                scene.render();
-            });
-
-            // Resposta ao redimensionamento da janela
-            window.addEventListener('resize', () => {
-                engine.resize();
-            });
         });
+
+    return scene;
+    };
     </script>
 </body>
 </html>
