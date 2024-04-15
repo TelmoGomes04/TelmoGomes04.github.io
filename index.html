@@ -169,16 +169,6 @@
                     }
                 });
 
-                xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
-                    if (xr.pointerSelection) {
-                        const pick = xr.pointerSelection.getLatestControllerPointerInfo();
-                        if (pick && pick.pickInfo && pick.pickInfo.hit) {
-                            var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {diameter:1}, scene);
-                            sphere.position = pick.pickInfo.pickedPoint;
-                        }
-                    }
-                });
-
                 return scene;
             };
 
