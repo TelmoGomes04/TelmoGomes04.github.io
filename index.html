@@ -1,43 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Example with Babylon.js</title>
+    <title>Babylon.js AR Example</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
     <style>
-        canvas {
+        html, body {
+            overflow: hidden;
             width: 100%;
-            height: 100vh;
-            touch-action: none;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
     <canvas id="renderCanvas"></canvas>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var canvas = document.getElementById('renderCanvas');
+            var engine = new BABYLON.Engine(canvas, true);
+
+            var createScene = async function () {
+                var scene = new BABYLON.Scene(engine);
+                var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+
+                const xr = await scene.createDefaultXRExperienceAsync({
+                    uiOptions: {
+                        sessionMode: 'immersive-ar'
+                    }
+                });
+
+                xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
+                    if (xr.pointerSelection) {
+                        const pick = xr.pointerSelection.getLatestControllerPointerInfo();
+                        if (pick && pick.pickInfo && pick.pickInfo.hit) {
+                            var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {diameter:1}, scene);
+                            sphere.position = pick.pickInfo.pickedPoint;
+                        }
+                    }
+                });
+
+                return scene;
+            };
+
+            var scene = createScene();
+
+            engine.runRenderLoop(function () {
+                if (scene) {
+                    scene.render();
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                engine.resize();
+            });
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+    <title>Babylon.js AR Example</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
     <script>
-        var createScene = async function () {
+        window.addEventListener('DOMContentLoaded', function () {
+            var canvas = document.getElementById('renderCanvas');
+            var engine = new BABYLON.Engine(canvas, true);
 
-        var scene = new BABYLON.Scene(engine);
-        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
-        camera.setTarget(BABYLON.Vector3.Zero());
-        camera.attachControl(canvas, true);
-        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-        light.intensity = 0.7;
-        var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
-        sphere.position.y = 2;
-        sphere.position.z = 5;
+            var createScene = async function () {
+                var scene = new BABYLON.Scene(engine);
+                var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
 
-        const xr = await scene.createDefaultXRExperienceAsync({
-            uiOptions: {
-                sessionMode: 'immersive-ar'
-            }
+                const xr = await scene.createDefaultXRExperienceAsync({
+                    uiOptions: {
+                        sessionMode: 'immersive-ar'
+                    }
+                });
+
+                xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
+                    if (xr.pointerSelection) {
+                        const pick = xr.pointerSelection.getLatestControllerPointerInfo();
+                        if (pick && pick.pickInfo && pick.pickInfo.hit) {
+                            var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {diameter:1}, scene);
+                            sphere.position = pick.pickInfo.pickedPoint;
+                        }
+                    }
+                });
+
+                return scene;
+            };
+
+            var scene = createScene();
+
+            engine.runRenderLoop(function () {
+                if (scene) {
+                    scene.render();
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                engine.resize();
+            });
         });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+    <title>Babylon.js AR Example</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
-    return scene;
-    };
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var canvas = document.getElementById('renderCanvas');
+            var engine = new BABYLON.Engine(canvas, true);
+
+            var createScene = async function () {
+                var scene = new BABYLON.Scene(engine);
+                var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+
+                const xr = await scene.createDefaultXRExperienceAsync({
+                    uiOptions: {
+                        sessionMode: 'immersive-ar'
+                    }
+                });
+
+                xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
+                    if (xr.pointerSelection) {
+                        const pick = xr.pointerSelection.getLatestControllerPointerInfo();
+                        if (pick && pick.pickInfo && pick.pickInfo.hit) {
+                            var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {diameter:1}, scene);
+                            sphere.position = pick.pickInfo.pickedPoint;
+                        }
+                    }
+                });
+
+                return scene;
+            };
+
+            var scene = createScene();
+
+            engine.runRenderLoop(function () {
+                if (scene) {
+                    scene.render();
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                engine.resize();
+            });
+        });
     </script>
 </body>
 </html>
