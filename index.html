@@ -25,8 +25,21 @@
             // Criar uma cena Babylon.js
             const scene = new BABYLON.Scene(engine);
 
-            // Criar uma câmera para realidade aumentada
-            const camera = new BABYLON.WebXRDefaultExperience(scene).baseExperience.camera;
+            // Verificar se o navegador suporta WebXR
+            if (!BABYLON.WebXRExperienceHelper.IsAvailable(scene)) {
+                console.error('WebXR não é suportado neste navegador.');
+                return;
+            }
+
+            // Criar uma experiência WebXR
+            const xrHelper = awaqit.scene.createDefaultXRExperienceAsync({floorMeshes: []});
+
+            // Obter a câmera da experiência WebXR
+            const camera = xrHelper.baseExperience.camera;
+            if (!camera) {
+                console.error('Não foi possível encontrar a câmera da experiência WebXR.');
+                return;
+            }
 
             // Carregar um modelo 3D
             BABYLON.SceneLoader.ImportMesh('', 'path/to/your/3d/model/', 'model.gltf', scene, (meshes) => {
