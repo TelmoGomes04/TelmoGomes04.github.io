@@ -8,23 +8,25 @@
     <p>uma bola</p>
     <canvas id="renderCanvas"></canvas>
     <script>
-        //scene.getEngine().switchFullscreen(true);
-        
-        var createScene = async function () {
-        var scene = new BABYLON.Scene(engine);
-        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
-        camera.setTarget(BABYLON.Vector3.Zero());
-        camera.attachControl(canvas, true);
-        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-        light.intensity = 0.7;
-        var sphere = BABYLON.MeshBuilder.CreateSphere("sphere1", { segments: 16, diameter: 2 }, scene);
-        sphere.position.y = 2;
-        sphere.position.z = 5;
-        const xr = await scene.createDefaultXRExperienceAsync({
-        // pedir uma sessão ar
-        uiOptions: { sessionMode: "immersive-ar" },
-    });
-    return scene;
+    var createScene = async function () {
+    var scene = new BABYLON.Scene(engine);
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.attachControl(canvas, true);
+    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+    light.intensity = 0.7;
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere1", { segments: 16, diameter: 2 }, scene);
+    sphere.position.y = 2;
+    sphere.position.z = 5;
+
+    const xr = await scene.createDefaultXRExperienceAsync({
+        // ask for an ar-session
+        uiOptions: {
+      sessionMode: "immersive-ar",
+    },
+  });
+
+  return scene;
 };
     </script>
 </body>
