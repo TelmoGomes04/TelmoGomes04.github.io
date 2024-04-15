@@ -23,51 +23,46 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        window.addEventListener('DOMContentLoaded', async function () {
-            var canvas = document.getElementById('renderCanvas');
-            var engine = new BABYLON.Engine(canvas, true);
+         window.addEventListener('DOMContentLoaded', function () {
+        var canvas = document.getElementById('renderCanvas');
+        var engine = new BABYLON.Engine(canvas, true);
+        var xr ;
 
-            var createScene = async function () {
-                var scene = new BABYLON.Scene(engine);
+        var createScene = async function () {
+            var scene = new BABYLON.Scene(engine);
+            var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 12, BABYLON.Vector3.Zero(), scene);
 
-                var camera = new BABYLON.FreeCamera("camera", new BABYLON.Vector3(0, 5, -10), scene);
-
-                // Cria uma experiência WebXR com modo 'immersive-ar'
-                const xr = await scene.createDefaultXRExperienceAsync({
-                    uiOptions: {
-                        sessionMode: 'immersive-ar'
-                    }
-                });
-
-                // Adiciona um observador para o evento XRFrame
-                xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
-                    if (xr.pointerSelection) {
-                        const pick = xr.pointerSelection.getLatestControllerPointerInfo();
-                        if (pick && pick.pickInfo && pick.pickInfo.hit) {
-                            var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', { diameter: 1 }, scene);
-                            sphere.position.copyFrom(pick.pickInfo.pickedPoint);
-                        }
-                    }
-                });
-
-                return scene;
-            };
-
-            // Cria a cena e aguarda a resolução da promessa
-            var scene = await createScene();
-
-            // Inicia o loop de renderização da engine
-            engine.runRenderLoop(function () {
-                if (scene) {
-                    scene.render();
+            const xr = await scene.createDefaultXRExperienceAsync({
+                uiOptions: {
+                    sessionMode: 'immersive-ar'
                 }
             });
 
-            // Atualiza o tamanho do canvas quando a janela é redimensionada
-            window.addEventListener('resize', function () {
-                engine.resize();
+            xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
+                if (xr.pointerSelection) {
+                    const pick = xr.pointerSelection.getLatestControllerPointerInfo();
+                    if (pick && pick.pickInfo && pick.pickInfo.hit) {
+                        var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {diameter:1}, scene);
+                        sphere.position = pick.pickInfo.pickedPoint;
+                    }
+                }
             });
+
+            return scene;
+        };
+
+        var scene = createScene();
+
+        engine.runRenderLoop(function () {
+            if (scene) {
+                scene.render();
+            }
         });
+
+        window.addEventListener('resize', function () {
+            engine.resize();
+        });
+    });
     </script>
 </body>
 </html>
