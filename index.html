@@ -23,7 +23,7 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-         window.addEventListener('DOMContentLoaded', function () {
+        var createScene = async function () {
         var canvas = document.getElementById('renderCanvas');
         var engine = new BABYLON.Engine(canvas, true);
         var xr ;
@@ -62,7 +62,7 @@
         window.addEventListener('resize', function () {
             engine.resize();
         });
-    });
+    };
     </script>
 </body>
 </html>
