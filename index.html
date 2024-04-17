@@ -9,13 +9,28 @@
     <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
     
 </head>
-<body style="margin : 0px; overflow: hidden;">
-    <p>tomar no teu cu otario</p>
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <a-marker preset="hiro">
-            <a-box position="10 10.5 10" material="color: yellow;"></a-box>
-        </a-marker>
-        <a-entity camera></a-entity>
-    </a-scene>
+<body >
+    <script>
+        var createScene = async function () {
+
+var scene = new BABYLON.Scene(engine);
+var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 3, 0), scene);
+camera.setTarget(BABYLON.Vector3.Zero());
+camera.attachControl(canvas, true);
+var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+light.intensity = 0.7;
+var sphere = BABYLON.Mesh.CreateSphere("sphere1", 14, 2, scene);
+sphere.position.y = 2;
+sphere.position.z = 5;
+
+const xr = await scene.createDefaultXRExperienceAsync({
+    uiOptions: {
+        sessionMode: 'immersive-ar'
+    }
+});
+
+return scene;
+};
+    </script>
 </body>
 </html>

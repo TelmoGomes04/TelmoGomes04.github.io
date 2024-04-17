@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "babylonjs": "^7.2.2",
     "three": "^0.163.0"
   }
 }
