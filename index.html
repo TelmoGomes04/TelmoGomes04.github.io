@@ -24,24 +24,24 @@
         var engine = new BABYLON.Engine(canvas, true); // Gere o motor 3D BABYLON
 
         var createScene = async function () {
-            var scene = new BABYLON.Scene(engine);
-            var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 3, 0), scene);
-            camera.setTarget(BABYLON.Vector3.Zero());
-            camera.attachControl(canvas, true);
-            var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-            light.intensity = 0.7;
-            var sphere = BABYLON.Mesh.CreateSphere("sphere1", 14, 2, scene);
-            sphere.position.y = 2;
-            sphere.position.z = 5;
+    var scene = new BABYLON.Scene(engine);
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.attachControl(canvas, true);
+    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+    light.intensity = 0.7;
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere1", { segments: 16, diameter: 2 }, scene);
+    sphere.position.y = 2;
+    sphere.position.z = 5;
 
-            const xr = await scene.createDefaultXRExperienceAsync({
-                uiOptions: {
-                    sessionMode: 'immersive-ar'
-                }
-            });
+    const xr = await scene.createDefaultXRExperienceAsync({
+        uiOptions: {
+            sessionMode: 'immersive-ar',
+        },
+    });
 
-            return scene;
-        };
+    return scene;
+};
 
         createScene().then(function(scene) { // Chame a função para criar a cena
             engine.runRenderLoop(function () { // Comece a renderizar a cena
