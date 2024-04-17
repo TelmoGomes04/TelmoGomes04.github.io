@@ -33,10 +33,10 @@
             return scene;
         };
 
-        var scene = createScene(); // Chame a função para criar a cena
-
-        engine.runRenderLoop(function () { // Comece a renderizar a cena
-            scene.render();
+        createScene().then(function(scene) { // Chame a função para criar a cena
+            engine.runRenderLoop(function () { // Comece a renderizar a cena
+                scene.render();
+            });
         });
     </script>
 </body>
