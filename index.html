@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Babylon.js AR Example</title>
+    <title>Babylon.js Basic Example</title>
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
     <style>
         html, body {
             overflow: hidden;
@@ -17,7 +15,6 @@
         #renderCanvas {
             width: 100%;
             height: 100%;
-            touch-action: none; /* Evitar interações indesejadas em dispositivos móveis */
         }
     </style>
 </head>
@@ -27,7 +24,7 @@
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true);
 
-        var createScene = async function () {
+        var createScene = function () {
             var scene = new BABYLON.Scene(engine);
 
             // Cria uma câmera livre
@@ -39,47 +36,38 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
-            // Carrega o modelo do carro
-            console.log("Carregando modelo...");
-            var carModel = await BABYLON.SceneLoader.ImportMeshAsync("", "models/", "car.glb", scene);
-            console.log("Modelo carregado:", carModel);
-            // Evento de clique na tela
-            scene.onPointerDown = function (evt, pickResult) {
-                // Verifica se um objeto foi clicado
-                if (pickResult.hit) {
-                    // Cria uma instância do carro na posição da esfera original
-                    var carInstance = carModel.createInstance("carInstance");
-                    carInstance.position = new BABYLON.Vector3(0, 2, 5); // Posição do carro (exemplo)
-                }
-            };
+            // Cria uma esfera
+            var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2 }, scene);
 
-            // Cria o ambiente de XR
-            const xr = await scene.createDefaultXRExperienceAsync({
-                uiOptions: {
-                    sessionMode: 'immersive-ar'
-                }
+            // Posiciona a esfera
+            sphere.position.y = 2;
+            sphere.position.z = 5;
+
+            // Criação do ambiente de renderização
+            engine.runRenderLoop(function () {
+                scene.render();
+            });
+
+            // Redimensionamento da janela
+            window.addEventListener("resize", function () {
+                engine.resize();
             });
 
             return scene;
         };
 
-        // Função principal para inicializar a cena
-        var main = async function () {
-            var scene = await createScene();
+        // Criação da cena
+        var scene = createScene();
 
-            // Inicia a renderização da cena
-            engine.runRenderLoop(function () {
-                scene.render();
-            });
+        // Inicialização da renderização
+        engine.runRenderLoop(function () {
+            scene.render();
+        });
 
-            // Redimensiona a cena quando a janela é redimensionada
-            window.addEventListener("resize", function () {
-                engine.resize();
-            });
-        };
-
-        // Chama a função principal para iniciar tudo
-        main();
+        // Redimensionamento da janela
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
     </script>
 </body>
 </html>
