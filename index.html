@@ -40,8 +40,9 @@
             light.intensity = 0.7;
 
             // Carrega o modelo do carro
+            console.log("Carregando modelo...");
             var carModel = await BABYLON.SceneLoader.ImportMeshAsync("", "models/", "car.glb", scene);
-
+            console.log("Modelo carregado:", carModel);
             // Evento de clique na tela
             scene.onPointerDown = function (evt, pickResult) {
                 // Verifica se um objeto foi clicado
