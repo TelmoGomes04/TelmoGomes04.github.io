@@ -24,54 +24,26 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        var canvas = document.getElementById("renderCanvas");
-        var engine = new BABYLON.Engine(canvas, true);
-
         var createScene = async function () {
-            var scene = new BABYLON.Scene(engine);
 
-            // Cria uma câmera XR
-            var xr = await scene.createDefaultXRExperienceAsync({
-                disableDefaultUI: true, // Desabilita a UI padrão do WebXR
-                floorMeshes: [] // Não renderiza o plano de chão padrão do WebXR
-            });
+        var scene = new BABYLON.Scene(engine);
+        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+        camera.setTarget(BABYLON.Vector3.Zero());
+        camera.attachControl(canvas, true);
+        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+        light.intensity = 0.7;
+        var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
+        sphere.position.y = 2;
+        sphere.position.z = 5;
 
-            // Cria uma luz hemisférica
-            var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-            light.intensity = 0.7;
+        const xr = await scene.createDefaultXRExperienceAsync({
+            uiOptions: {
+                sessionMode: 'immersive-ar'
+            }
+        });
 
-            // Cria uma esfera
-            var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 0.2 }, scene);
-            sphere.position.y = 0.1; // Posição da esfera acima do chão virtual
-
-            // Evento de clique na tela (para adicionar uma nova esfera)
-            scene.onPointerDown = function (evt, pickResult) {
-                if (pickResult.hit) {
-                    var newSphere = sphere.clone("sphereClone"); // Clona a esfera
-                    newSphere.position = pickResult.pickedPoint; // Define a posição da nova esfera onde foi tocado
-                }
-            };
-
-            return scene;
+        return scene;
         };
-
-        var scene;
-        var main = async function () {
-            scene = await createScene();
-
-            // Inicia a renderização da cena
-            engine.runRenderLoop(function () {
-                scene.render();
-            });
-
-            // Redimensiona a cena quando a janela é redimensionada
-            window.addEventListener("resize", function () {
-                engine.resize();
-            });
-        };
-
-        // Chama a função principal para iniciar tudo
-        main();
     </script>
 </body>
 </html>
