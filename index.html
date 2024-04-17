@@ -24,45 +24,39 @@
     <canvas id="renderCanvas"></canvas>
     <script>
         var createScene = async function () {
-        var canvas = document.getElementById('renderCanvas');
-        var engine = new BABYLON.Engine(canvas, true);
-        var xr ;
+    var scene = new BABYLON.Scene(engine);
 
-        var createScene = async function () {
-            var scene = new BABYLON.Scene(engine);
-            var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 12, BABYLON.Vector3.Zero(), scene);
+    // Cria uma câmera livre
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    camera.setTarget(BABYLON.Vector3.Zero());
+    camera.attachControl(canvas, true);
 
-            const xr = await scene.createDefaultXRExperienceAsync({
-                uiOptions: {
-                    sessionMode: 'immersive-ar'
-                }
-            });
+    // Cria uma luz hemisférica
+    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+    light.intensity = 0.7;
 
-            xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
-                if (xr.pointerSelection) {
-                    const pick = xr.pointerSelection.getLatestControllerPointerInfo();
-                    if (pick && pick.pickInfo && pick.pickInfo.hit) {
-                        var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {diameter:1}, scene);
-                        sphere.position = pick.pickInfo.pickedPoint;
-                    }
-                }
-            });
+    // Carrega o modelo do carro
+    carModel = await BABYLON.SceneLoader.ImportMeshAsync("", "models/", "car.glb", scene); // Substitua com o caminho do modelo do carro
 
-            return scene;
-        };
-
-        var scene = createScene();
-
-        engine.runRenderLoop(function () {
-            if (scene) {
-                scene.render();
-            }
-        });
-
-        window.addEventListener('resize', function () {
-            engine.resize();
-        });
+    // Evento de clique na tela
+    scene.onPointerDown = function (evt, pickResult) {
+        // Verifica se um objeto foi clicado
+        if (pickResult.hit) {
+            // Cria uma instância do carro na posição da esfera original
+            var carInstance = carModel.createInstance("carInstance");
+            carInstance.position = new BABYLON.Vector3(0, 2, 5); // Posição do carro (mesma que a esfera original)
+        }
     };
+
+    // Cria o ambiente de XR
+    const xr = await scene.createDefaultXRExperienceAsync({
+        uiOptions: {
+            sessionMode: 'immersive-ar'
+        }
+    });
+
+    return scene;
+};
     </script>
 </body>
 </html>
