@@ -3,38 +3,41 @@
 <head>
     <title>Babylon.js AR Example</title>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
-
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
-    
 </head>
-<body >
+<body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        var canvas = document.getElementById('renderCanvas'); // Get the canvas element 
-        var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+        var canvas = document.getElementById('renderCanvas'); // Obtenha o elemento canvas
+        var engine = new BABYLON.Engine(canvas, true); // Gere o motor 3D BABYLON
 
         var createScene = async function () {
+            var scene = new BABYLON.Scene(engine);
+            var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 3, 0), scene);
+            camera.setTarget(BABYLON.Vector3.Zero());
+            camera.attachControl(canvas, true);
+            var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+            light.intensity = 0.7;
+            var sphere = BABYLON.Mesh.CreateSphere("sphere1", 14, 2, scene);
+            sphere.position.y = 2;
+            sphere.position.z = 5;
 
-        var scene = new BABYLON.Scene(engine);
-        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 3, 0), scene);
-        camera.setTarget(BABYLON.Vector3.Zero());
-        camera.attachControl(canvas, true);
-        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-        light.intensity = 0.7;
-        var sphere = BABYLON.Mesh.CreateSphere("sphere1", 14, 2, scene);
-        sphere.position.y = 2;
-        sphere.position.z = 5;
+            const xr = await scene.createDefaultXRExperienceAsync({
+                uiOptions: {
+                    sessionMode: 'immersive-ar'
+                }
+            });
 
-        const xr = await scene.createDefaultXRExperienceAsync({
-            uiOptions: {
-                sessionMode: 'immersive-ar'
-            }
-        });
-
-        return scene;
+            return scene;
         };
+
+        var scene = createScene(); // Chame a função para criar a cena
+
+        engine.runRenderLoop(function () { // Comece a renderizar a cena
+            scene.render();
+        });
     </script>
 </body>
 </html>
