@@ -67,7 +67,41 @@
         // optional axis helper you can add to an object
         // reticle.add(new THREE.AxesHelper(1));
       }
+      //carregar um modelo GLTF/GLB
+      async function loadModel(url) {
+        return new Promise((resolve, reject) => {
+          const loader = new THREE.GLTFLoader();
+          loader.load(
+            url,
+            (gltf) => {
+              resolve(gltf.scene); // Retorna apenas a cena do modelo carregado
+            },
+            undefined,
+            (error) => {
+              console.error('Erro ao carregar modelo 3D', error);
+              reject(error);
+            }
+          );
+        });
+      }
 
+      async function onSelect() {
+        if (reticle.visible) {
+          try {
+            // Carrega o modelo GLTF/GLB. Substitua 'seu_modelo.glb' pelo caminho do seu modelo.
+            const model = await loadModel('seu_modelo.glb');
+      
+            // Posiciona o modelo na posição do reticle
+            model.position.copy(reticle.position);
+      
+            // Adiciona o modelo à cena
+            scene.add(model);
+          } catch (error) {
+            console.error('Erro ao adicionar modelo 3D', error);
+          }
+        }
+      }
+      /*
       function onSelect() {        
         if (reticle.visible) {
           // cone added at the point of a hit test
@@ -85,6 +119,7 @@
           scene.add(mesh); 
         }
       }
+      */
 
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
