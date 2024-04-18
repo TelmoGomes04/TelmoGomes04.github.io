@@ -4,6 +4,7 @@
       
       import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
 
+
       let container;
       let camera, scene, renderer;
       let reticle;
@@ -89,6 +90,7 @@
         if (reticle.visible) {
           try {
             // Carrega o modelo GLTF/GLB. Substitua 'seu_modelo.glb' pelo caminho do seu modelo.
+            const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
             const model = await loadModel('seu_modelo.glb');
       
             // Posiciona o modelo na posição do reticle
