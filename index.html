@@ -1,54 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Babylon.js AR Example</title>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsartoolkit5"></script>
+    <title>WebXR AR Example</title>
     <style>
-        /* Defina o estilo do canvas para preencher a janela do navegador */
-        #renderCanvas {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
+        body {
+            margin: 0;
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
-    <canvas id="renderCanvas"></canvas>
     <script>
-        var createScene = async function () {
+        // Verifique se o navegador suporta 'immersive-ar' mode
+        if (navigator.xr && navigator.xr.isSessionSupported('immersive-ar')) {
+            navigator.xr.requestSession('immersive-ar', {
+                requiredFeatures: ['local-floor', 'hit-test']
+            }).then((session) => {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl', { xrCompatible: true });
+                document.body.appendChild(canvas);
+                session.updateRenderState({ baseLayer: new XRWebGLLayer(session, gl) });
 
-            var canvas = document.getElementById('renderCanvas');
-            var engine = new BABYLON.Engine(canvas, true);
+                session.requestReferenceSpace('local-floor').then((refSpace) => {
+                    session.requestAnimationFrame((time, frame) => {
+                        // Obtenha a pose do dispositivo
+                        const pose = frame.getViewerPose(refSpace);
 
-        var scene = new BABYLON.Scene(engine);
-        var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
-        camera.setTarget(BABYLON.Vector3.Zero());
-        camera.attachControl(canvas, true);
-        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-        light.intensity = 0.7;
-        var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
-        sphere.position.y = 2;
-        sphere.position.z = 5;
+                        // Use a pose para renderizar a cena
+                        // ...
+                    });
+                });
 
-        const xr = await scene.createDefaultXRExperienceAsync({
-            uiOptions: {
-                sessionMode: 'immersive-ar'
-            }
-        });
+                // Adicione um ouvinte de evento para 'select' para lidar com o toque/click
+                session.addEventListener('select', (event) => {
+                    // Use o evento XRHitTestResult para obter a posição do toque/click
+                    const hitTestResult = event.frame.getHitTestResults(event.inputSource);
 
-        return scene;
-        };
+                    if (hitTestResult.length > 0) {
+                        const hitPose = hitTestResult[0].getPose(refSpace);
 
-        createScene().then(function (scene) {
-            engine.runRenderLoop(function () {
-                scene.render();
+                        // Use a pose do hit para posicionar seu objeto
+                        // ...
+                    }
+                });
             });
-        });
+        }
     </script>
 </body>
 </html>
