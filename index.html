@@ -38,7 +38,8 @@
         var shadowGenerator = new BABYLON.ShadowGenerator(1024, dirLight);
         shadowGenerator.useBlurExponentialShadowMap = true;
         shadowGenerator.blurKernel = 32;
-        const model = await BABYLON.SceneLoader.ImportMeshAsync("", "./scenes/", "dummy3.babylon", scene);
+        //const model = await BABYLON.SceneLoader.ImportMeshAsync("", "./", "car.glb", scene);
+        const model = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene);
         var xr = await scene.createDefaultXRExperienceAsync({
             uiOptions: {
                 sessionMode: "immersive-ar",
