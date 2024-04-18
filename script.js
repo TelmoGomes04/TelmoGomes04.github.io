@@ -122,7 +122,7 @@
           mesh.quaternion.setFromRotationMatrix(reticle.matrix);
       
           scene.add(model);
-          scene.add(mesh); 
+          scene.add(mesh);
         }
       }
       
