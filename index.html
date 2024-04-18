@@ -43,6 +43,12 @@
 
         return scene;
         };
+
+        createScene().then(function (scene) {
+            engine.runRenderLoop(function () {
+                scene.render();
+            });
+        });
     </script>
 </body>
 </html>
