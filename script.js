@@ -116,7 +116,7 @@
           });
           const mesh = new THREE.Mesh(geometry, material);
           
-          // set the position of the cylinder based on where the reticle is        
+          // set the position of the cylinder based on where the reticle is       
           model.position.copy(reticle.position); 
           mesh.position.setFromMatrixPosition(reticle.matrix);
           mesh.quaternion.setFromRotationMatrix(reticle.matrix);
