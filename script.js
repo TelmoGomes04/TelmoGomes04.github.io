@@ -85,7 +85,7 @@
           );
         });
       }
-
+      /*
       async function onSelect() {
         if (reticle.visible) {
           try {
@@ -103,7 +103,7 @@
           }
         }
       }
-      /*
+      */
       function onSelect() {        
         if (reticle.visible) {//
           // cone added at the point of a hit test
@@ -121,7 +121,7 @@
           scene.add(mesh); 
         }
       }
-      */
+      
 
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
