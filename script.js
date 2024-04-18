@@ -105,7 +105,7 @@
       }
       /*
       function onSelect() {        
-        if (reticle.visible) {
+        if (reticle.visible) {//
           // cone added at the point of a hit test
           // replace the next lines to add your own object in space
           const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
