@@ -2,9 +2,21 @@
   "dependencies": {
     "babylonjs": "^7.2.2",
     "three": "^0.163.0",
-    "tree.js": "^1.4.1"
+    "tree.js": "^1.4.1",
+    "webpack": "^5.91.0"
   },
   "devDependencies": {
-    "vite": "^5.2.9"
-  }
+    "vite": "^5.2.9",
+    "webpack-cli": "^5.1.4"
+  },
+  "name": "ar_test_sketchpixel",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
