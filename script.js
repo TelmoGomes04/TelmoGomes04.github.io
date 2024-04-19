@@ -1,196 +1,171 @@
-// Código Babylon.js aqui
-var canvas = document.getElementById("renderCanvas");
-var engine = new BABYLON.Engine(canvas, true);
-
-var createScene = async function () {
-      /**
-   * WebXR ar demo using hit-test, anchors, and plane detection.
-   * 
-   * Every press on the screen will add a figure in the requested position (if the ring is displayed). Those meshes will be kept in place by the AR system you are using.
-   * 
-   * Working (at the moment) on android devices and the latest chrome.
-   * 
-   * Created by Raanan Weber (@RaananW)
-   */
-
-    // This creates a basic Babylon Scene object (non-mesh)
-    var scene = new BABYLON.Scene(engine);
-
-    // This creates and positions a free camera (non-mesh)
-    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 1, -5), scene);
-
-    // This targets the camera to scene origin
-    camera.setTarget(BABYLON.Vector3.Zero());
-
-    // This attaches the camera to the canvas
-    camera.attachControl(canvas, true);
-
-    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-
-    // Default intensity is 1. Let's dim the light a small amount
-    light.intensity = 0.7;
-
-    var dirLight = new BABYLON.DirectionalLight('light', new BABYLON.Vector3(0, -1, -0.5), scene);
-    dirLight.position = new BABYLON.Vector3(0, 5, -5);
-
-    var shadowGenerator = new BABYLON.ShadowGenerator(1024, dirLight);
-    shadowGenerator.useBlurExponentialShadowMap = true;
-    shadowGenerator.blurKernel = 32;
-
-    const model = await BABYLON.SceneLoader.ImportMeshAsync("", "./scenes/", "dummy3.babylon", scene);
-
-    var xr = await scene.createDefaultXRExperienceAsync({
-        uiOptions: {
-            sessionMode: "immersive-ar",
-            referenceSpaceType: "local-floor"
-        },
-        optionalFeatures: true
-    });
-
-    const fm = xr.baseExperience.featuresManager;
-
-    const xrTest = fm.enableFeature(BABYLON.WebXRHitTest.Name, "latest");
-    const xrPlanes = fm.enableFeature(BABYLON.WebXRPlaneDetector.Name, "latest");
-    const anchors = fm.enableFeature(BABYLON.WebXRAnchorSystem.Name, 'latest');
-
-    const xrBackgroundRemover = fm.enableFeature(BABYLON.WebXRBackgroundRemover.Name);
-
-    let b = model.meshes[0];//BABYLON.CylinderBuilder.CreateCylinder('cylinder', { diameterBottom: 0.2, diameterTop: 0.4, height: 0.5 });
-    b.rotationQuaternion = new BABYLON.Quaternion();
-    // b.isVisible = false;
-    shadowGenerator.addShadowCaster(b, true);
-
-    const marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 });
-    marker.isVisible = false;
-    marker.rotationQuaternion = new BABYLON.Quaternion();
-
-    var skeleton = model.skeletons[0];
-
-    // ROBOT
-    skeleton.animationPropertiesOverride = new BABYLON.AnimationPropertiesOverride();
-    skeleton.animationPropertiesOverride.enableBlending = true;
-    skeleton.animationPropertiesOverride.blendingSpeed = 0.05;
-    skeleton.animationPropertiesOverride.loopMode = 1;
-
-    var idleRange = skeleton.getAnimationRange("YBot_Idle");
-    var walkRange = skeleton.getAnimationRange("YBot_Walk");
-    var runRange = skeleton.getAnimationRange("YBot_Run");
-    var leftRange = skeleton.getAnimationRange("YBot_LeftStrafeWalk");
-    var rightRange = skeleton.getAnimationRange("YBot_RightStrafeWalk");
-    scene.beginAnimation(skeleton, idleRange.from, idleRange.to, true);
-
-    let hitTest;
-
-    b.isVisible = false;
-
-    xrTest.onHitTestResultObservable.add((results) => {
-        if (results.length) {
-            marker.isVisible = true;
-            hitTest = results[0];
-            hitTest.transformationMatrix.decompose(undefined, b.rotationQuaternion, b.position);
-            hitTest.transformationMatrix.decompose(undefined, marker.rotationQuaternion, marker.position);
-        } else {
-            marker.isVisible = false;
-            hitTest = undefined;
-        }
-    });
-    const mat1 = new BABYLON.StandardMaterial('1', scene);
-    mat1.diffuseColor = BABYLON.Color3.Red();
-    const mat2 = new BABYLON.StandardMaterial('1', scene);
-    mat2.diffuseColor = BABYLON.Color3.Blue();
-
-    if (anchors) {
-        console.log('anchors attached');
-        anchors.onAnchorAddedObservable.add(anchor => {
-            console.log('attaching', anchor);
-            b.isVisible = true;
-            anchor.attachedNode = b.clone("mensch");
-            anchor.attachedNode.skeleton = skeleton.clone('skelet');
-            shadowGenerator.addShadowCaster(anchor.attachedNode, true);
-            scene.beginAnimation(anchor.attachedNode.skeleton, idleRange.from, idleRange.to, true);
-            b.isVisible = false;
-        })
-
-        anchors.onAnchorRemovedObservable.add(anchor => {
-            console.log('disposing', anchor);
-            if (anchor) {
-                anchor.attachedNode.isVisible = false;
-                anchor.attachedNode.dispose();
-            }
+// In this example you should be able to place a cone on top of a surface (like a floor or table)
+      // On your phone, you have to tap the screen to place a phone where the circle shows up
+      // On the desktop emulator you have to "right-click" to simulate a tap
+      import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
+      let container;
+      let camera, scene, renderer;
+      let reticle;
+      let controller;
+      init();
+      animate();
+      function init() {
+        container = document.createElement("div");
+        document.body.appendChild(container);
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(
+          70,
+          window.innerWidth / window.innerHeight,
+          0.01,
+          20
+        );
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.xr.enabled = true;
+        container.appendChild(renderer.domElement);
+        var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+        light.position.set(0.5, 1, 0.25);
+        scene.add(light);
+        controller = renderer.xr.getController(0);
+        controller.addEventListener('select', onSelect);
+        scene.add(controller);
+        addReticleToScene();
+        const button = ARButton.createButton(renderer, {
+          requiredFeatures: ["hit-test"] // notice a new required feature
         });
-    }
-
-    scene.onPointerDown = (evt, pickInfo) => {
-        if (hitTest && anchors && xr.baseExperience.state === BABYLON.WebXRState.IN_XR) {
-            anchors.addAnchorPointUsingHitTestResultAsync(hitTest);
+        document.body.appendChild(button);
+        renderer.domElement.style.display = "none";
+        window.addEventListener("resize", onWindowResize, false);
+      }
+      function addReticleToScene() {
+        const geometry = new THREE.RingBufferGeometry(0.15, 0.2, 32).rotateX(
+          -Math.PI / 2
+        );
+        const material = new THREE.MeshBasicMaterial();
+        reticle = new THREE.Mesh(geometry, material);
+        // we will calculate the position and rotation of this reticle every frame manually
+        // in the render() function so matrixAutoUpdate is set to false
+        reticle.matrixAutoUpdate = false;
+        reticle.visible = false; // we start with the reticle not visible
+        scene.add(reticle);
+        // optional axis helper you can add to an object
+        // reticle.add(new THREE.AxesHelper(1));
+      }
+      //carregar um modelo GLTF/GLB
+      async function loadModel(url) {
+        return new Promise((resolve, reject) => {
+          const loader = new THREE.GLTFLoader();
+          loader.load(
+            url,
+            (gltf) => {
+              resolve(gltf.scene); // Retorna apenas a cena do modelo carregado
+            },
+            undefined,
+            (error) => {
+              console.error('Erro ao carregar modelo 3D', error);
+              reject(error);
+            }
+          );
+        });
+      }
+      /*
+      async function onSelect() {
+        if (reticle.visible) {
+          try {
+            // Carrega o modelo GLTF/GLB. Substitua 'seu_modelo.glb' pelo caminho do seu modelo.
+            const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
+            const model = await loadModel('seu_modelo.glb');
+            // Posiciona o modelo na posição do reticle
+            model.position.copy(reticle.position);
+            // Adiciona o modelo à cena
+            scene.add(model);
+          } catch (error) {
+            console.error('Erro ao adicionar modelo 3D', error);
+          }
         }
-    }
-
-    const planes = [];
-
-    xrPlanes.onPlaneAddedObservable.add(plane => {
-        plane.polygonDefinition.push(plane.polygonDefinition[0]);
-        var polygon_triangulation = new BABYLON.PolygonMeshBuilder("name", plane.polygonDefinition.map((p) => new BABYLON.Vector2(p.x, p.z)), scene);
-        var polygon = polygon_triangulation.build(false, 0.01);
-        plane.mesh = polygon; //BABYLON.TubeBuilder.CreateTube("tube", { path: plane.polygonDefinition, radius: 0.02, sideOrientation: BABYLON.Mesh.FRONTSIDE, updatable: true }, scene);
-        //}
-        planes[plane.id] = (plane.mesh);
-        const mat = new BABYLON.StandardMaterial("mat", scene);
-        mat.alpha = 0.5;
-        mat.diffuseColor = BABYLON.Color3.Random();
-        polygon.createNormals();
-        // polygon.receiveShadows = true;
-        plane.mesh.material = mat;
-
-        plane.mesh.rotationQuaternion = new BABYLON.Quaternion();
-        plane.transformationMatrix.decompose(plane.mesh.scaling, plane.mesh.rotationQuaternion, plane.mesh.position);
-    });
-
-    xrPlanes.onPlaneUpdatedObservable.add(plane => {
-        let mat;
-        if (plane.mesh) {
-            mat = plane.mesh.material;
-            plane.mesh.dispose(false, false);
+      }
+      */
+      async function onSelect() {
+        if (reticle.visible) {
+          // cone added at the point of a hit test
+          // replace the next lines to add your own object in space
+          const model = await loadModel('seu_modelo.glb');
+          const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
+          const material = new THREE.MeshPhongMaterial({
+            color: 0xffffff * Math.random()
+          });
+          const mesh = new THREE.Mesh(geometry, material);
+          // set the position of the cylinder based on where the reticle is
+          model.position.copy(reticle.position);
+          mesh.position.setFromMatrixPosition(reticle.matrix);
+          mesh.quaternion.setFromRotationMatrix(reticle.matrix);
+          scene.add(model);
+          scene.add(mesh);
         }
-        const some = plane.polygonDefinition.some(p => !p);
-        if (some) {
-            return;
+      }
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      function animate() {
+        renderer.setAnimationLoop(render);
+      }
+      // read more about hit testing here:
+      // https://github.com/immersive-web/hit-test/blob/master/hit-testing-explainer.md
+      // https://web.dev/ar-hit-test/
+      // hit testing provides the position and orientation of the intersection point, but nothing about the surfaces themselves.
+      let hitTestSource = null;
+      let localSpace = null;
+      let hitTestSourceInitialized = false;
+      // This function gets called just once to initialize a hitTestSource
+      // The purpose of this function is to get a) a hit test source and b) a reference space
+      async function initializeHitTestSource() {
+        const session = renderer.xr.getSession(); // XRSession
+        // Reference spaces express relationships between an origin and the world.
+        // For hit testing, we use the "viewer" reference space,
+        // which is based on the device's pose at the time of the hit test.
+        const viewerSpace = await session.requestReferenceSpace("viewer");
+        hitTestSource = await session.requestHitTestSource({ space: viewerSpace });
+        // We're going to use the reference space of "local" for drawing things.
+        // which gives us stability in terms of the environment.
+        // read more here: https://developer.mozilla.org/en-US/docs/Web/API/XRReferenceSpace
+        localSpace = await session.requestReferenceSpace("local");
+        // set this to true so we don't request another hit source for the rest of the session
+        hitTestSourceInitialized = true;
+        // In case we close the AR session by hitting the button "End AR"
+        session.addEventListener("end", () => {
+          hitTestSourceInitialized = false;
+          hitTestSource = null;
+        });
+      }
+      // the callback from 'setAnimationLoop' can also return a timestamp
+      // and an XRFrame, which provides access to the information needed in
+      // order to render a single frame of animation for an XRSession describing
+      // a VR or AR sccene.
+      function render(timestamp, frame) {
+        if (frame) {
+          // 1. create a hit test source once and keep it for all the frames
+          // this gets called only once
+          if (!hitTestSourceInitialized) {
+            initializeHitTestSource();
+          }
+          // 2. get hit test results
+          if (hitTestSourceInitialized) {
+            // we get the hit test results for a particular frame
+            const hitTestResults = frame.getHitTestResults(hitTestSource);
+            // XRHitTestResults The hit test may find multiple surfaces. The first one in the array is the one closest to the camera.
+            if (hitTestResults.length > 0) {
+              const hit = hitTestResults[0];
+              // Get a pose from the hit test result. The pose represents the pose of a point on a surface.
+              const pose = hit.getPose(localSpace);
+              reticle.visible = true;
+              // Transform/move the reticle image to the hit test position
+              reticle.matrix.fromArray(pose.transform.matrix);
+            } else {
+              reticle.visible = false;
+            }
+          }
+          renderer.render(scene, camera);
         }
-        plane.polygonDefinition.push(plane.polygonDefinition[0]);
-        var polygon_triangulation = new BABYLON.PolygonMeshBuilder("name", plane.polygonDefinition.map((p) => new BABYLON.Vector2(p.x, p.z)), scene);
-        var polygon = polygon_triangulation.build(false, 0.01);
-        polygon.createNormals();
-        plane.mesh = polygon;// BABYLON.TubeBuilder.CreateTube("tube", { path: plane.polygonDefinition, radius: 0.02, sideOrientation: BABYLON.Mesh.FRONTSIDE, updatable: true }, scene);
-        //}
-        planes[plane.id] = (plane.mesh);
-        plane.mesh.material = mat;
-        plane.mesh.rotationQuaternion = new BABYLON.Quaternion();
-        plane.transformationMatrix.decompose(plane.mesh.scaling, plane.mesh.rotationQuaternion, plane.mesh.position);
-        plane.mesh.receiveShadows = true;
-    })
-
-    xrPlanes.onPlaneRemovedObservable.add(plane => {
-        if (plane && planes[plane.id]) {
-            planes[plane.id].dispose()
-        }
-    })
-
-    xr.baseExperience.sessionManager.onXRSessionInit.add(() => {
-        planes.forEach(plane => plane.dispose());
-        while (planes.pop()) { };
-    });
-
-
-
-    return scene;
-
-  };
-
-createScene().then(scene => {
-    engine.runRenderLoop(function () {
-        if (scene) {
-            scene.render();
-        }
-    });
-});
+      }
