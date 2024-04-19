@@ -1,7 +1,7 @@
 // Importando o Three.js e os módulos adicionais
-import * as THREE from 'three';
-import { GLTFLoader } from './modulos/GLTFLoader.js';
-import { ARButton } from './modulos/ARButton.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.163.0/examples/js/loaders/GLTFLoader.js';
+import { ARButton } from 'https://cdn.jsdelivr.net/npm/three@0.163.0/examples/js/webxr/ARButton.js';
 
 let container;
 let camera, scene, renderer;
