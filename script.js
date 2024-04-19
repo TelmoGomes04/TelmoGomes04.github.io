@@ -1,16 +1,12 @@
-//import * as THREE from 'https://threejs.org/build/three.module.js';
+// Importando o Three.js e os módulos adicionais
 import * as THREE from './node_modules/three/build/three.module.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { ARButton } from "https://unpkg.com/three@0.163.0/examples/jsm/webxr/ARButton.js";
-//import { GLTFLoader } from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
-
+import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import { ARButton } from './node_modules/three/examples/jsm/webxr/ARButton.js';
 
 let container;
 let camera, scene, renderer;
 let reticle;
 let controller;
-
-//const loader = new GLTFLoader(); 
 
 init();
 animate();
@@ -130,4 +126,4 @@ function render(timestamp, frame) {
     }
     renderer.render(scene, camera);
   }
-} 
+}
