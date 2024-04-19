@@ -68,23 +68,7 @@
           );
         });
       }
-      /*
-      async function onSelect() {
-        if (reticle.visible) {
-          try {
-            // Carrega o modelo GLTF/GLB. Substitua 'seu_modelo.glb' pelo caminho do seu modelo.
-            const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
-            const model = await loadModel('seu_modelo.glb');
-            // Posiciona o modelo na posição do reticle
-            model.position.copy(reticle.position);
-            // Adiciona o modelo à cena
-            scene.add(model);
-          } catch (error) {
-            console.error('Erro ao adicionar modelo 3D', error);
-          }
-        }
-      }
-      */
+      
       function onSelect() {        
         if (reticle.visible) {
           // cone added at the point of a hit test
