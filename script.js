@@ -92,6 +92,7 @@ async function onSelect() {
     } catch (error) {
       console.error('Erro ao carregar o modelo 3D', error);
     }
+    cube();
   }
 }
 
