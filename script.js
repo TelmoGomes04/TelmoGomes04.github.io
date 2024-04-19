@@ -117,3 +117,5 @@
           }
           renderer.render(scene, camera);
         }
+      }
+    
