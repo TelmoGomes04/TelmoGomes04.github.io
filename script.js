@@ -1,10 +1,13 @@
 import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
+import { GLTFLoader } from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
 
 
 let container;
 let camera, scene, renderer;
 let reticle;
 let controller;
+
+const loader = new GLTFLoader();
 
 init();
 animate();
