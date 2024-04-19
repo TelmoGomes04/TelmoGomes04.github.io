@@ -69,6 +69,18 @@ async function loadModel(url) {
   });
 }
 
+async function cube(){
+  // spawn for testing
+  const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
+  const material = new THREE.MeshPhongMaterial({
+    color: 0xffffff * Math.random()
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.setFromMatrixPosition(reticle.matrix);
+  mesh.quaternion.setFromRotationMatrix(reticle.matrix);
+  scene.add(mesh);
+  //
+}
 async function onSelect() {
   if (reticle.visible) {
     try {
@@ -76,6 +88,7 @@ async function onSelect() {
       model.position.setFromMatrixPosition(reticle.matrix);
       model.quaternion.setFromRotationMatrix(reticle.matrix);
       scene.add(model);
+      cube();
     } catch (error) {
       console.error('Erro ao carregar o modelo 3D', error);
     }
