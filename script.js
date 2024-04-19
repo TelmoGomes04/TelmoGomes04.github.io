@@ -52,6 +52,21 @@
         // optional axis helper you can add to an object
         // reticle.add(new THREE.AxesHelper(1));
       }
+
+                              import * as THREE from 'three';
+                        import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
+                        const loader = new GLTFLoader();
+
+                        // Agora você pode carregar modelos GLTF normalmente
+                        loader.load('models/Full_Car_F3.gltf', (gltf) => {
+                          const model = gltf.scene;
+                          scene.add(model);
+                        }, undefined, (error) => {
+                          console.error('Erro ao carregar modelo 3D', error);
+                        });
+
+
       //carregar um modelo GLTF/GLB
       async function loadModel(url) {
         return new Promise((resolve, reject) => {
@@ -88,23 +103,23 @@
       }
       */
       async function onSelect() {
-  if (reticle.visible) {
-    try {
-      const modelName = 'Full_Car_F3.gltf'; // Nome do seu arquivo de modelo
-      const model = await loadModel(modelName); // Carrega o modelo
+        if (reticle.visible) {
+          try {
+            const modelName = 'Full_Car_F3.gltf'; // Nome do seu arquivo de modelo
+            const model = await loadModel(modelName); // Carrega o modelo
 
-      // Posiciona o modelo na posição do reticle
-      model.position.copy(reticle.position);
+            // Posiciona o modelo na posição do reticle
+            model.position.copy(reticle.position);
 
-      // Adiciona o modelo à cena
-      scene.add(model);
+            // Adiciona o modelo à cena
+            scene.add(model);
 
-      console.log('Modelo carregado e adicionado à cena com sucesso!');
-    } catch (error) {
-      console.error('Erro ao carregar e adicionar modelo à cena:', error);
-    }
-  }
-}
+            console.log('Modelo carregado e adicionado à cena com sucesso!');
+          } catch (error) {
+            console.error('Erro ao carregar e adicionar modelo à cena:', error);
+          }
+        }
+      }
 
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
