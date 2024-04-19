@@ -9,7 +9,7 @@ let reticle;
 let controller;
 
 init();
-animate();
+animate(); 
 
 function init() {
   container = document.createElement("div");
