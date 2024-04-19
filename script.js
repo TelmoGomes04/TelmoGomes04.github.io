@@ -13,8 +13,6 @@ var createScene = async function () {
    * Created by Raanan Weber (@RaananW)
    */
 
-  var createScene = async function () {
-
     // This creates a basic Babylon Scene object (non-mesh)
     var scene = new BABYLON.Scene(engine);
 
@@ -187,7 +185,6 @@ var createScene = async function () {
 
     return scene;
 
-  };
   };
 
 createScene().then(scene => {
