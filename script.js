@@ -74,7 +74,7 @@ async function loadModel(url) {
 async function onSelect() {
   if (reticle.visible) {
     try {
-      const model = await loadModel('911_Turbo.gltf');
+      const model = await loadModel('/911_Turbo.gltf');
       model.position.copy(reticle.position);
       scene.add(model);
     } catch (error) {
