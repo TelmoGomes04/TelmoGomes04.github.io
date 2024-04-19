@@ -1,4 +1,5 @@
-  // On your phone, you have to tap the screen to place a phone where the circle shows up
+// In this example you should be able to place a cone on top of a surface (like a floor or table)
+      // On your phone, you have to tap the screen to place a phone where the circle shows up
       // On the desktop emulator you have to "right-click" to simulate a tap
       import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
       let container;
@@ -168,4 +169,3 @@
           renderer.render(scene, camera);
         }
       }
-    
