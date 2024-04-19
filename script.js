@@ -85,22 +85,21 @@
         }
       }
       */
-      async function onSelect() {
+      function onSelect() {        
         if (reticle.visible) {
           // cone added at the point of a hit test
           // replace the next lines to add your own object in space
-          const model = await loadModel('seu_modelo.glb');
           const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
           const material = new THREE.MeshPhongMaterial({
             color: 0xffffff * Math.random()
           });
           const mesh = new THREE.Mesh(geometry, material);
-          // set the position of the cylinder based on where the reticle is
-          model.position.copy(reticle.position);
+          
+          // set the position of the cylinder based on where the reticle is          
           mesh.position.setFromMatrixPosition(reticle.matrix);
           mesh.quaternion.setFromRotationMatrix(reticle.matrix);
-          scene.add(model);
-          scene.add(mesh);
+
+          scene.add(mesh); 
         }
       }
       function onWindowResize() {
