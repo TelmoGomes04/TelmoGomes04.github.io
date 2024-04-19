@@ -69,18 +69,16 @@ async function loadModel(url) {
   });
 }
 
-function onSelect() {
+async function onSelect() {
   if (reticle.visible) {
-    const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xffffff * Math.random()
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-
-    mesh.position.setFromMatrixPosition(reticle.matrix);
-    mesh.quaternion.setFromRotationMatrix(reticle.matrix);
-
-    scene.add(mesh);
+    try {
+      const model = await loadModel('models/911_Turbo.gltf');
+      model.position.setFromMatrixPosition(reticle.matrix);
+      model.quaternion.setFromRotationMatrix(reticle.matrix);
+      scene.add(model);
+    } catch (error) {
+      console.error('Erro ao carregar o modelo 3D', error);
+    }
   }
 }
 
