@@ -37,6 +37,7 @@
         renderer.domElement.style.display = "none";
         window.addEventListener("resize", onWindowResize, false);
       }
+
       function addReticleToScene() {
         const geometry = new THREE.RingBufferGeometry(0.15, 0.2, 32).rotateX(
           -Math.PI / 2
@@ -87,18 +88,24 @@
       }
       */
       async function onSelect() {
-        if (reticle.visible) {
-          const modelName = 'Full_Car_F3.gltf'; // Nome do seu arquivo de modelo
-          const model = await loadModel(modelName); // Carrega o modelo
-      
-          // Posiciona o modelo na posição do reticle
-          model.position.copy(reticle.position);
-      
-          // Adiciona o modelo à cena
-          scene.add(model);
-        }
-      }
-      
+  if (reticle.visible) {
+    try {
+      const modelName = 'Full_Car_F3.gltf'; // Nome do seu arquivo de modelo
+      const model = await loadModel(modelName); // Carrega o modelo
+
+      // Posiciona o modelo na posição do reticle
+      model.position.copy(reticle.position);
+
+      // Adiciona o modelo à cena
+      scene.add(model);
+
+      console.log('Modelo carregado e adicionado à cena com sucesso!');
+    } catch (error) {
+      console.error('Erro ao carregar e adicionar modelo à cena:', error);
+    }
+  }
+}
+
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
