@@ -55,8 +55,9 @@
       async function loadModel(url) {
         return new Promise((resolve, reject) => {
           const loader = new THREE.GLTFLoader();
+          const fullURL = 'models/' + url; // Caminho completo para o arquivo de modelo
           loader.load(
-            url,
+            fullURL,
             (gltf) => {
               resolve(gltf.scene); // Retorna apenas a cena do modelo carregado
             },
@@ -87,22 +88,17 @@
       */
       async function onSelect() {
         if (reticle.visible) {
-          // cone added at the point of a hit test
-          // replace the next lines to add your own object in space
-          const model = await loadModel('seu_modelo.glb');
-          const geometry = new THREE.CylinderBufferGeometry(0, 0.05, 0.2, 32);
-          const material = new THREE.MeshPhongMaterial({
-            color: 0xffffff * Math.random()
-          });
-          const mesh = new THREE.Mesh(geometry, material);
-          // set the position of the cylinder based on where the reticle is
+          const modelName = 'Full_Car_F3.gltf'; // Nome do seu arquivo de modelo
+          const model = await loadModel(modelName); // Carrega o modelo
+      
+          // Posiciona o modelo na posição do reticle
           model.position.copy(reticle.position);
-          mesh.position.setFromMatrixPosition(reticle.matrix);
-          mesh.quaternion.setFromRotationMatrix(reticle.matrix);
+      
+          // Adiciona o modelo à cena
           scene.add(model);
-          scene.add(mesh);
         }
       }
+      
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
