@@ -1,5 +1,7 @@
 //import * as THREE from 'https://threejs.org/build/three.module.js';
-import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { ARButton } from "https://unpkg.com/three@0.163.0/examples/jsm/webxr/ARButton.js";
 //import { GLTFLoader } from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
 
 
