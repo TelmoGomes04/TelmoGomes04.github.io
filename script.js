@@ -79,7 +79,7 @@ async function cube(){
   mesh.position.setFromMatrixPosition(reticle.matrix);
   mesh.quaternion.setFromRotationMatrix(reticle.matrix);
   scene.add(mesh);
-  //
+  //aa
 }
 async function onSelect() {
   if (reticle.visible) {
@@ -92,7 +92,7 @@ async function onSelect() {
     } catch (error) {
       console.error('Erro ao carregar o modelo 3D', error);
     }
-    cube(); 
+    cube();
   }
 }
 
