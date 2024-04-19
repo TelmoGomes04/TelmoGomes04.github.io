@@ -1,7 +1,7 @@
 // Importando o Three.js e os módulos adicionais
-import * as THREE from './node_modules/three/build/three.module.js';
-import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
-import { ARButton } from './node_modules/three/examples/jsm/webxr/ARButton.js';
+import * as THREE from 'three';
+import { GLTFLoader } from './modulos/GLTFLoader.js';
+import { ARButton } from './modulos/ARButton.js';
 
 let container;
 let camera, scene, renderer;
@@ -72,7 +72,7 @@ async function loadModel(url) {
 async function onSelect() {
   if (reticle.visible) {
     try {
-      const model = await loadModel('/911_Turbo.gltf');
+      const model = await loadModel('./911_Turbo.gltf');
       model.position.copy(reticle.position);
       scene.add(model);
     } catch (error) {
