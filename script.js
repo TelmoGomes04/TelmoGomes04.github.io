@@ -8,7 +8,7 @@ let camera, scene, renderer;
 let reticle;
 let controller;
 
-//const loader = new GLTFLoader();
+//const loader = new GLTFLoader(); 
 
 init();
 animate();
