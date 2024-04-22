@@ -47,6 +47,8 @@
       arObject.visible = false;
       scene.addNode(arObject);
 
+      BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "911_Turbo.gltf", cena);
+
       let flower = new Gltf2Node({url: 'media/gltf/F3_Car/911_Turbo.gltf'});
       arObject.addNode(flower);
 
