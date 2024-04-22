@@ -10,22 +10,21 @@
   </head>
   <body>
     <!--<script type="module" src="script.js"></script> -->
+
     <script type="importmap">
-      <script type="importmap">
-        {
-          "imports": {
-            "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
-            "GLTFLoader": "https://unpkg.com/three@0.163.0/examples/jsm/loaders/GLTFLoader.js",
-            "ARButton": "https://unpkg.com/three@0.163.0/examples/jsm/webxr/ARButton.js"
-          }
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
+          "GLTFLoader": "https://unpkg.com/three@0.163.0/examples/jsm/loaders/GLTFLoader.js",
+          "ARButton": "https://unpkg.com/three@0.163.0/examples/jsm/webxr/ARButton.js"
         }
-        </script>
-        
-    </script>
+      }
+      </script>
+      
     <script type="module">
       import * as THREE from 'three';
-import { GLTFLoader } from 'GLTFLoader';
-import { ARButton } from 'ARButton';
+      import { GLTFLoader } from 'GLTFLoader';
+      import { ARButton } from 'ARButton';
 
 
 let container;
