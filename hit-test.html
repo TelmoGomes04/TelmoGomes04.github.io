@@ -21,28 +21,6 @@
         </p>
       </details>
     </header>
-    <script>
-      // Função para carregar um arquivo de texto
-      function loadTextFile(url, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onload = function() {
-          if (xhr.status === 200) {
-            callback(xhr.responseText);
-          }
-        };
-        xhr.send();
-      }
-      
-      // Carregar o shader
-      var fragmentShaderSource;
-      loadTextFile('simple.frag.glsl', function(responseText) {
-        fragmentShaderSource = responseText;
-      });
-      
-      // ... Agora você pode usar fragmentShaderSource para criar o shader ...
-      </script>
-      
     <script type="module">
       import {WebXRButton} from './js/util/webxr-button.js';
       import {Scene} from './js/render/scenes/scene.js';
@@ -68,6 +46,7 @@
       let arObject = new Node();
       arObject.visible = false;
       scene.addNode(arObject);
+      
 
       //gltfLoader.load('media/gltf/F3_Car/scene.gltf',onload);
 
@@ -91,26 +70,7 @@
       const MAX_FLOWERS = 30;
       let flowers = [];
 
-      //--------------------------------------------------------
-      // Ensure the background is transparent for AR.
-      scene.clear = false;
-
-        // Acessar o material do modelo
-        model.traverse(function(node) {
-          if (node.isMesh) {
-            // Criar um novo material
-            var material = new THREE.MeshBasicMaterial({
-              color: 0x0000ff // Cor azul
-            });
-
-            // Aplicar o material ao modelo
-            node.material = material;
-          }
-        });
-
-        // Adicionar o modelo à cena
-        scene.add(model);
-      //--------------------------------------------------------
+      
 
       function initXR() {
         xrButton = new WebXRButton({
@@ -151,6 +111,19 @@
 
           scene.setRenderer(renderer);
         }
+        // Carregar a textura
+        var texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+
+        // Carregar a imagem
+        var image = new Image();
+        image.onload = function() {
+          // Quando a imagem for carregada, copie-a para a textura
+          gl.bindTexture(gl.TEXTURE_2D, texture);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        }
+        image.src = 'media/gltf/F3_Car/textures/930_chromes_baseColor.png';
+        
 
         session.updateRenderState({ baseLayer: new XRWebGLLayer(session, gl) });
 
