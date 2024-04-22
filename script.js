@@ -1,5 +1,6 @@
-import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
-import { GLTFLoader } from 'https://unpkg.com/three@0.126.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'three';
+import { ARButton } from "https://unpkg.com/three@0.163.0/examples/jsm/webxr/ARButton.js";
+import { GLTFLoader } from 'https://unpkg.com/three@0.163.0/examples/jsm/loaders/GLTFLoader.js';
 
 let container;
 let camera, scene, renderer;
