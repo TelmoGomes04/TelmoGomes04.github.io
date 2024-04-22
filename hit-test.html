@@ -21,6 +21,28 @@
         </p>
       </details>
     </header>
+    <script>
+      // Função para carregar um arquivo de texto
+      function loadTextFile(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            callback(xhr.responseText);
+          }
+        };
+        xhr.send();
+      }
+      
+      // Carregar o shader
+      var fragmentShaderSource;
+      loadTextFile('simple.frag.glsl', function(responseText) {
+        fragmentShaderSource = responseText;
+      });
+      
+      // ... Agora você pode usar fragmentShaderSource para criar o shader ...
+      </script>
+      
     <script type="module">
       import {WebXRButton} from './js/util/webxr-button.js';
       import {Scene} from './js/render/scenes/scene.js';
@@ -51,6 +73,9 @@
 
       let flower = new Gltf2Node({url: 'media/gltf/F3_Car/scene.gltf'});
       flower.scale.set(3,3,3);
+      let material = new PbrMaterial();
+      material.baseColorFactor.value = [0.0, 0.0, 1.0, 1.0];
+      let mesh = new THREE.Mesh(geometry, material);
       arObject.addNode(flower);
 
       let reticle = new Gltf2Node({url: 'media/gltf/reticle/reticle.gltf'});
@@ -66,8 +91,26 @@
       const MAX_FLOWERS = 30;
       let flowers = [];
 
+      //--------------------------------------------------------
       // Ensure the background is transparent for AR.
       scene.clear = false;
+
+        // Acessar o material do modelo
+        model.traverse(function(node) {
+          if (node.isMesh) {
+            // Criar um novo material
+            var material = new THREE.MeshBasicMaterial({
+              color: 0x0000ff // Cor azul
+            });
+
+            // Aplicar o material ao modelo
+            node.material = material;
+          }
+        });
+
+        // Adicionar o modelo à cena
+        scene.add(model);
+      //--------------------------------------------------------
 
       function initXR() {
         xrButton = new WebXRButton({
