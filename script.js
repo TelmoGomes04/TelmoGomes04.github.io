@@ -1,6 +1,4 @@
-//import * as THREE from 'https://unpkg.com/three@0.163.0/build/three.module.js';
-//import { ARButton } from "https://unpkg.com/three@0.163.0/examples/jsm/webxr/ARButton.js";
-//import { GLTFLoader } from 'https://unpkg.com/three@0.163.0/examples/jsm/loaders/GLTFLoader.js';
+import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
 
 let container;
 let camera, scene, renderer;
@@ -56,7 +54,7 @@ function addReticleToScene() {
 
 async function loadModel(url) {
   return new Promise((resolve, reject) => {
-    const loader = new GLTFLoader();
+    const loader = new THREE.GLTFLoader();
     loader.load(
       url,
       (gltf) => {
@@ -83,31 +81,20 @@ async function cube(){
   scene.add(mesh);
   //aa
 }
-
 async function onSelect() {
   if (reticle.visible) {
     try {
-      const loader = new GLTFLoader();
-      loader.load( 'models/Full_Car_F3.gltf', function ( gltf ) {
-        const model = gltf.scene;
-        model.position.setFromMatrixPosition(reticle.matrix);
-        model.quaternion.setFromRotationMatrix(reticle.matrix);
-
-        scene.add( model );
-      
-      }, undefined, function ( error ) {
-      
-        console.error( 'Erro ao carregar o modelo 3D',error );
-      
-      } );
-      
+      const model = await loadModel('models/Full_Car_F3.gltf');
+      model.position.setFromMatrixPosition(reticle.matrix);
+      model.quaternion.setFromRotationMatrix(reticle.matrix);
+      scene.add(model);
+      cube();
     } catch (error) {
       console.error('Erro ao carregar o modelo 3D', error);
     }
     cube();
   }
 }
-
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
