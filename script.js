@@ -1,5 +1,5 @@
 import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
-import { GLTFLoader } from 'https://unpkg.com/three@0.126.0/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 let container;
 let camera, scene, renderer;
@@ -82,20 +82,31 @@ async function cube(){
   scene.add(mesh);
   //aa
 }
+
 async function onSelect() {
   if (reticle.visible) {
     try {
-      const model = await loadModel('models/Full_Car_F3.gltf');
-      model.position.setFromMatrixPosition(reticle.matrix);
-      model.quaternion.setFromRotationMatrix(reticle.matrix);
-      scene.add(model);
-      cube();
+      const loader = new GLTFLoader();
+      loader.load( 'models/Full_Car_F3.gltf', function ( gltf ) {
+        const model = gltf.scene;
+        model.position.setFromMatrixPosition(reticle.matrix);
+        model.quaternion.setFromRotationMatrix(reticle.matrix);
+
+        scene.add( model );
+      
+      }, undefined, function ( error ) {
+      
+        console.error( 'Erro ao carregar o modelo 3D',error );
+      
+      } );
+      
     } catch (error) {
       console.error('Erro ao carregar o modelo 3D', error);
     }
     cube();
   }
 }
+
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
