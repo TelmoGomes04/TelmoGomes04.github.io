@@ -36,8 +36,8 @@
 
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
               console.log(meshes);
-              mesh.set.scaling(0.5,0.5,0.5);
               var mesh = meshes[0];
+              mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
             });
             
             return scene;
@@ -97,8 +97,8 @@
                   console.log("Mesh importada", Mesh);
 
                   // Desativar o marcador e remover o evento de clique
-                  //marker.isVisible = false;
-                  //canvas.removeEventListener("click", arguments.callee);
+                  marker.isVisible = false;
+                  canvas.removeEventListener("click", arguments.callee);
               
           }
       });
