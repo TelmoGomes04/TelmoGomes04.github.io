@@ -110,14 +110,15 @@
         }
         // Carregar a textura
         var texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
+          //gl.bindTexture(gl.TEXTURE_2D, texture);
 
         // Carregar a imagem
         var image = new Image();
         image.onload = function() {
           // Quando a imagem for carregada, copie-a para a textura
-          gl.bindTexture(gl.TEXTURE_2D, texture);
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+            //gl.bindTexture(gl.TEXTURE_2D, texture);
+            //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+          handleTextureLoaded(image, texture);
         }
         image.src = 'media/gltf/F3_Car/textures/930_chromes_baseColor.png';
 
@@ -208,6 +209,25 @@
 
         scene.endFrame();
       }
+
+      function handleTextureLoaded(image, texture) {
+        // Vincular a textura WebGL para configurar os parâmetros e carregar a imagem.
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      
+        // Configurar parâmetros de textura (por exemplo, filtragem e repetição).
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      
+        // Agora a textura está pronta para ser usada nos seus shaders.
+      }
+      var textureLocation = gl.getUniformLocation(program, 'uTexture');
+      gl.uniform1i(textureLocation, 0); // Use a textura na unidade de textura 0.
+
+      // Ative a textura para ser usada durante o desenho.
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
 
       // Start the XR application.
       initXR();

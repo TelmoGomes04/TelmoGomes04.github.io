@@ -1,8 +1,6 @@
-var fragmentShaderSource = `
-  precision mediump float;
-  uniform sampler2D u_texture;
-  varying vec2 v_texcoord;
-  void main(void) {
-    gl_FragColor = texture2D(u_texture, v_texcoord);
-  }
-`;
+uniform sampler2D uTexture;
+
+void main() {
+  vec4 texColor = texture2D(uTexture, vTextureCoord);
+  gl_FragColor = texColor;
+}
