@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>AR Test</title>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script> 
-    <!-- <script src="https://cdn.babylonjs.com/4.2.0/babylon.js"></script> -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
     <style>
         html, body {
@@ -35,6 +34,11 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                var mesh = meshes[0];
+                mesh.position.y = 1;
+            });
+
             return scene;
         }
 
@@ -42,28 +46,19 @@
         var scene = createScene();
 
         // Iniciar a sessão WebXR
-        var xrHelper = scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}});
-
-        xrHelper.then(function (xr) {
-          var hitTestFeature = xr.baseExperience.featuresManager.enableFeature(BABYLON.WebXRHitTest.Name, "latest");
+        scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}}).then((xrHelper) => {
+          // Ativar a detecção de plano
+          xrHelper.baseExperience.featuresManager.enableFeature(BABYLON.WebXRPlaneDetector.Name, "latest", { worldParentNode: scene.rootNode });
       
-          hitTestFeature.onHitTestResultObservable.add((results) => {
-              if (results.length) {
-                  var hitTestResult = results[0];
-                  var hitMatrix = hitTestResult.hitMatrix;
-                  if (hitMatrix) {
-                      var hitPosition = BABYLON.Vector3.TransformCoordinates(BABYLON.Vector3.Zero(), hitMatrix);
-                      BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                          var mesh = meshes[0];
-                          mesh.position = hitPosition;
-                      });
-                  }
-              }
+          // Quando um novo plano é detectado, criar um objeto
+          xrHelper.baseExperience.featuresManager.getEnabledFeature(BABYLON.WebXRPlaneDetector.Name).onPlaneAddedObservable.add((plane) => {
+              // Carregar o objeto quando um novo plano é detectado
+              BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                  var mesh = meshes[0];
+                  mesh.position = plane.position; // Posicionar o objeto no plano
+              });
           });
       });
-      
-      
-      
 
         engine.runRenderLoop(function () {
             if (scene) {
