@@ -36,6 +36,7 @@
 
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
               console.log(meshes);
+              mesh.set.scaling(0.5,0.5,0.5);
               var mesh = meshes[0];
             });
             
@@ -65,7 +66,7 @@
                 marker.isVisible = false;
             }
           });
-
+/*
           // Adicione um evento de clique/tap ao canvas
           canvas.addEventListener("click", function () {
               if (marker.isVisible) {
@@ -82,8 +83,26 @@
                   
               }
           });
-
+*/
         });
+
+        // Adicione um evento de clique/tap ao canvas
+        canvas.addEventListener("click", function () {
+          if (marker.isVisible) {
+              // Carregar o objeto quando um novo plano é detectado
+              
+                  mesh.position = marker.position.clone(); // Posicionar o objeto no marcador
+                  mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
+
+                  console.log("Mesh importada", Mesh);
+
+                  // Desativar o marcador e remover o evento de clique
+                  //marker.isVisible = false;
+                  //canvas.removeEventListener("click", arguments.callee);
+              
+          }
+      });
+
 
         engine.runRenderLoop(function () {
             if (scene) {
