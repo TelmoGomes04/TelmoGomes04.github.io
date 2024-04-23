@@ -28,7 +28,8 @@
       var mesh; // Define mesh here
       var marker; // Define marker here
 
-      var lastTouchX;
+      var lastTouchX; // Keep track of the last touch position
+      var lastTouchY; // Keep track of the last touch position
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -84,13 +85,16 @@
   
               if (lastTouchX !== undefined) {
                   var changeInX = touch.clientX - lastTouchX; // Calculate the change in X position
+                  var changeInY = touch.clientY - lastTouchY; // Calculate the change in Y position
   
-                  // Update the mesh position based on the change in X position
-                  // You may need to adjust the sensitivity (0.01 here) to get the desired speed
-                  mesh.position.x += changeInX * 0.01;
+                  // Update the mesh position based on the change in X and Y position
+                  // You may need to adjust the sensitivity (0.005 here) to get the desired speed
+                  mesh.position.x += changeInX * 0.005;
+                  mesh.position.z += changeInY * 0.005; // Move the car forward/backward based on the change in Y position
               }
   
               lastTouchX = touch.clientX; // Update the last touch position
+              lastTouchY = touch.clientY; // Update the last touch position
           }
       });
 
