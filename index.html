@@ -41,9 +41,9 @@
               mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
           });
             
-            
+          return scene;
         }
-        return scene;
+        
 
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
         var scene = createScene();
