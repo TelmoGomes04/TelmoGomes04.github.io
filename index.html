@@ -45,19 +45,11 @@
         var xrHelper = scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}});
 
         xrHelper.then(function (xr) {
-          var xrHitTest;
+          var hitTestFeature = xr.baseExperience.featuresManager.enableFeature(BABYLON.WebXRHitTest.Name, "latest");
       
-          xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
-              if (!xrHitTest) {
-                  xr.xrHitTest.addOnHitTestResultObservable((result) => {
-                      xrHitTest = result;
-                  });
-              }
-          });
-      
-          scene.onPointerDown = function (evt, pickInfo) {
-              if (xrHitTest && xrHitTest.length) {
-                  var hitTestResult = xrHitTest[0];
+          hitTestFeature.onHitTestResultObservable.add((results) => {
+              if (results.length) {
+                  var hitTestResult = results[0];
                   var pose = hitTestResult.getPose(xr.baseExperience.sessionManager.referenceSpace);
                   if (pose) {
                       BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
@@ -66,8 +58,9 @@
                       });
                   }
               }
-          };
+          });
       });
+      
       
 
         engine.runRenderLoop(function () {
