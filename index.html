@@ -43,7 +43,7 @@
         // Iniciar a sessão WebXR
         scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}}).then((xrHelper) => {
           // Ativar a detecção de plano
-          const fm = xr.baseExperience.featuresManager;
+          const fm = xrHelper.baseExperience.featuresManager;
 
           const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
@@ -60,22 +60,22 @@
                 marker.isVisible = false;
             }
           });
-        });
 
-        // Adicione um evento de clique/tap ao canvas
-        canvas.addEventListener("click", function () {
-            if (marker.isVisible) {
-                // Carregar o objeto quando um novo plano é detectado
-                BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                    var mesh = meshes[0];
-                    mesh.position = marker.position.clone(); // Posicionar o objeto no marcador
-                    mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
+          // Adicione um evento de clique/tap ao canvas
+          canvas.addEventListener("click", function () {
+              if (marker.isVisible) {
+                  // Carregar o objeto quando um novo plano é detectado
+                  BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                      var mesh = meshes[0];
+                      mesh.position = marker.position.clone(); // Posicionar o objeto no marcador
+                      mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
 
-                    // Desativar o marcador e remover o evento de clique
-                    marker.isVisible = false;
-                    canvas.removeEventListener("click", arguments.callee);
-                });
-            }
+                      // Desativar o marcador e remover o evento de clique
+                      marker.isVisible = false;
+                      canvas.removeEventListener("click", arguments.callee);
+                  });
+              }
+          });
         });
 
         engine.runRenderLoop(function () {
