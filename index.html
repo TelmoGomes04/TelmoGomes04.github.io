@@ -54,9 +54,13 @@
 
           const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
-          const marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 });
-          marker.isVisible = false;
-          marker.rotationQuaternion = new BABYLON.Quaternion();
+          const marker = new Gltf2Node({url: 'media/gltf/reticle/reticle.gltf'});
+          marker.visible = false;
+          scene.addNode(marker);
+
+          //const marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 });
+          //marker.isVisible = false;
+          //marker.rotationQuaternion = new BABYLON.Quaternion();
 
           xrTest.onHitTestResultObservable.add((results) => {
             if (results.length) {
