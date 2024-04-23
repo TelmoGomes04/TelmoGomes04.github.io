@@ -34,11 +34,6 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                var mesh = meshes[0];
-                mesh.position.y = 1;
-            });
-
             return scene;
         }
 
@@ -52,6 +47,10 @@
       
           // Quando um novo plano é detectado, criar um objeto
           xrHelper.baseExperience.featuresManager.getEnabledFeature(BABYLON.WebXRPlaneDetector.Name).onPlaneAddedObservable.add((plane) => {
+            // Crie um box para visualizar o plano
+            var box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
+            box.position = plane.position.clone();
+            
             // Carregar o objeto quando um novo plano é detectado
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
                 var mesh = meshes[0];
