@@ -50,16 +50,18 @@
           hitTestFeature.onHitTestResultObservable.add((results) => {
               if (results.length) {
                   var hitTestResult = results[0];
-                  var pose = hitTestResult.getPose(xr.baseExperience.sessionManager.referenceSpace);
-                  if (pose) {
+                  var hitMatrix = hitTestResult.hitMatrix;
+                  if (hitMatrix) {
+                      var hitPosition = BABYLON.Vector3.TransformCoordinates(BABYLON.Vector3.Zero(), hitMatrix);
                       BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
                           var mesh = meshes[0];
-                          mesh.position = new BABYLON.Vector3(pose.transform.position.x, pose.transform.position.y, pose.transform.position.z);
+                          mesh.position = hitPosition;
                       });
                   }
               }
           });
       });
+      
       
       
 
