@@ -48,7 +48,7 @@
             var hitTest;
             xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
                 if (!hitTest) {
-                    xr.baseExperience.sessionManager.currentFrame.createHitTestSource(new XRHitTestSourceInit()).then((res) => {
+                    xr.baseExperience.sessionManager.currentFrame.requestHitTestSource().then((res) => {
                         hitTest = res;
                     });
                 }
