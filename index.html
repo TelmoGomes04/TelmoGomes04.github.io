@@ -66,12 +66,12 @@
               if (marker.isVisible) {
                   // Carregar o objeto quando um novo plano é detectado
                   BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                    console.log(meshes)
+                      console.log(meshes);
                       var mesh = meshes[0];
                       mesh.position = marker.position.clone(); // Posicionar o objeto no marcador
                       mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
 
-                      console.log("Mesh importada", ImportMesh);
+                      console.log("Mesh importada", Mesh);
 
                       // Desativar o marcador e remover o evento de clique
                       //marker.isVisible = false;
