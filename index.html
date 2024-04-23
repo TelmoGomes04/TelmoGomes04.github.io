@@ -44,30 +44,31 @@
         // Iniciar a sessão WebXR
         var xrHelper = scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}});
 
-        xrHelper.then(function(xr) {
-            var hitTest;
-            xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
-                if (!hitTest) {
-                    xr.baseExperience.sessionManager.currentFrame.requestHitTestSource().then((res) => {
-                        hitTest = res;
-                    });
-                }
-            });
-
-            scene.onPointerDown = function(evt, pickInfo) {
-                hitTest.requestHitTestSourceForTransientInput(new XRTransientInputHitTestSourceInit()).then((hitTestSourceTransient) => {
-                    hitTestSourceTransient.results.forEach((hitTestResult) => {
-                        var pose = hitTestResult.getPose(xr.baseExperience.sessionManager.referenceSpace);
-                        if (pose) {
-                            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                                var mesh = meshes[0];
-                                mesh.position = new BABYLON.Vector3(pose.transform.position.x, pose.transform.position.y, pose.transform.position.z);
-                            });
-                        }
-                    });
-                });
-            };
-        });
+        xrHelper.then(function (xr) {
+          var xrHitTest;
+      
+          xr.baseExperience.sessionManager.onXRFrameObservable.add(() => {
+              if (!xrHitTest) {
+                  xr.xrHitTest.addOnHitTestResultObservable((result) => {
+                      xrHitTest = result;
+                  });
+              }
+          });
+      
+          scene.onPointerDown = function (evt, pickInfo) {
+              if (xrHitTest && xrHitTest.length) {
+                  var hitTestResult = xrHitTest[0];
+                  var pose = hitTestResult.getPose(xr.baseExperience.sessionManager.referenceSpace);
+                  if (pose) {
+                      BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                          var mesh = meshes[0];
+                          mesh.position = new BABYLON.Vector3(pose.transform.position.x, pose.transform.position.y, pose.transform.position.z);
+                      });
+                  }
+              }
+          };
+      });
+      
 
         engine.runRenderLoop(function () {
             if (scene) {
