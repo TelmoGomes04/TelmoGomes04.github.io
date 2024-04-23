@@ -43,13 +43,22 @@
         // Iniciar a sessão WebXR
         scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}}).then((xrHelper) => {
           // Ativar a detecção de plano
-          xrHelper.baseExperience.featuresManager.enableFeature(BABYLON.WebXRPlaneDetector.Name, "latest", { worldParentNode: scene.rootNode });
-      
-          // Quando um novo plano é detectado, criar um objeto
-          xrHelper.baseExperience.featuresManager.getEnabledFeature(BABYLON.WebXRPlaneDetector.Name).onPlaneAddedObservable.add((plane) => {
-            // Crie um box para visualizar o plano
-            var box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
-            box.position = plane.position.clone();
+          const fm = xr.baseExperience.featuresManager;
+
+          const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
+
+          const marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 });
+          marker.isVisible = false;
+          marker.rotationQuaternion = new BABYLON.Quaternion();
+
+          xrTest.onHitTestResultObservable.add((results) => {
+            if (results.length) {
+                marker.isVisible = true;
+                hitTest = results[0];
+                hitTest.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, marker.position);
+            } else {
+                marker.isVisible = false;
+            }
           });
         });
 
