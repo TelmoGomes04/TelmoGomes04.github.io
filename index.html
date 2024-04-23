@@ -23,12 +23,13 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        var canvas = document.getElementById("renderCanvas");
-        var mesh; // Define mesh here
-        var marker; // Define marker here
 
-        var lastTouchX; // Keep track of the last touch position
-        var lastTouchY; // Keep track of the last touch position
+      var canvas = document.getElementById("renderCanvas");
+      var mesh; // Define mesh here
+      var marker; // Define marker here
+
+      var lastTouchX; // Keep track of the last touch position
+      var lastTouchY; // Keep track of the last touch position
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -40,14 +41,14 @@
             light.intensity = 0.7;
 
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                console.log(meshes);
-                mesh = meshes[0]; // Assign the loaded mesh to the mesh variable defined earlier
-                mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
-                if (marker) { // Check if marker is defined
-                    mesh.position = marker.position.clone(); // Position the object at the marker
-                    mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
-                }
-            });
+            console.log(meshes);
+            mesh = meshes[0]; // Assign the loaded mesh to the mesh variable defined earlier
+            mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
+              if (marker) { // Check if marker is defined
+                  mesh.position = marker.position.clone(); // Position the object at the marker
+                  mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
+              }
+          });
             
             return scene;
         }
@@ -57,32 +58,25 @@
 
         // Start the WebXR session
         scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}}).then((xrHelper) => {
-            // Enable plane detection
-            const fm = xrHelper.baseExperience.featuresManager;
+          // Enable plane detection
+          const fm = xrHelper.baseExperience.featuresManager;
 
-            const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
-            const xrPlanes = fm.enableFeature(BABYLON.WebXRPlaneDetector.Name, "latest");
-            const anchors = fm.enableFeature(BABYLON.WebXRAnchorSystem.Name, 'latest');
+          const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
-            marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 }); // Assign the created torus to the marker variable defined earlier
-            marker.isVisible = false;
-            marker.rotationQuaternion = new BABYLON.Quaternion();
+          marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 }); // Assign the created torus to the marker variable defined earlier
+          marker.isVisible = false;
+          marker.rotationQuaternion = new BABYLON.Quaternion();
 
-            xrTest.onHitTestResultObservable.add((results) => {
-                if (results.length) {
-                    marker.isVisible = true;
-                    hitTest = results[0];
-                    hitTest.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, marker.position);
-                } else {
-                    marker.isVisible = false;
-                }
-            });
-
-            scene.onPointerDown = (evt, pickInfo) => {
-                if (hitTest && anchors && xr.baseExperience.state === BABYLON.WebXRState.IN_XR) {
-                    anchors.addAnchorPointUsingHitTestResultAsync(hitTest);
-                }
+          xrTest.onHitTestResultObservable.add((results) => {
+            if (results.length) {
+                marker.isVisible = true;
+                hitTest = results[0];
+                hitTest.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, marker.position);
+            } else {
+                marker.isVisible = false;
             }
+          });
+
         });
 
         window.addEventListener('click', function(event) {
@@ -93,23 +87,23 @@
         });
         
         canvas.addEventListener("touchmove", function (event) {
-            if (mesh && marker.isVisible) {
-                var touch = event.touches[0]; // Get the first touch event
-
-                if (lastTouchX !== undefined) {
-                    changeInX = touch.clientX - lastTouchX; // Calculate the change in X position
-                    changeInY = touch.clientY - lastTouchY; // Calculate the change in Y position
-
-                    // Update the mesh position based on the change in X and Y position 
-                    // You may need to adjust the sensitivity (0.005 here) to get the desired speed
-                    mesh.position.x += changeInX * 0.005;
-                    mesh.position.z += changeInY * 0.005; // Move the car forward/backward based on the change in Y position
-                }
-
-                lastTouchX = touch.clientX; // Update the last touch position
-                lastTouchY = touch.clientY; // Update the last touch position
-            }
-        });
+          if (mesh && marker.isVisible) {
+              var touch = event.touches[0]; // Get the first touch event
+  
+              if (lastTouchX !== undefined) {
+                  changeInX = touch.clientX - lastTouchX; // Calculate the change in X position
+                  changeInY = touch.clientY - lastTouchY; // Calculate the change in Y position
+  
+                  // Update the mesh position based on the change in X and Y position 
+                  // You may need to adjust the sensitivity (0.005 here) to get the desired speed
+                  mesh.position.x += changeInX * 0.005;
+                  mesh.position.z += changeInY * 0.005; // Move the car forward/backward based on the change in Y position
+              }
+  
+              lastTouchX = touch.clientX; // Update the last touch position
+              lastTouchY = touch.clientY; // Update the last touch position
+          }
+      });
 
         engine.runRenderLoop(function () {
             if (scene) {
