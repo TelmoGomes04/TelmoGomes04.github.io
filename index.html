@@ -71,22 +71,18 @@
           });
 
         });
-/*
-        // Add a click/tap event to the canvas
-        canvas.addEventListener("click", function () {
-          if (marker.isVisible) {
-              // Load the object when a new plane is detected
-              mesh.position = marker.position.clone(); // Position the object at the marker
-              mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
 
-              console.log("Mesh imported", mesh);
-
-              // Deactivate the marker and remove the click event
-              marker.isVisible = false;
-              canvas.removeEventListener("click", arguments.callee);
+        canvas.addEventListener("touchmove", function (event) {
+          if (mesh && marker.isVisible) {
+              var touch = event.touches[0]; // Get the first touch event
+              var changeInX = touch.clientX - canvas.width / 2; // Calculate the change in X position
+  
+              // Update the mesh position based on the change in X position
+              // You may need to adjust the sensitivity (0.01 here) to get the desired speed
+              mesh.position.x += changeInX * 0.01;
           }
       });
-*/
+      
         engine.runRenderLoop(function () {
             if (scene) {
                 scene.render();
