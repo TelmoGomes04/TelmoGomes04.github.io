@@ -70,12 +70,15 @@
                       mesh.position = marker.position.clone(); // Posicionar o objeto no marcador
                       mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
 
+                      console.log("Mesh importada", ImportMesh);
+
                       // Desativar o marcador e remover o evento de clique
-                      marker.isVisible = false;
-                      canvas.removeEventListener("click", arguments.callee);
+                      //marker.isVisible = false;
+                      //canvas.removeEventListener("click", arguments.callee);
                   });
               }
           });
+
         });
 
         engine.runRenderLoop(function () {
