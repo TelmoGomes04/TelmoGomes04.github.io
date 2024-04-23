@@ -24,7 +24,7 @@
     <canvas id="renderCanvas"></canvas>
     <script>
         var canvas = document.getElementById("renderCanvas");
-        var mesh;
+        var mesh; // Define mesh here
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -39,18 +39,17 @@
               console.log(meshes);
               mesh = meshes[0]; // Assign the loaded mesh to the mesh variable defined earlier
               mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
-          });
+            });
             
-          return scene;
+            return scene;
         }
-        
 
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
         var scene = createScene();
 
-        // Iniciar a sessão WebXR
+        // Start the WebXR session
         scene.createDefaultXRExperienceAsync({floorMeshes: [], uiOptions: {sessionMode: "immersive-ar"}}).then((xrHelper) => {
-          // Ativar a detecção de plano
+          // Enable plane detection
           const fm = xrHelper.baseExperience.featuresManager;
 
           const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
@@ -68,41 +67,23 @@
                 marker.isVisible = false;
             }
           });
-/*
-          // Adicione um evento de clique/tap ao canvas
-          canvas.addEventListener("click", function () {
-              if (marker.isVisible) {
-                  // Carregar o objeto quando um novo plano é detectado
-                  
-                      mesh.position = marker.position.clone(); // Posicionar o objeto no marcador
-                      mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
 
-                      console.log("Mesh importada", Mesh);
-
-                      // Desativar o marcador e remover o evento de clique
-                      //marker.isVisible = false;
-                      //canvas.removeEventListener("click", arguments.callee);
-                  
-              }
-          });
-*/
         });
 
-        // Adicione um evento de clique/tap ao canvas
+        // Add a click/tap event to the canvas
         canvas.addEventListener("click", function () {
           if (marker.isVisible) {
               // Load the object when a new plane is detected
               mesh.position = marker.position.clone(); // Position the object at the marker
               mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
-  
+
               console.log("Mesh imported", mesh);
-  
+
               // Deactivate the marker and remove the click event
               marker.isVisible = false;
               canvas.removeEventListener("click", arguments.callee);
           }
       });
-
 
         engine.runRenderLoop(function () {
             if (scene) {
