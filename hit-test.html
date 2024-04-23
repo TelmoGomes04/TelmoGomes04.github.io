@@ -40,6 +40,14 @@
       // WebGL scene globals.
       //let gl = null;
       var gl = createWebGLContext({ xrCompatible: true });
+      if (!gl) {
+        console.error('Falha ao inicializar o contexto WebGL.');
+        // Trate o erro ou saia da função aqui, se necessário
+      }
+      if (textureLocation === null) {
+        console.error('Falha ao obter a localização do uniforme no shader.');
+        // Trate o erro ou saia da função aqui, se necessário
+      }
       let renderer = null;
       let scene = new Scene();
       scene.enableStats(false);
