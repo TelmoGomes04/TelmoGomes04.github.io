@@ -28,6 +28,8 @@
       var mesh; // Define mesh here
       var marker; // Define marker here
 
+      var lastTouchX;
+
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
 
@@ -79,11 +81,16 @@
         canvas.addEventListener("touchmove", function (event) {
           if (mesh && marker.isVisible) {
               var touch = event.touches[0]; // Get the first touch event
-              var changeInX = touch.clientX - canvas.width / 2; // Calculate the change in X position
   
-              // Update the mesh position based on the change in X position
-              // You may need to adjust the sensitivity (0.01 here) to get the desired speed
-              mesh.position.x += changeInX * 0.01;
+              if (lastTouchX !== undefined) {
+                  var changeInX = touch.clientX - lastTouchX; // Calculate the change in X position
+  
+                  // Update the mesh position based on the change in X position
+                  // You may need to adjust the sensitivity (0.01 here) to get the desired speed
+                  mesh.position.x += changeInX * 0.01;
+              }
+  
+              lastTouchX = touch.clientX; // Update the last touch position
           }
       });
 
