@@ -34,6 +34,11 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+              console.log(meshes);
+              var mesh = meshes[0];
+            });
+            
             return scene;
         }
 
@@ -65,9 +70,7 @@
           canvas.addEventListener("click", function () {
               if (marker.isVisible) {
                   // Carregar o objeto quando um novo plano é detectado
-                  BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                      console.log(meshes);
-                      var mesh = meshes[0];
+                  
                       mesh.position = marker.position.clone(); // Posicionar o objeto no marcador
                       mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
 
@@ -76,7 +79,7 @@
                       // Desativar o marcador e remover o evento de clique
                       //marker.isVisible = false;
                       //canvas.removeEventListener("click", arguments.callee);
-                  });
+                  
               }
           });
 
