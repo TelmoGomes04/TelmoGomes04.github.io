@@ -38,7 +38,8 @@
       let xrHitTestSource = null;
 
       // WebGL scene globals.
-      let gl = null;
+      //let gl = null;
+      var gl = createWebGLContext({ xrCompatible: true });
       let renderer = null;
       let scene = new Scene();
       scene.enableStats(false);
