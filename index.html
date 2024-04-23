@@ -23,8 +23,10 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        var canvas = document.getElementById("renderCanvas");
-        var mesh; // Define mesh here
+
+      var canvas = document.getElementById("renderCanvas");
+      var mesh; // Define mesh here
+      var marker; // Define marker here
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -36,12 +38,14 @@
             light.intensity = 0.7;
 
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-              console.log(meshes);
-              mesh = meshes[0]; // Assign the loaded mesh to the mesh variable defined earlier
-              mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
-              mesh.position = marker.position.clone(); // Position the object at the marker
-              mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
-            });
+            console.log(meshes);
+            mesh = meshes[0]; // Assign the loaded mesh to the mesh variable defined earlier
+            mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
+              if (marker) { // Check if marker is defined
+                  mesh.position = marker.position.clone(); // Position the object at the marker
+                  mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
+              }
+          });
             
             return scene;
         }
@@ -56,7 +60,7 @@
 
           const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
-          const marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 });
+          marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 }); // Assign the created torus to the marker variable defined earlier
           marker.isVisible = false;
           marker.rotationQuaternion = new BABYLON.Quaternion();
 
@@ -82,7 +86,7 @@
               mesh.position.x += changeInX * 0.01;
           }
       });
-      
+
         engine.runRenderLoop(function () {
             if (scene) {
                 scene.render();
