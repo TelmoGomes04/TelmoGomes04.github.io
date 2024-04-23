@@ -52,12 +52,13 @@
       
           // Quando um novo plano é detectado, criar um objeto
           xrHelper.baseExperience.featuresManager.getEnabledFeature(BABYLON.WebXRPlaneDetector.Name).onPlaneAddedObservable.add((plane) => {
-              // Carregar o objeto quando um novo plano é detectado
-              BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                  var mesh = meshes[0];
-                  mesh.position = plane.position; // Posicionar o objeto no plano
-              });
-          });
+            // Carregar o objeto quando um novo plano é detectado
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                var mesh = meshes[0];
+                mesh.position = plane.position.clone(); // Posicionar o objeto no plano
+                mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Ajustar a posição y para que o objeto apareça no chão
+            });
+        });
       });
 
         engine.runRenderLoop(function () {
