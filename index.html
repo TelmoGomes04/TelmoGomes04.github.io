@@ -24,91 +24,82 @@
     <canvas id="renderCanvas"></canvas>
     <script>
         var canvas = document.getElementById("renderCanvas");
-        var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
-        
-        var xrHelper;
-        var scene;
-        
-        // Função para criar a cena com detecção de plano
-        var createScene = function () {
-            var scene = new BABYLON.Scene(engine);
-        
-            // Configurar câmera e luz
-            var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
-            camera.setTarget(BABYLON.Vector3.Zero());
-        
-            var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-            light.intensity = 0.7;
-        
-            // Inicializar WebXR e habilitar detecção de plano
-            scene.createDefaultXRExperienceAsync({
-                floorMeshes: [],
-                uiOptions: { sessionMode: "immersive-ar" }
-            }).then((xr) => {
-                xrHelper = xr;
-                xrHelper.baseExperience.sessionManager.onXRSessionInit.add(() => {
-                    // Obter sistema de detecção de planos
-                    const fm = xrHelper.baseExperience.featuresManager;
-                    const xrHitTest = fm.enableFeature(BABYLON.WebXRHitTest, 'latest');
-        
-                    // Array para armazenar cubos (meshes) que representam o plano
-                    var planeCubes = [];
-        
-                    // Evento para tratar resultado do hit test (detecção de plano)
-                    xrHitTest.onHitTestResultObservable.add((results) => {
-                        if (results.length > 0) {
-                            // Limpar cubos anteriores
-                            planeCubes.forEach((cube) => {
-                                cube.dispose();
-                            });
-                            planeCubes = [];
-        
-                            // Criar cubos para representar o plano
-                            results.forEach((result) => {
-                                const cube = BABYLON.MeshBuilder.CreateBox("planeCube", {
-                                    size: 0.1
-                                }, scene);
-                                cube.position.copyFrom(result.transformationMatrix.getTranslation());
-                                planeCubes.push(cube);
-                            });
-        
-                            // Chamar função para carregar o modelo do carro após detecção do plano
-                            loadCarModel(results[0].transformationMatrix);
-                        }
-                    });
-                });
+var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+
+var xrHelper;
+var scene;
+
+// Variáveis para o marcador e o carro
+var marker;
+var carMesh;
+
+// Função para criar a cena com detecção de plano e marcador
+var createScene = function () {
+    var scene = new BABYLON.Scene(engine);
+
+    // Configurar câmera e luz
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+    light.intensity = 0.7;
+
+    // Inicializar WebXR e habilitar detecção de plano
+    scene.createDefaultXRExperienceAsync({
+        floorMeshes: [],
+        uiOptions: { sessionMode: "immersive-ar" }
+    }).then((xr) => {
+        xrHelper = xr;
+        xrHelper.baseExperience.sessionManager.onXRSessionInit.add(() => {
+            // Obter sistema de detecção de planos
+            const fm = xrHelper.baseExperience.featuresManager;
+            const xrHitTest = fm.enableFeature(BABYLON.WebXRHitTest, 'latest');
+
+            // Criar marcador (torus) para posicionar o carro
+            marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 }, scene);
+            marker.isVisible = false;
+            marker.rotationQuaternion = new BABYLON.Quaternion();
+
+            // Evento para tratar resultado do hit test (detecção de plano)
+            xrHitTest.onHitTestResultObservable.add((results) => {
+                if (results.length > 0) {
+                    var hitResult = results[0];
+                    marker.isVisible = true;
+                    hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, marker.position);
+
+                    // Chamar função para carregar o modelo do carro após detecção do marcador
+                    loadCarModel();
+                }
             });
-        
-            return scene;
-        };
-        
-        // Função para carregar o modelo do carro
-        function loadCarModel(transformationMatrix) {
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                var carMesh = meshes[0];
-                carMesh.position = new BABYLON.Vector3(0, 0, 0); // Posição inicial do carro
-                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-                
-                // Posicionar o carro em cima do plano detectado
-                carMesh.position = BABYLON.Vector3.TransformCoordinates(carMesh.position, transformationMatrix);
-            });
-        }
-        
-        // Inicializar a cena
-        scene = createScene();
-        
-        // Iniciar o loop de renderização
-        engine.runRenderLoop(function () {
-            if (scene) {
-                scene.render();
-            }
         });
-        
-        // Lidar com redimensionamento da janela
-        window.addEventListener("resize", function () {
-            engine.resize();
-        });
-        
+    });
+
+    return scene;
+};
+
+// Função para carregar o modelo do carro
+function loadCarModel() {
+    BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+        carMesh = meshes[0];
+        carMesh.position.copyFrom(marker.position); // Posicionar o carro no marcador
+        carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
+    });
+}
+
+// Inicializar a cena
+scene = createScene();
+
+// Iniciar o loop de renderização
+engine.runRenderLoop(function () {
+    if (scene) {
+        scene.render();
+    }
+});
+
+// Lidar com redimensionamento da janela
+window.addEventListener("resize", function () {
+    engine.resize();
+});
 
     </script>
 </body>
