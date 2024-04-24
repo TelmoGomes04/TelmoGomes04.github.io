@@ -23,12 +23,15 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        //Funciona com as mecânicas erradas 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
         var marker;
         var carMesh;
+        var markerInitialPosition = null; // Variable to store the initial marker position
+
+        var touchStartX;
+        var touchStartY;
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -38,13 +41,6 @@
 
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
-
-            // Preload car model
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                carMesh = meshes[0];
-                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-                carMesh.isVisible = false; // Hide the car initially
-            });
 
             // Start the WebXR session
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
@@ -57,27 +53,31 @@
                 marker.rotationQuaternion = new BABYLON.Quaternion();
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (results.length > 0) {
+                    if (results.length > 0 && !markerInitialPosition) { // Process only once if markerInitialPosition is not set
                         var hitResult = results[0];
                         marker.isVisible = true;
-                        hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, marker.position);
+                        markerInitialPosition = new BABYLON.Vector3(); // Initialize markerInitialPosition
+                        hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, markerInitialPosition);
 
-                        // Show the car model when the marker is detected
-                        if (carMesh) {
-                            carMesh.isVisible = true;
-                            carMesh.position.copyFrom(marker.position);
-                        }
+                        // Spawn the car model at the initial marker position
+                        spawnCar(scene, markerInitialPosition);
                     } else {
                         marker.isVisible = false;
-                        if (carMesh) {
-                            carMesh.isVisible = false;
-                        }
                     }
                 });
             });
 
             return scene;
         };
+
+        function spawnCar(scene, position) {
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "F3_Car.gltf", scene, function (meshes) {
+                carMesh = meshes[0];
+                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
+                carMesh.isVisible = true;
+                carMesh.position.copyFrom(position); // Position the car at the initial marker position
+            });
+        }
 
         var scene = createScene();
 
@@ -91,10 +91,31 @@
             engine.resize();
         });
 
-        // Handle touch event to reposition the car on the marker
-        canvas.addEventListener("touchend", function (event) {
-            if (marker && marker.isVisible && carMesh) {
-                carMesh.position.copyFrom(marker.position);
+        // Handle touch events to move the car based on finger movement
+        canvas.addEventListener("touchstart", function (event) {
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+        });
+
+        canvas.addEventListener("touchmove", function (event) {
+            event.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
+
+            if (carMesh && carMesh.isVisible) {
+                var touchX = event.touches[0].clientX;
+                var touchY = event.touches[0].clientY;
+
+                var deltaX = touchX - touchStartX;
+                var deltaY = touchY - touchStartY;
+
+                // Adjust car position based on touch movement
+                markerInitialPosition.position.x += deltaX * 0.01; // Scale factor for sensitivity
+                markerInitialPosition.position.z -= deltaY * 0.01; // Invert Y-axis for intuitive movement
+
+                carMesh.position.copyFrom(markerInitialPosition);
+
+                // Update touch start position for next move
+                touchStartX = touchX;
+                touchStartY = touchY;
             }
         });
     </script>
