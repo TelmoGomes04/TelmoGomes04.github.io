@@ -71,7 +71,7 @@
         };
 
         function spawnCar(scene, position) {
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "F3_Car.gltf", scene, function (meshes) {
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
                 carMesh = meshes[0];
                 carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
                 carMesh.isVisible = true;
