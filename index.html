@@ -81,7 +81,7 @@
         });
 
         window.addEventListener('click', function(event) {
-            if (marker && mesh) { // Check if marker is defined
+            if (marker && marker.isVisible && mesh) { // Check if marker is defined and visible
                 console.log("mesh position changed");
                 mesh.position = marker.position.clone(); // Position the object at the marker
                 mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
