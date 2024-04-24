@@ -63,8 +63,7 @@
                     if (results.length > 0 && !markerInitialPosition) { // Process only once if markerInitialPosition is not set
                         var hitResult = results[0];
                         marker.isVisible = true;
-                        markerInitialPosition = new BABYLON.Vector3(); // Initialize markerInitialPosition
-                        hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, markerInitialPosition);
+                        markerInitialPosition = hitResult.transformationMatrix.getTranslation(); // Get hit test position
 
                         // Show the car at the initial marker position
                         if (carMesh) {
@@ -102,16 +101,10 @@
         
             if (carMesh && carMesh.isVisible && marker && marker.isVisible) {
                 var touchX = event.touches[0].clientX;
-                var deltaX = touchX - touchStartX;
+                var deltaX = (touchX - touchStartX) / window.innerWidth; // Normalize delta by screen width
         
-                // Determine movement direction based on touch location
-                if (deltaX < 0) {
-                    // Move car to the left
-                    markerInitialPosition.position.x -= 100; // Adjust this value for desired speed
-                } else {
-                    // Move car to the right
-                    markerInitialPosition.position.x += 100; // Adjust this value for desired speed
-                }
+                // Move car based on horizontal touch movement
+                carMesh.position.x += deltaX * 0.5; // Adjust speed as needed
 
                 // Update touch start position for next movement
                 touchStartX = touchX;
