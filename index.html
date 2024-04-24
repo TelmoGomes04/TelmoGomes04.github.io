@@ -30,8 +30,7 @@
         var carMesh;
         var markerInitialPosition = null; // Variable to store the initial marker position
 
-        var touchStartX;
-        var touchStartY;
+        var isFirstTouch = true; // Flag to track first touch after marker becomes visible
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -64,12 +63,6 @@
                         var hitResult = results[0];
                         marker.isVisible = true;
                         markerInitialPosition = hitResult.transformationMatrix.getTranslation(); // Get hit test position
-
-                        // Show the car at the initial marker position
-                        if (carMesh) {
-                            carMesh.isVisible = true;
-                            carMesh.position.copyFrom(markerInitialPosition);
-                        }
                     } else {
                         marker.isVisible = false;
                     }
@@ -91,25 +84,20 @@
             engine.resize();
         });
 
-        // Handle touch events to move the car left or right based on touch location
+        // Handle touch events to spawn car on first touch after marker becomes visible
         canvas.addEventListener("touchstart", function (event) {
-            touchStartX = event.touches[0].clientX;
-        });
-
-        canvas.addEventListener("touchmove", function (event) {
-            event.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
-        
-            if (carMesh && carMesh.isVisible && marker && marker.isVisible) {
-                var touchX = event.touches[0].clientX;
-                var deltaX = (touchX - touchStartX) / window.innerWidth; // Normalize delta by screen width
-        
-                // Move car based on horizontal touch movement
-                carMesh.position.x += deltaX * 0.5; // Adjust speed as needed
-
-                // Update touch start position for next movement
-                touchStartX = touchX;
+            if (marker && marker.isVisible && isFirstTouch) {
+                isFirstTouch = false; // Disable further processing of first touch
+                spawnCar(markerInitialPosition);
             }
         });
+
+        function spawnCar(position) {
+            if (carMesh) {
+                carMesh.isVisible = true;
+                carMesh.position.copyFrom(position);
+            }
+        }
     </script>
 </body>
 </html>
