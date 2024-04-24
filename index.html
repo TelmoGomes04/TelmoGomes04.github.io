@@ -38,6 +38,13 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
+            // Preload car model
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                carMesh = meshes[0];
+                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
+                carMesh.isVisible = false; // Hide the car initially
+            });
+
             // Start the WebXR session
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 // Enable plane detection
@@ -54,24 +61,22 @@
                         marker.isVisible = true;
                         hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, marker.position);
 
-                        // Load car model and position it on the marker
-                        loadCarModel(scene, marker.position);
+                        // Show the car model when the marker is detected
+                        if (carMesh) {
+                            carMesh.isVisible = true;
+                            carMesh.position.copyFrom(marker.position);
+                        }
                     } else {
                         marker.isVisible = false;
+                        if (carMesh) {
+                            carMesh.isVisible = false;
+                        }
                     }
                 });
             });
 
             return scene;
         };
-
-        function loadCarModel(scene, position) {
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                carMesh = meshes[0];
-                carMesh.position.copyFrom(position); // Position the car on the marker
-                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-            });
-        }
 
         var scene = createScene();
 
