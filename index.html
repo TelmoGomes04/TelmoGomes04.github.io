@@ -80,9 +80,17 @@
 
         });
 
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', function(event) { //For desktop
             if (marker && marker.isVisible && mesh) { // Check if marker is defined and visible
-                console.log("mesh position changed");
+                console.log("mesh position changed desktop");
+                mesh.position = marker.position.clone(); // Position the object at the marker
+                mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
+                //origin = mesh.position.clone(); // Set the origin to the current position of the mesh
+            }
+        });
+        window.addEventListener('touchend', function(event) {//for mobile
+            if (marker && marker.isVisible && mesh) { // Check if marker is defined and visible
+                console.log("mesh position changed mobile");
                 mesh.position = marker.position.clone(); // Position the object at the marker
                 mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y; // Adjust the y position so the object appears on the ground
                 //origin = mesh.position.clone(); // Set the origin to the current position of the mesh
