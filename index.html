@@ -28,6 +28,7 @@
 
         var marker;
         var carMesh;
+        var markerPosition; // Variable to store the initial marker position
 
         var touchStartX;
         var touchStartY;
@@ -41,13 +42,6 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
-            // Preload car model
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                carMesh = meshes[0];
-                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-                carMesh.isVisible = false; // Hide the car initially
-            });
-
             // Start the WebXR session
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 // Enable plane detection
@@ -59,27 +53,30 @@
                 marker.rotationQuaternion = new BABYLON.Quaternion();
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (results.length > 0) {
+                    if (results.length > 0 && !carMesh) { // Only process if carMesh hasn't been spawned
                         var hitResult = results[0];
                         marker.isVisible = true;
-                        hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, marker.position);
+                        hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, markerPosition);
 
-                        // Show the car model when the marker is detected
-                        if (carMesh) {
-                            carMesh.isVisible = true;
-                            carMesh.position.copyFrom(marker.position);
-                        }
+                        // Spawn the car model at the marker position
+                        spawnCar(scene, markerPosition);
                     } else {
                         marker.isVisible = false;
-                        if (carMesh) {
-                            carMesh.isVisible = false;
-                        }
                     }
                 });
             });
 
             return scene;
         };
+
+        function spawnCar(scene, position) {
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                carMesh = meshes[0];
+                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
+                carMesh.isVisible = true;
+                carMesh.position.copyFrom(position); // Position the car at the initial marker position
+            });
+        }
 
         var scene = createScene();
 
@@ -102,7 +99,7 @@
         canvas.addEventListener("touchmove", function (event) {
             event.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
 
-            if (carMesh && carMesh.isVisible && marker && marker.isVisible) {
+            if (carMesh && carMesh.isVisible) {
                 var touchX = event.touches[0].clientX;
                 var touchY = event.touches[0].clientY;
 
