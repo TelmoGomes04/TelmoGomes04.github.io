@@ -28,7 +28,7 @@
 
         var marker;
         var carMesh;
-        var markerPosition = null; // Variable to store the initial marker position
+        var markerInitialPosition = null; // Variable to store the initial marker position
 
         var touchStartX;
         var touchStartY;
@@ -53,14 +53,14 @@
                 marker.rotationQuaternion = new BABYLON.Quaternion();
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (results.length > 0 && !markerPosition) { // Process only once if markerPosition is not set
+                    if (results.length > 0 && !markerInitialPosition) { // Process only once if markerInitialPosition is not set
                         var hitResult = results[0];
                         marker.isVisible = true;
-                        markerPosition = new BABYLON.Vector3(); // Initialize markerPosition
-                        hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, markerPosition);
+                        markerInitialPosition = new BABYLON.Vector3(); // Initialize markerInitialPosition
+                        hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, markerInitialPosition);
 
                         // Spawn the car model at the initial marker position
-                        spawnCar(scene, markerPosition);
+                        spawnCar(scene, markerInitialPosition);
                     } else {
                         marker.isVisible = false;
                     }
