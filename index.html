@@ -98,24 +98,24 @@
         });
 
         canvas.addEventListener("touchmove", function (event) {
-            event.preventDefault(); // Prevenir o comportamento padrão do toque (por exemplo, rolagem da página)
+            event.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
         
-            if (carMesh && carMesh.isVisible) {
+            if (carMesh && carMesh.isVisible && marker && marker.isVisible) {
                 var touchX = event.touches[0].clientX;
                 var touchY = event.touches[0].clientY;
         
-                // Obter a posição 3D a partir das coordenadas do toque
+                // Get 3D position from touch coordinates
                 var scene = engine.getScene();
                 var pickResult = scene.pick(touchX, touchY);
         
                 if (pickResult.hit) {
-                    // Obter a posição 3D do ponto tocado
+                    // Get the 3D position of the touched point
                     var touchedPosition = pickResult.pickedPoint.clone();
-                    // Ajustar a posição do carro mantendo o plano Y (chão)
+        
+                    // Adjust car position
                     carMesh.position.x = touchedPosition.x;
                     carMesh.position.z = touchedPosition.z;
-                    // Manter a posição Y do carro constante (no chão)
-                    carMesh.position.y = marker.position.y; // Defina a posição Y do chão conforme necessário
+                    carMesh.position.y = marker.position.y; // Maintain the same height (Y) as the marker
                 }
             }
         });
