@@ -7,6 +7,7 @@
   "display": "standalone",
   "theme_color": "#d30000",
   "background_color": "#ffffff",
+  
   "icons": [
     {
       "src": "./media/manifest/icon-192x192.png",
@@ -21,6 +22,7 @@
       "purpose": "any maskable"
     }
   ],
+  
   "screenshots": [
     {
       "src": "./media/manifest/screenshot-1.png",
