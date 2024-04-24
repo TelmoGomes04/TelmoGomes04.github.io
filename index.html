@@ -23,12 +23,14 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-        //Funciona com as mecânicas erradas 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
         var marker;
         var carMesh;
+
+        var touchStartX;
+        var touchStartY;
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -91,10 +93,29 @@
             engine.resize();
         });
 
-        // Handle touch event to reposition the car on the marker
-        canvas.addEventListener("touchend", function (event) {
-            if (marker && marker.isVisible && carMesh) {
-                carMesh.position.copyFrom(marker.position);
+        // Handle touch events to move the car based on finger movement
+        canvas.addEventListener("touchstart", function (event) {
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+        });
+
+        canvas.addEventListener("touchmove", function (event) {
+            event.preventDefault(); // Prevent default touch behavior (e.g., scrolling)
+
+            if (carMesh && carMesh.isVisible && marker && marker.isVisible) {
+                var touchX = event.touches[0].clientX;
+                var touchY = event.touches[0].clientY;
+
+                var deltaX = touchX - touchStartX;
+                var deltaY = touchY - touchStartY;
+
+                // Adjust car position based on touch movement
+                carMesh.position.x += deltaX * 0.01; // Scale factor for sensitivity
+                carMesh.position.z -= deltaY * 0.01; // Invert Y-axis for intuitive movement
+
+                // Update touch start position for next move
+                touchStartX = touchX;
+                touchStartY = touchY;
             }
         });
     </script>
