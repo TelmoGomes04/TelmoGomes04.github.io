@@ -38,7 +38,8 @@ var createScene = function () {
     var scene = new BABYLON.Scene(engine);
 
     // Configurar câmera e luz
-    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, 0), scene);
+    camera.position = new BABYLON.Vector3(0, 1, -2);
     camera.setTarget(BABYLON.Vector3.Zero());
 
     var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
@@ -73,6 +74,7 @@ var createScene = function () {
             });
         });
     });
+
     return scene;
 };
 
@@ -98,6 +100,13 @@ engine.runRenderLoop(function () {
 // Lidar com redimensionamento da janela
 window.addEventListener("resize", function () {
     engine.resize();
+});
+
+// Lidar com eventos de toque (touch) para posicionar o carro
+canvas.addEventListener("touchend", function (event) {
+    if (marker && marker.isVisible && carMesh) {
+        carMesh.position.copyFrom(marker.position); // Posicionar o carro no marcador
+    }
 });
 
     </script>
