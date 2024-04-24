@@ -89,12 +89,15 @@
         });
         
         canvas.addEventListener("touchmove", function (event) {
+            console.log("touchmove event triggered");
             if (mesh && marker.isVisible) {
                 var touch = event.touches[0]; // Get the first touch event
 
                 if (lastTouchX !== undefined) {
                     changeInX = touch.clientX - lastTouchX; // Calculate the change in X position
                     changeInY = touch.clientY - lastTouchY; // Calculate the change in Y position
+
+                    console.log("changeInX:", changeInX, "changeInY:", changeInY);
 
                     // Update the mesh position based on the change in X and Y position 
                     // You may need to adjust the sensitivity (0.005 here) to get the desired speed
