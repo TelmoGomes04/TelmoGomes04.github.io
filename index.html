@@ -41,7 +41,10 @@
             light.intensity = 0.7;
 
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                console.log(meshes);
+                if(mesh){
+                    console.log(meshes);
+                }
+                
                 mesh = meshes[0]; // Assign the loaded mesh to the mesh variable defined earlier
                 mesh.scaling = new BABYLON.Vector3(0.5,0.5,0.5);
                 if (marker) { // Check if marker is defined
