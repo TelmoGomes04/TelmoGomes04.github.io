@@ -42,6 +42,13 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
+            // Preload car model
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                carMesh = meshes[0];
+                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
+                carMesh.isVisible = false; // Initially hide the car
+            });
+
             // Start the WebXR session
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 // Enable plane detection
@@ -59,8 +66,11 @@
                         markerInitialPosition = new BABYLON.Vector3(); // Initialize markerInitialPosition
                         hitResult.transformationMatrix.decompose(marker.scaling, marker.rotationQuaternion, markerInitialPosition);
 
-                        // Spawn the car model at the initial marker position
-                        spawnCar(scene, markerInitialPosition);
+                        // Show the car at the initial marker position
+                        if (carMesh) {
+                            carMesh.isVisible = true;
+                            carMesh.position.copyFrom(markerInitialPosition);
+                        }
                     } else {
                         marker.isVisible = false;
                     }
@@ -69,15 +79,6 @@
 
             return scene;
         };
-
-        function spawnCar(scene, position) {
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                carMesh = meshes[0];
-                carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-                carMesh.isVisible = true;
-                carMesh.position.copyFrom(position); // Position the car at the initial marker position
-            });
-        }
 
         var scene = createScene();
 
@@ -91,10 +92,9 @@
             engine.resize();
         });
 
-        // Handle touch events to move the car based on finger movement
+        // Handle touch events to move the car left or right based on touch location
         canvas.addEventListener("touchstart", function (event) {
             touchStartX = event.touches[0].clientX;
-            touchStartY = event.touches[0].clientY;
         });
 
         canvas.addEventListener("touchmove", function (event) {
@@ -102,21 +102,19 @@
         
             if (carMesh && carMesh.isVisible && marker && marker.isVisible) {
                 var touchX = event.touches[0].clientX;
-                var touchY = event.touches[0].clientY;
+                var deltaX = touchX - touchStartX;
         
-                // Get 3D position from touch coordinates
-                var scene = engine.getScene();
-                var pickResult = scene.pick(touchX, touchY);
-        
-                if (pickResult.hit) {
-                    // Get the 3D position of the touched point
-                    var touchedPosition = pickResult.pickedPoint.clone();
-        
-                    // Adjust car position
-                    carMesh.position.x = touchedPosition.x;
-                    carMesh.position.z = touchedPosition.z;
-                    carMesh.position.y = marker.position.y; // Maintain the same height (Y) as the marker
+                // Determine movement direction based on touch location
+                if (deltaX < 0) {
+                    // Move car to the left
+                    carMesh.position.x -= 0.01; // Adjust this value for desired speed
+                } else {
+                    // Move car to the right
+                    carMesh.position.x += 0.01; // Adjust this value for desired speed
                 }
+
+                // Update touch start position for next movement
+                touchStartX = touchX;
             }
         });
     </script>
