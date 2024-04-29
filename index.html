@@ -105,7 +105,7 @@
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if(initialTouchPoint && meshes && meshes[0].isVisible) {
-                        var deltaX = scene.pointerX - initialTouchPoint.x;
+                        var deltaX = initialTouchPoint.x- scene.pointerX;
                         var deltaY = initialTouchPoint.y - scene.pointerY;
         
                         // Limitar a velocidade máxima de movimento
