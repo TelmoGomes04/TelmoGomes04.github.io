@@ -48,7 +48,7 @@
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[i].isVisible = false; // Cada malha é invisível inicialmente
                 }
-                meshes.scaling = new BABYLON.Vector3(0.3,0.3,0.3);
+                //meshes.scaling = new BABYLON.Vector3(0.3,0.3,0.3);
             });
 
             // Start the WebXR session
@@ -101,7 +101,7 @@
                             //meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
                         }
-                        marker.isVisible = true;
+                        marker.isVisible = false;
                     }
                     break;
             }
