@@ -94,37 +94,25 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                    initialTouchPoint = new BABYLON.Vector2(scene.pointerX, scene.pointerY);
                     console.log("Touch down event detected");
                     if(marker.isVisible && meshes) {
-                        for(var i = 0; i < meshes.length; i++) {
-                            meshes[0].position = marker.position.clone();
-                            meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário .
+                        // Calcular a posição no plano onde o usuário clicou
+                        var pickResult = scene.pick(scene.pointerX, scene.pointerY, function(mesh) {
+                            return mesh === marker; // Substitua 'marker' pelo nome da sua malha de plano
+                        });
+        
+                        if(pickResult.hit) {
+                            // Mover o carro para a posição clicada
+                            for(var i = 0; i < meshes.length; i++) {
+                                meshes[0].position = pickResult.pickedPoint;
+                                meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário .
+                            }
                         }
+        
                         marker.isVisible = false;
                     }
                     break;
-                case BABYLON.PointerEventTypes.POINTERMOVE:
-                    if(initialTouchPoint && meshes && meshes[0].isVisible) {
-                        var deltaY = (initialTouchPoint.x- scene.pointerX) * 1; // Trocar deltaX por deltaY
-                        var deltaX = (initialTouchPoint.y - scene.pointerY) * 1; // Trocar deltaY por deltaX
-        
-                        // Limitar a velocidade máxima de movimento
-                        var maxSpeed = 0.5; // Aumentar o valor de maxSpeed
-                        deltaX = Math.max(-maxSpeed, Math.min(maxSpeed, deltaX));
-                        deltaY = Math.max(-maxSpeed, Math.min(maxSpeed, deltaY));
-        
-                        // Converte os movimentos do dedo para movimentos no mundo 3D
-                        var deltaPosition = new BABYLON.Vector3(deltaX, 0, deltaY);
-
-                        var newPosition = meshes[0].position.add(deltaPosition);
-        
-                        meshes[0].position = BABYLON.Vector3.Lerp(meshes[0].position, newPosition, lerpSpeed); // Aumentar o valor de escala
-                    }
-                    break;
-                case BABYLON.PointerEventTypes.POINTERUP:
-                    initialTouchPoint = null;
-                    break;
+                // Resto do seu código...
             }
         });
         
