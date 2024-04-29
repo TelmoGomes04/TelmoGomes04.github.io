@@ -98,7 +98,7 @@
                     if(marker.isVisible && meshes) {
                         // Calcular a posição no plano onde o usuário clicou
                         var pickResult = scene.pick(scene.pointerX, scene.pointerY, function(mesh) {
-                            return mesh === marker; // Substitua 'marker' pelo nome da sua malha de plano
+                            return mesh === xrTest; // Substitua 'marker' pelo nome da sua malha de plano
                         });
         
                         if(pickResult.hit) {
