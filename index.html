@@ -49,12 +49,13 @@
                 marker.rotationQuaternion = new BABYLON.Quaternion();
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (results.length > 0 && !markerInitialPosition) { // Process only once if markerInitialPosition is not set
+                    if (results.length > 0) {
                         var hitResult = results[0];
                         marker.isVisible = true;
-                        markerInitialPosition = hitResult.transformationMatrix.getTranslation(); // Get hit test position
-                    } else {
-                        marker.isVisible = false;
+                        marker.position = hitResult.transformationMatrix.getTranslation(); // Update marker position
+                        if (!markerInitialPosition) {
+                            markerInitialPosition = marker.position.clone(); // Store initial position
+                        }
                     }
                 });
             });
