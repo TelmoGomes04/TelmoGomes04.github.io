@@ -24,8 +24,6 @@
     <canvas id="renderCanvas"></canvas>
     <script>
 
-        var mesh;
-
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
@@ -44,6 +42,7 @@
             // Carregar as malhas no início, mas mantê-las invisíveis
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                 meshes = loadedMeshes;
+                meshes.scaling = new BABYLON.Vector3(0.4, 0.4, 0.4);
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[i].isVisible = false; // Cada malha é invisível inicialmente
                 }
@@ -98,7 +97,7 @@
                         }
                         meshes[0].position = marker.position.clone();
                         meshes[0].position.y += meshes[0].getBoundingInfo().boundingBox.extendSize.y;
-                
+                        
                         marker.isVisible = true;
                     }
                     break;
