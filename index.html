@@ -97,7 +97,7 @@
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
                         }
                         meshes[0].position = marker.position.clone();
-                        meshes[0].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                        meshes[0].position.y += meshes[0].getBoundingInfo().boundingBox.extendSize.y;
                 
                         marker.isVisible = true;
                     }
