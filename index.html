@@ -95,6 +95,7 @@
                             
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
                         }
+                        meshes[0].scaling = new BABYLON.Vector3(0.2,0.2,0.2);
                         meshes[0].position = marker.position.clone();
                         meshes[0].position.y += meshes[0].getBoundingInfo().boundingBox.extendSize.y;
                         
