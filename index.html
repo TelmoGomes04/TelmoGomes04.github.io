@@ -42,8 +42,9 @@
             // Carregar as malhas no início, mas mantê-las invisíveis
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                 meshes = loadedMeshes;
-                meshes.scaling = new BABYLON.Vector3(0.4, 0.4, 0.4);
+                
                 for(var i = 0; i < meshes.length; i++) {
+                    meshes[i].scaling = new BABYLON.Vector3(0.4, 0.4, 0.4);
                     meshes[i].isVisible = false; // Cada malha é invisível inicialmente
                 }
             });
