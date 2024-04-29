@@ -84,6 +84,28 @@
             engine.resize();
         });
 
+
+        const deviceSourceManager = new BABYLON.DeviceSourceManager(engine);
+        deviceSourceManager.onDeviceConnectedObservable.add(deviceEventData => {
+            const deviceSource = deviceSourceManager.getDeviceSource(deviceEventData.deviceType, deviceEventData.deviceSlot);
+            if (deviceEventData.deviceType === BABYLON.DeviceType.Mouse) {
+                deviceSource.onInputChangedObservable.add(inputEventData => {
+                    if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 1 ) {
+                        // process touch down event
+                        if (marker && marker.isVisible && isFirstTouch) {
+                            isFirstTouch = false; // Disable further processing of first touch
+                            spawnCar(markerInitialPosition);
+                        }
+                    } else if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 0) {
+                        // process touch up event
+                    } else if (inputEventData.inputIndex === BABYLON.PointerInput.Move) {
+                        // process touch move event
+                    }
+                });
+            }
+        });
+
+        /*
         // Handle touch events to spawn car on first touch after marker becomes visible
         canvas.addEventListener("touchstart", function (event) {
             if (marker && marker.isVisible && isFirstTouch) {
@@ -91,13 +113,14 @@
                 spawnCar(markerInitialPosition);
             }
         });
-
+        */
         function spawnCar(position) {
             if (carMesh) {
                 carMesh.isVisible = true;
                 carMesh.position.copyFrom(position);
             }
         }
+        
     </script>
 </body>
 </html>
