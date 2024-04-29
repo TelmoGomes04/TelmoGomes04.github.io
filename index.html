@@ -23,6 +23,17 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
+
+        var mesh;
+
+        // Carregar as malhas no início, mas mantê-las invisíveis
+        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
+            meshes = loadedMeshes;
+            for(var i = 0; i < meshes.length; i++) {
+                meshes[i].isVisible = false; // Cada malha é invisível inicialmente
+            }
+        });
+
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
@@ -55,16 +66,15 @@
                         marker.position = hitResult.transformationMatrix.getTranslation(); // Update marker position
                         var i = 0;
                         if(i ==0 && marker.isVisible){
-                            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                                var mesh = meshes[0];
-                                mesh.position = marker.position.clone();
-                                mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
-                                //marker.isVisible = false;
-                                //canvas.removeEventListener("click", arguments.callee);
-                            });
+                            for(var i = 0; i < meshes.length; i++) {
+                                meshes[i].position = marker.position.clone();
+                                meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                                meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
+                            }
                         }
                         if (!markerInitialPosition) {
                             markerInitialPosition = marker.position.clone(); // Store initial position
+                        
                         }
                     }
                 });
