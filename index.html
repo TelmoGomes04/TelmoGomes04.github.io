@@ -100,7 +100,7 @@
         /*
         const deviceSourceManager = new BABYLON.DeviceSourceManager(engine);
         deviceSourceManager.onDeviceConnectedObservable.add(deviceEventData => {
-            const deviceSource = deviceSourceManager.getDeviceSource(deviceEventData.deviceType, deviceEventData.deviceSlot);
+            const deviceSource = deviceSourceManager.getDeviceSource(deviceEventData.deviceType, deviceEventData.deviceSlot); 
             if (deviceEventData.deviceType === BABYLON.DeviceType.Mouse) {
                 deviceSource.onInputChangedObservable.add(inputEventData => {
                     if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 1 ) {
