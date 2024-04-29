@@ -47,6 +47,7 @@
                 meshes = loadedMeshes;
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[i].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
+                    meshes[i].position = new BABYLON.Vector3(0,0,0);
                     meshes[i].isVisible = false; // Cada malha é invisível inicialmente
                 }
                 //meshes.scaling = new BABYLON.Vector3(0.3,0.3,0.3);
