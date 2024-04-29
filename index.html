@@ -93,14 +93,13 @@
                     console.log("Touch down event detected");
                     if(marker.isVisible && meshes) {
                         for(var i = 0; i < meshes.length; i++) {
-                            //meshes[i].position = marker.position.clone();
-                            //meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                            
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
                         }
-                        //mesh.position = marker.position.clone();
-                        //mesh.position.y += meshParent.getBoundingInfo().boundingBox.extendSize.y;
-                        
-                        marker.isVisible = false;
+                        meshes[0].position = marker.position.clone();
+                        meshes[0].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                
+                        marker.isVisible = true;
                     }
                     break;
             }
