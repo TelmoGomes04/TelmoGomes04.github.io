@@ -53,19 +53,19 @@
                         var hitResult = results[0];
                         marker.isVisible = true;
                         marker.position = hitResult.transformationMatrix.getTranslation(); // Update marker position
+                        var i = 0;
+                        if(i ==0 && marker.isVisible){
+                            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                                var mesh = meshes[0];
+                                mesh.position = marker.position.clone();
+                                mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
+                                //marker.isVisible = false;
+                                //canvas.removeEventListener("click", arguments.callee);
+                            });
+                        }
                         if (!markerInitialPosition) {
                             markerInitialPosition = marker.position.clone(); // Store initial position
                         }
-                    }
-                    if(marker.isVisible) {
-                        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                            var mesh = meshes[0];
-                            mesh.position = marker.position.clone();
-                            mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
-                
-                            //marker.isVisible = false;
-                            //canvas.removeEventListener("click", arguments.callee);
-                        });
                     }
                 });
             });
