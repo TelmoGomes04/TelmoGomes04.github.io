@@ -47,10 +47,8 @@
                 meshes = loadedMeshes;
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-                    //meshes[i].position = new BABYLON.Vector3(0,0,0);
                     meshes[i].isVisible = false; // Cada malha é invisível inicialmente
                 }
-                //meshes.scaling = new BABYLON.Vector3(0.3,0.3,0.3);
             });
 
             // Start the WebXR session
@@ -96,9 +94,9 @@
                 case BABYLON.PointerEventTypes.POINTERDOWN:
                     console.log("Touch down event detected");
                     if(marker.isVisible && meshes) {
-                        meshes.position = marker.position.clone();
+                        
                         for(var i = 0; i < meshes.length; i++) {
-                            
+                            meshes[0].position = marker.position.clone();
                             //meshes.position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário 
                         }
