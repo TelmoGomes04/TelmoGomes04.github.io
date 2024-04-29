@@ -87,44 +87,22 @@
             engine.resize();
         });
 
-        const deviceSourceManager = new BABYLON.DeviceSourceManager(engine);
-        deviceSourceManager.onDeviceConnectedObservable.add(deviceEventData => {
-            const deviceSource = deviceSourceManager.getDeviceSource(deviceEventData.deviceType, deviceEventData.deviceSlot); 
-            if (deviceEventData.deviceType === BABYLON.DeviceType.Mouse) {
-                deviceSource.onInputChangedObservable.add(inputEventData => {
-                    if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 1 ) {
-                        // process touch down event
-                        if(marker.isVisible) {
-                            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                                var mesh = meshes[0];
-                                mesh.position = marker.position.clone();
-                                mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
-                    
-                                //marker.isVisible = false;
-                                //canvas.removeEventListener("click", arguments.callee);
-                            });
+        scene.onPointerObservable.add((pointerInfo) => {
+            switch (pointerInfo.type) {
+                case BABYLON.PointerEventTypes.POINTERDOWN:
+                    if(marker.isVisible && meshes) {
+                        for(var i = 0; i < meshes.length; i++) {
+                            meshes[i].position = marker.position.clone();
+                            meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                            meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
                         }
-                    } else if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 0) {
-                        // process touch up event
-                    } else if (inputEventData.inputIndex === BABYLON.PointerInput.Move) {
-                        // process touch move event
+                
+                        marker.isVisible = false;
                     }
-                });
+                    break;
             }
         });
 
-        canvas.addEventListener("click", function() {
-            if(marker.isVisible && meshes) {
-                for(var i = 0; i < meshes.length; i++) {
-                    meshes[i].position = marker.position.clone();
-                    meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
-                    meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
-                }
-        
-                marker.isVisible = false;
-                canvas.removeEventListener("click", arguments.callee);
-            }
-        });
     </script>
 </body>
 </html>
