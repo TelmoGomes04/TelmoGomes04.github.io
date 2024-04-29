@@ -93,7 +93,7 @@
                     if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 1 ) {
                         // process touch down event
                         if (marker && marker.isVisible && isFirstTouch) {
-                            isFirstTouch = false; // Disable further processing of first touch
+                            isFirstTouch = true; // Disable further processing of first touch
                             spawnCar(markerInitialPosition);
                         }
                     } else if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 0) {
