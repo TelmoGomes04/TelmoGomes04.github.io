@@ -43,9 +43,10 @@
 
             // Carregar as malhas no início, mas mantê-las invisíveis
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
-                meshParent = loadedMeshes[0]; // A primeira malha é geralmente a malha pai
-                meshParent.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-                meshParent.isVisible = false; // A malha pai é invisível inicialmente
+                meshes = loadedMeshes;
+                for(var i = 0; i < meshes.length; i++) {
+                    meshes[i].isVisible = false; // Cada malha é invisível inicialmente
+                }
             });
 
             // Start the WebXR session
@@ -86,14 +87,22 @@
             engine.resize();
         });
 
-        canvas.addEventListener("click", function() {
-            if(marker.isVisible && meshParent) {
-                meshParent.position = marker.position.clone();
-                meshParent.position.y += meshParent.getBoundingInfo().boundingBox.extendSize.y;
-                meshParent.isVisible = true; // Tornar a malha pai visível quando for necessário
-        
-                marker.isVisible = false;
-                canvas.removeEventListener("click", arguments.callee);
+        scene.onPointerObservable.add((pointerInfo) => {
+            switch (pointerInfo.type) {
+                case BABYLON.PointerEventTypes.POINTERDOWN:
+                    console.log("Touch down event detected");
+                    if(marker.isVisible && meshes) {
+                        for(var i = 0; i < meshes.length; i++) {
+                            //meshes[i].position = marker.position.clone();
+                            //meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                            meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
+                        }
+                        mesh.position = marker.position.clone();
+                        mesh.position.y += meshParent.getBoundingInfo().boundingBox.extendSize.y;
+                        
+                        marker.isVisible = false;
+                    }
+                    break;
             }
         });
 
