@@ -75,6 +75,32 @@
             engine.resize();
         });
 
+        const deviceSourceManager = new BABYLON.DeviceSourceManager(engine);
+        deviceSourceManager.onDeviceConnectedObservable.add(deviceEventData => {
+            const deviceSource = deviceSourceManager.getDeviceSource(deviceEventData.deviceType, deviceEventData.deviceSlot); 
+            if (deviceEventData.deviceType === BABYLON.DeviceType.Mouse) {
+                deviceSource.onInputChangedObservable.add(inputEventData => {
+                    if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 1 ) {
+                        // process touch down event
+                        if(marker.isVisible) {
+                            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                                var mesh = meshes[0];
+                                mesh.position = marker.position.clone();
+                                mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
+                    
+                                //marker.isVisible = false;
+                                //canvas.removeEventListener("click", arguments.callee);
+                            });
+                        }
+                    } else if (inputEventData.inputIndex === BABYLON.PointerInput.LeftClick && deviceSource.getInput(inputEventData.inputIndex) === 0) {
+                        // process touch up event
+                    } else if (inputEventData.inputIndex === BABYLON.PointerInput.Move) {
+                        // process touch move event
+                    }
+                });
+            }
+        });
+        /*
         canvas.addEventListener("click", function() {
             if(marker.isVisible) {
                 BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
@@ -87,6 +113,7 @@
                 });
             }
         });
+        */
     </script>
 </body>
 </html>
