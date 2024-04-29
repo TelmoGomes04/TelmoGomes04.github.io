@@ -97,12 +97,21 @@
                         
                         for(var i = 0; i < meshes.length; i++) {
                             meshes[0].position = marker.position.clone();
-                            //meshes.position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário .
                         }
                         marker.isVisible = true;
                     }
-                    break;
+                break;
+                case BABYLON.PointerEventTypes.POINTERMOVE:
+                    if(meshes && meshes[0].isVisible) {
+                        var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function(mesh) {
+                            return mesh === marker;
+                        });
+                        if(pickInfo.hit) {
+                            meshes[0].position = pickInfo.pickedPoint;
+                        }
+                    }
+                break;
             }
         });
 
