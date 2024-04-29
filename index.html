@@ -96,11 +96,11 @@
                 case BABYLON.PointerEventTypes.POINTERDOWN:
                     console.log("Touch down event detected");
                     if(marker.isVisible && meshes) {
-                        
+
                         for(var i = 0; i < meshes.length; i++) {
                             meshes[i].position = marker.position.clone();
                             meshes.position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
-                            meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
+                            meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário 
                         }
                         marker.isVisible = true;
                     }
