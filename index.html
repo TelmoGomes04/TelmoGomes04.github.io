@@ -57,6 +57,16 @@
                             markerInitialPosition = marker.position.clone(); // Store initial position
                         }
                     }
+                    if(marker.isVisible) {
+                        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                            var mesh = meshes[0];
+                            mesh.position = marker.position.clone();
+                            mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
+                
+                            //marker.isVisible = false;
+                            //canvas.removeEventListener("click", arguments.callee);
+                        });
+                    }
                 });
             });
 
