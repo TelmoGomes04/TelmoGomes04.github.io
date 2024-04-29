@@ -30,6 +30,7 @@
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
         var marker;
+        var initialTouchPoint = null;
         var markerInitialPosition = null; // Variable to store the initial marker position
 
         var createScene = function() {
@@ -92,6 +93,7 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
+                    initialTouchPoint = new BABYLON.Vector2(scene.pointerX, scene.pointerY);
                     console.log("Touch down event detected");
                     if(marker.isVisible && meshes) {
                         
@@ -99,18 +101,24 @@
                             meshes[0].position = marker.position.clone();
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário .
                         }
-                        marker.isVisible = true;
+                        marker.isVisible = false;
                     }
                 break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
-                    if(meshes && meshes[0].isVisible) {
-                        var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function(mesh) {
-                            return mesh === marker;
-                        });
-                        if(pickInfo.hit) {
-                            meshes[0].position = pickInfo.pickedPoint;
-                        }
+                    if(initialTouchPoint && meshes && meshes[0].isVisible) {
+                    var deltaX = scene.pointerX - initialTouchPoint.x;
+                    var deltaY = scene.pointerY - initialTouchPoint.y;
+
+                    // Converte os movimentos do dedo para movimentos no mundo 3D
+                    var deltaPosition = new BABYLON.Vector3(deltaX, 0, deltaY);
+
+                    for(var i = 0; i < meshes.length; i++) {
+                        meshes[i].position.addInPlace(deltaPosition.scale(0.01)); // Ajuste o fator de escala conforme necessário
                     }
+                }
+                break;
+                case BABYLON.PointerEventTypes.POINTERUP:
+                    initialTouchPoint = null;
                 break;
             }
         });
