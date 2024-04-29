@@ -46,9 +46,9 @@
                 meshParent = new BABYLON.TransformNode("meshParent", scene); // Criar um nó de transformação para ser o pai
                 for(var i = 0; i < loadedMeshes.length; i++) {
                     loadedMeshes[i].parent = meshParent; // Definir o pai de cada malha para ser o nó de transformação
-                    loadedMeshes[i].isVisible = false; // Cada malha é invisível inicialmente
                 }
                 meshParent.scaling = new BABYLON.Vector3(0.4, 0.4, 0.4); // Escalar o pai
+                meshParent.isVisible = false; // O nó de transformação é invisível inicialmente
             });
 
             // Start the WebXR session
@@ -93,9 +93,7 @@
             if(marker.isVisible && meshParent) {
                 meshParent.position = marker.position.clone();
                 meshParent.position.y += meshParent.getBoundingInfo().boundingBox.extendSize.y;
-                meshParent.getChildMeshes().forEach(function(mesh) {
-                    mesh.isVisible = true; // Tornar cada malha visível quando for necessário
-                });
+                meshParent.isVisible = true; // Tornar o nó de transformação visível quando for necessário
         
                 marker.isVisible = false;
                 canvas.removeEventListener("click", arguments.callee);
