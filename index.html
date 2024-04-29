@@ -27,7 +27,7 @@
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
         var marker;
-        var carMesh;
+        //var carMesh;
         var markerInitialPosition = null; // Variable to store the initial marker position
 
         var isFirstTouch = true; // Flag to track first touch after marker becomes visible
@@ -40,14 +40,14 @@
 
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
-
+            /*
             // Preload car model
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
                 carMesh = meshes[0];
                 carMesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
                 carMesh.isVisible = false; // Initially hide the car
             });
-
+            */
             // Start the WebXR session
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 // Enable plane detection
@@ -84,7 +84,20 @@
             engine.resize();
         });
 
+        canvas.addEventListener("click", function() {
+            if(marker.isVisible) {
+                BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
+                    var mesh = meshes[0];
+                    mesh.position = marker.position.clone();
+                    mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
+        
+                    marker.isVisible = false;
+                    canvas.removeEventListener("click", arguments.callee);
+                });
+            }
+        });
 
+        /*
         const deviceSourceManager = new BABYLON.DeviceSourceManager(engine);
         deviceSourceManager.onDeviceConnectedObservable.add(deviceEventData => {
             const deviceSource = deviceSourceManager.getDeviceSource(deviceEventData.deviceType, deviceEventData.deviceSlot);
@@ -105,22 +118,13 @@
             }
         });
 
-        /*
-        // Handle touch events to spawn car on first touch after marker becomes visible
-        canvas.addEventListener("touchstart", function (event) {
-            if (marker && marker.isVisible && isFirstTouch) {
-                isFirstTouch = false; // Disable further processing of first touch
-                spawnCar(markerInitialPosition);
-            }
-        });
-        */
         function spawnCar(position) {
             if (carMesh) {
                 carMesh.isVisible = true;
                 carMesh.position.copyFrom(position);
             }
         }
-        
+        */
     </script>
 </body>
 </html>
