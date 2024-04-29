@@ -42,13 +42,10 @@
             light.intensity = 0.7;
 
             // Carregar as malhas no início, mas mantê-las invisíveis
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
-                meshParent = new BABYLON.TransformNode("meshParent", scene); // Criar um nó de transformação para ser o pai
-                for(var i = 0; i < loadedMeshes.length; i++) {
-                    loadedMeshes[i].parent = meshParent; // Definir o pai de cada malha para ser o nó de transformação
-                }
-                meshParent.scaling = new BABYLON.Vector3(0.4, 0.4, 0.4); // Escalar o pai
-                meshParent.isVisible = false; // O nó de transformação é invisível inicialmente
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes, particleSystems, skeletons) {
+                mesh = loadedMeshes[0]; // A primeira malha é geralmente a malha pai
+                mesh.scaling = new BABYLON.Vector3(0.4, 0.4, 0.4); // Escalar a malha
+                mesh.isVisible = false; // A malha é invisível inicialmente
             });
 
             // Start the WebXR session
@@ -90,10 +87,10 @@
         });
 
         canvas.addEventListener("click", function() {
-            if(marker.isVisible && meshParent) {
-                meshParent.position = marker.position.clone();
-                meshParent.position.y += meshParent.getBoundingInfo().boundingBox.extendSize.y;
-                meshParent.isVisible = true; // Tornar o nó de transformação visível quando for necessário
+            if(marker.isVisible && mesh) {
+                mesh.position = marker.position.clone();
+                mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
+                mesh.isVisible = true; // Tornar a malha visível quando for necessário
         
                 marker.isVisible = false;
                 canvas.removeEventListener("click", arguments.callee);
