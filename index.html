@@ -25,6 +25,7 @@
     <script>
 
         var meshes;
+        var xrTest
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -57,7 +58,7 @@
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 // Enable plane detection
                 const fm = xrHelper.baseExperience.featuresManager;
-                const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
+                xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 }, scene);
                 marker.isVisible = false;
