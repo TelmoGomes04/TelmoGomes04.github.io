@@ -46,6 +46,7 @@
                 
                 meshes = loadedMeshes;
                 for(var i = 0; i < meshes.length; i++) {
+                    meshes[i].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                     meshes[i].isVisible = false; // Cada malha é invisível inicialmente
                 }
                 //meshes.scaling = new BABYLON.Vector3(0.3,0.3,0.3);
@@ -94,11 +95,9 @@
                 case BABYLON.PointerEventTypes.POINTERDOWN:
                     console.log("Touch down event detected");
                     if(marker.isVisible && meshes) {
-                        meshes.position = marker.position.clone();
-                        meshes.position.y += meshes.getBoundingInfo().boundingBox.extendSize.y;
                         for(var i = 0; i < meshes.length; i++) {
-                            //meshes[i].position = marker.position.clone();
-                            //meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                            meshes[i].position = marker.position.clone();
+                            meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
                             meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
                         }
                         marker.isVisible = false;
