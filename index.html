@@ -26,15 +26,6 @@
 
         var mesh;
 
-        // Carregar as malhas no início, mas mantê-las invisíveis
-        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
-            meshes = loadedMeshes;
-            meshes.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-            for(var i = 0; i < meshes.length; i++) {
-                meshes[i].isVisible = false; // Cada malha é invisível inicialmente
-            }
-        });
-
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
@@ -49,6 +40,14 @@
 
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
+
+            // Carregar as malhas no início, mas mantê-las invisíveis
+            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
+                meshes = loadedMeshes;
+                for(var i = 0; i < meshes.length; i++) {
+                    meshes[i].isVisible = false; // Cada malha é invisível inicialmente
+                }
+            });
 
             // Start the WebXR session
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
