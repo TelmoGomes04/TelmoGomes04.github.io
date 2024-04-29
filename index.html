@@ -25,15 +25,10 @@
     <script>
 
         var meshes;
-        var xrTest
+        var touchStart = null;
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
-
-        var marker;
-        var lerpSpeed = 0.05;
-        var initialTouchPoint = null;
-        var markerInitialPosition = null; // Variable to store the initial marker position
 
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
@@ -44,35 +39,27 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
-            // Carregar as malhas no início, mas mantê-las invisíveis
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                 
                 meshes = loadedMeshes;
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-                    meshes[i].isVisible = false; // Cada malha é invisível inicialmente
+                    meshes[i].isVisible = false;
                 }
             });
 
-            // Start the WebXR session
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
-                // Enable plane detection
                 const fm = xrHelper.baseExperience.featuresManager;
-                xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
-
-                marker = BABYLON.MeshBuilder.CreateTorus('marker', { diameter: 0.15, thickness: 0.05 }, scene);
-                marker.isVisible = false;
-                marker.rotationQuaternion = new BABYLON.Quaternion();
+                const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (results.length > 0) {
+                    if (results.length > 0 && touchStart) {
                         var hitResult = results[0];
-                        marker.isVisible = true;
-                        marker.position = hitResult.transformationMatrix.getTranslation(); // Update marker position
-                        if (!markerInitialPosition) {
-                            markerInitialPosition = marker.position.clone(); // Store initial position
-                        
+                        for(var i = 0; i < meshes.length; i++) {
+                            meshes[0].position = hitResult.transformationMatrix.getTranslation();
+                            meshes[i].isVisible = true;
                         }
+                        touchStart = null;
                     }
                 });
             });
@@ -95,29 +82,18 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                    console.log("Touch down event detected");
-                    if(marker.isVisible && meshes) {
-                        // Calcular a posição no plano onde o usuário clicou
-                        var pickResult = scene.pick(scene.pointerX, scene.pointerY, function(mesh) {
-                            return mesh === xrTest; // Substitua 'marker' pelo nome da sua malha de plano
-                        });
-        
-                        if(pickResult.hit) {
-                            // Mover o carro para a posição clicada
-                            for(var i = 0; i < meshes.length; i++) {
-                                meshes[0].position = pickResult.pickedPoint;
-                                meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário .
-                            }
-                        }
-        
-                        marker.isVisible = false;
+                    touchStart = pointerInfo.pickInfo.pickedPoint;
+                    break;
+                case BABYLON.PointerEventTypes.POINTERMOVE:
+                    if(meshes && meshes[0].isVisible) {
+                        var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
+                        meshes[0].position.x += delta.x;
+                        meshes[0].position.z += delta.z;
+                        touchStart = pointerInfo.pickInfo.pickedPoint;
                     }
                     break;
-                // Resto do seu código...
             }
         });
-        
-        
 
     </script>
 </body>
