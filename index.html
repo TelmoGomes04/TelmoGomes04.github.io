@@ -90,6 +90,7 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
+                    console.log("Touch down event detected");
                     if(marker.isVisible && meshes) {
                         for(var i = 0; i < meshes.length; i++) {
                             meshes[i].position = marker.position.clone();
