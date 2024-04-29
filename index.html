@@ -64,14 +64,6 @@
                         var hitResult = results[0];
                         marker.isVisible = true;
                         marker.position = hitResult.transformationMatrix.getTranslation(); // Update marker position
-                        var i = 0;
-                        if(i ==0 && marker.isVisible){
-                            for(var i = 0; i < meshes.length; i++) {
-                                meshes[i].position = marker.position.clone();
-                                meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
-                                meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
-                            }
-                        }
                         if (!markerInitialPosition) {
                             markerInitialPosition = marker.position.clone(); // Store initial position
                         
@@ -120,20 +112,19 @@
                 });
             }
         });
-        /*
-        canvas.addEventListener("click", function() {
-            if(marker.isVisible) {
-                BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (meshes) {
-                    var mesh = meshes[0];
-                    mesh.position = marker.position.clone();
-                    mesh.position.y += mesh.getBoundingInfo().boundingBox.extendSize.y;
         
-                    //marker.isVisible = false;
-                    //canvas.removeEventListener("click", arguments.callee);
-                });
+        canvas.addEventListener("click", function() {
+            if(marker.isVisible && meshes) {
+                for(var i = 0; i < meshes.length; i++) {
+                    meshes[i].position = marker.position.clone();
+                    meshes[i].position.y += meshes[i].getBoundingInfo().boundingBox.extendSize.y;
+                    meshes[i].isVisible = true; // Tornar cada malha visível quando for necessário
+                }
+        
+                marker.isVisible = false;
+                canvas.removeEventListener("click", arguments.callee);
             }
         });
-        */
     </script>
 </body>
 </html>
