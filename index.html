@@ -27,6 +27,7 @@
         var meshes;
         var touchStart = null;
         var initialY = null;
+        var planeDetected = false; // Adicionado para verificar se um plano foi detectado
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -40,37 +41,22 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
-            // Shadows
-            var light00 = new BABYLON.SpotLight("*spot00", new BABYLON.Vector3(0, 20, 20), new BABYLON.Vector3(0, -1, -1), 1.2, 24, scene);
-            light00.shadowMinZ = 15;
-            light00.shadowMaxZ = 40; 
-
-            var shadowGenerator00 = new BABYLON.ShadowGenerator(512, light00);
-            shadowGenerator00.getShadowMap().renderList.push(meshes);
-            shadowGenerator00.useContactHardeningShadow = true;
-            shadowGenerator00.contactHardeningLightSizeUVRatio = 0.0075;
-
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
-                
-                meshes = loadedMeshes;
-                for(var i = 0; i < meshes.length; i++) {
-                    meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-                    meshes[i].isVisible = false;
-                }
-            });
-
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 const fm = xrHelper.baseExperience.featuresManager;
                 const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (results.length > 0 && meshes && !meshes[0].isVisible) {
-                        var hitResult = results[0];
-                        for(var i = 0; i < meshes.length; i++) {
-                            meshes[0].position = hitResult.transformationMatrix.getTranslation();
-                            initialY = meshes[0].position.y;
-                            meshes[i].isVisible = true;
-                        }
+                    if (results.length > 0 && !planeDetected) {
+                        planeDetected = true; // Um plano foi detectado
+
+                        // Agora carregamos a mesh
+                        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
+                            meshes = loadedMeshes;
+                            for(var i = 0; i < meshes.length; i++) {
+                                meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
+                                meshes[i].isVisible = false;
+                            }
+                        });
                     }
                 });
             });
