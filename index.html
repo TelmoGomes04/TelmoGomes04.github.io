@@ -29,6 +29,7 @@
         var initialY = null;
         var initialScale = null;
         var initialRotation = null;
+        var touchedMesh = false;
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -88,11 +89,12 @@
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
                     touchStart = pointerInfo.pickInfo.pickedPoint;
+                    touchedMesh = pointerInfo.pickInfo.pickedMesh == meshes[0];
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if(meshes && meshes[0].isVisible && touchStart) {
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
-                        if (pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == meshes[0]) {
+                        if (touchedMesh) {
                             // Move the car
                             meshes[0].position.x += delta.x;
                             meshes[0].position.z += delta.z;
