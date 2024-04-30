@@ -18,10 +18,29 @@
             width: 100%;
             height: 100%;
         }
+
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .control-button {
+            display: inline-block;
+            padding: 10px;
+            background-color: #ccc;
+            cursor: pointer;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
     <canvas id="renderCanvas"></canvas>
+    <div id="controls">
+        <div id="move" class="control-button">Move Car</div>
+        <div id="scale" class="control-button">Scale Car</div>
+        <div id="rotate" class="control-button">Rotate Car</div>
+    </div>
     <script>
 
         var meshes;
@@ -46,12 +65,10 @@
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                 
                 meshes = loadedMeshes;
-                meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                 for(var i = 0; i < meshes.length; i++) {
-                    
+                    meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                     meshes[i].isVisible = false;
                 }
-                objectMesh = scene.getMeshByName("Object_32");
             });
 
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
@@ -87,43 +104,19 @@
             engine.resize();
         });
 
-        scene.onPointerObservable.add((pointerInfo) => {
-            switch (pointerInfo.type) {
-                case BABYLON.PointerEventTypes.POINTERDOWN:
-                    if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
-                        return;
-                    }
-                    touchStart = pointerInfo.pickInfo.pickedPoint.clone();
-                    touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
-                    break;
-                case BABYLON.PointerEventTypes.POINTERMOVE:
-                    if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
-                        return;
-                    }
-                    if(meshes && meshes[0].isVisible && touchStart) {
-                        var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
-                        if (touchedMesh) {
-                            // Move the car
-                            meshes[0].position.x += delta.x;
-                            meshes[0].position.z += delta.z;
-                            meshes[0].position.y = initialY;
-                        } else {
-                            // Scale and rotate the car
-                            if(delta.y != 0){
-                                var scaleFactor = 1 + delta.y * 0.01;
-                                meshes[0].scaling = initialScale.scale(scaleFactor);
-                            }
-                            if(delta.x != 0){
-                                var rotationFactor = delta.x * 0.01;
-                                meshes[0].rotation.y = initialRotation.y + rotationFactor;
-                            }
-                        }
-                        touchStart = pointerInfo.pickInfo.pickedPoint.clone();
-                    }
-                    break; 
-            }
+        // Add event listeners for the control buttons
+        document.getElementById("move").addEventListener("click", function() {
+            // Add code to move the car
         });
-        
+
+        document.getElementById("scale").addEventListener("click", function() {
+            // Add code to scale the car
+        });
+
+        document.getElementById("rotate").addEventListener("click", function() {
+            // Add code to rotate the car
+        });
+
     </script>
 </body>
 </html>
