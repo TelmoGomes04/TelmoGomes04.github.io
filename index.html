@@ -90,10 +90,16 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                    touchStart = pointerInfo.pickInfo.pickedPoint;
+                    if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
+                        return;
+                    }
+                    touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
+                    if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
+                        return;
+                    }
                     if(meshes && meshes[0].isVisible && touchStart) {
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
                         if (touchedMesh) {
@@ -109,9 +115,9 @@
                         }else{
                             var rotationFactor = delta.x * 0.01;
                             meshes[0].rotation.y = initialRotation.y + rotationFactor;
-
+        
                         }*/
-                        touchStart = pointerInfo.pickInfo.pickedPoint;
+                        touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     }
                     break; 
             }
