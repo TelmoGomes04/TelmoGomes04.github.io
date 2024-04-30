@@ -90,18 +90,13 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                    if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
-                        return;
-                    }
-                    touchStart = pointerInfo.pickInfo.pickedPoint.clone();
-                    touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
+                    var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+                    touchedMesh = pickResult.hit && pickResult.pickedMesh == objectMesh;
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
-                    if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
-                        return;
-                    }
-                    if(meshes && meshes[0].isVisible && touchStart) {
-                        var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
+                    if(meshes && meshes[0].isVisible) {
+                        var pickResult = scene.pick(scene.pointerX, scene.pointerY);
+                        var delta = pickResult.pickedPoint.subtract(touchStart);
                         if (touchedMesh) {
                             // Move the car
                             meshes[0].position.x += delta.x;
@@ -109,16 +104,12 @@
                             meshes[0].position.y = initialY;
                         } else {
                             // Scale and rotate the car
-                            if(delta.y != 0){
-                                var scaleFactor = 1 + delta.y * 0.01;
-                                meshes[0].scaling = initialScale.scale(scaleFactor);
-                            }
-                            if(delta.x != 0){
-                                var rotationFactor = delta.x * 0.01;
-                                meshes[0].rotation.y = initialRotation.y + rotationFactor;
-                            }
+                            var scaleFactor = 1 + delta.y * 0.01;
+                            var rotationFactor = delta.x * 0.01;
+                            meshes[0].scaling = initialScale.scale(scaleFactor);
+                            meshes[0].rotation.y = initialRotation.y + rotationFactor;
                         }
-                        touchStart = pointerInfo.pickInfo.pickedPoint.clone();
+                        touchStart = pickResult.pickedPoint.clone();
                     }
                     break; 
             }
