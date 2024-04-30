@@ -32,6 +32,15 @@
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
+        // Carregando a mesh logo no início
+        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", null, function (loadedMeshes) {
+            meshes = loadedMeshes;
+            for(var i = 0; i < meshes.length; i++) {
+                meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
+                meshes[i].isVisible = false;
+            }
+        });
+
         var createScene = function() {
             var scene = new BABYLON.Scene(engine);
 
@@ -49,14 +58,10 @@
                     if (results.length > 0 && !planeDetected) {
                         planeDetected = true; // Um plano foi detectado
 
-                        // Agora carregamos a mesh
-                        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
-                            meshes = loadedMeshes;
-                            for(var i = 0; i < meshes.length; i++) {
-                                meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-                                meshes[i].isVisible = false;
-                            }
-                        });
+                        // Agora adicionamos a mesh à cena
+                        for(var i = 0; i < meshes.length; i++) {
+                            scene.addMesh(meshes[i]);
+                        }
                     }
                 });
             });
