@@ -24,6 +24,7 @@
     <canvas id="renderCanvas"></canvas>
     <script>
 
+        var pointers = {};
         var initialDistance = null;
         var initialAngle = null;
 
@@ -89,54 +90,51 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                    touchStart = pointerInfo.pickInfo.pickedPoint;
+                    pointers[pointerInfo.event.pointerId] = {
+                        x: pointerInfo.event.clientX,
+                        y: pointerInfo.event.clientY
+                    };
+                    if (Object.keys(pointers).length == 2) {
+                        var ids = Object.keys(pointers);
+                        var dx = pointers[ids[0]].x - pointers[ids[1]].x;
+                        var dy = pointers[ids[0]].y - pointers[ids[1]].y;
+                        initialDistance = Math.sqrt(dx * dx + dy * dy);
+                        initialAngle = Math.atan2(dy, dx);
+                    }
+                    break;
+                case BABYLON.PointerEventTypes.POINTERUP:
+                    delete pointers[pointerInfo.event.pointerId];
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
-                    if(meshes && meshes[0].isVisible && touchStart) {
-                        var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
+                    if (pointerInfo.event.pointerId in pointers) {
+                        pointers[pointerInfo.event.pointerId].x = pointerInfo.event.clientX;
+                        pointers[pointerInfo.event.pointerId].y = pointerInfo.event.clientY;
+                    }
+                    if (meshes && meshes[0].isVisible && Object.keys(pointers).length == 1) {
+                        var delta = new BABYLON.Vector3(pointerInfo.event.clientX, pointerInfo.event.clientY, 0).subtract(touchStart);
                         meshes[0].position.x += delta.x;
                         meshes[0].position.z += delta.z;
                         meshes[0].position.y = initialY; // Usamos a posição y do plano detectado para posicionar a mesh
-                        touchStart = pointerInfo.pickInfo.pickedPoint;
+                        touchStart = new BABYLON.Vector3(pointerInfo.event.clientX, pointerInfo.event.clientY, 0);
+                    } else if (meshes && meshes[0].isVisible && Object.keys(pointers).length == 2 && initialDistance !== null && initialAngle !== null) {
+                        var ids = Object.keys(pointers);
+                        var dx = pointers[ids[0]].x - pointers[ids[1]].x;
+                        var dy = pointers[ids[0]].y - pointers[ids[1]].y;
+                        var distance = Math.sqrt(dx * dx + dy * dy);
+                        var angle = Math.atan2(dy, dx);
+        
+                        var scale = distance / initialDistance;
+                        meshes[0].scaling.scaleInPlace(scale);
+        
+                        var rotation = angle - initialAngle;
+                        meshes[0].rotation.y += rotation;
+        
+                        initialDistance = distance;
+                        initialAngle = angle;
                     }
-                    break; 
+                    break;
             }
         });
-
-        canvas.addEventListener('pointerdown', function(event) {
-            if (event.pointerId === 1) {
-                touchStart = new BABYLON.Vector3(event.clientX, event.clientY, 0);
-            } else if (event.pointerId === 2) {
-                var dx = event.clientX - touchStart.x;
-                var dy = event.clientY - touchStart.y;
-                initialDistance = Math.sqrt(dx * dx + dy * dy);
-                initialAngle = Math.atan2(dy, dx);
-            }
-        }, false);
-        
-        canvas.addEventListener('pointermove', function(event) {
-            if (event.pointerId === 1 && meshes && meshes[0].isVisible) {
-                var delta = new BABYLON.Vector3(event.clientX, event.clientY, 0).subtract(touchStart);
-                meshes[0].position.x += delta.x;
-                meshes[0].position.z += delta.z;
-                meshes[0].position.y = initialY; // Usamos a posição y do plano detectado para posicionar a mesh
-                touchStart = new BABYLON.Vector3(event.clientX, event.clientY, 0);
-            } else if (event.pointerId === 2 && meshes && meshes[0].isVisible && initialDistance !== null && initialAngle !== null) {
-                var dx = event.clientX - touchStart.x;
-                var dy = event.clientY - touchStart.y;
-                var distance = Math.sqrt(dx * dx + dy * dy);
-                var angle = Math.atan2(dy, dx);
-        
-                var scale = distance / initialDistance;
-                meshes[0].scaling.scaleInPlace(scale);
-        
-                var rotation = angle - initialAngle;
-                meshes[0].rotation.y += rotation;
-        
-                initialDistance = distance;
-                initialAngle = angle;
-            }
-        }, false);
 
     </script>
 </body>
