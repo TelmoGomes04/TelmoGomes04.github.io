@@ -24,6 +24,9 @@
     <canvas id="renderCanvas"></canvas>
     <script>
 
+        var initialDistance = null;
+        var initialAngle = null;
+
         var meshes;
         var touchStart = null;
         var initialY = null;
@@ -100,36 +103,32 @@
             }
         });
 
-        var initialDistance = null;
-        var initialScale = null;
-
-        canvas.addEventListener('pointerdown', function(event) {
-            if(event.pointerType == "touch" && event.isPrimary) {
-                touchStart = {x: event.clientX, y: event.clientY};
-                initialScale = meshes[0].scaling.clone();
+        canvas.addEventListener('touchstart', function(event) {
+            if (event.touches.length == 2) {
+                var dx = event.touches[0].clientX - event.touches[1].clientX;
+                var dy = event.touches[0].clientY - event.touches[1].clientY;
+                initialDistance = Math.sqrt(dx * dx + dy * dy);
+                initialAngle = Math.atan2(dy, dx);
             }
-        });
-
-        canvas.addEventListener('pointermove', function(event) {
-            if(event.pointerType == "touch" && event.isPrimary && touchStart) {
-                var currentTouch = {x: event.clientX, y: event.clientY};
-                var delta = Math.sqrt(Math.pow(currentTouch.x - touchStart.x, 2) + Math.pow(currentTouch.y - touchStart.y, 2));
-
-                if(initialDistance === null) {
-                    initialDistance = delta;
-                }
-
-                var scaleRatio = delta / initialDistance;
-                meshes[0].scaling = initialScale.scale(scaleRatio);
+        }, false);
+    
+        canvas.addEventListener('touchmove', function(event) {
+            if (event.touches.length == 2 && meshes && meshes[0].isVisible) {
+                var dx = event.touches[0].clientX - event.touches[1].clientX;
+                var dy = event.touches[0].clientY - event.touches[1].clientY;
+                var distance = Math.sqrt(dx * dx + dy * dy);
+                var angle = Math.atan2(dy, dx);
+    
+                var scale = distance / initialDistance;
+                meshes[0].scaling.scaleInPlace(scale);
+    
+                var rotation = angle - initialAngle;
+                meshes[0].rotation.y += rotation;
+    
+                initialDistance = distance;
+                initialAngle = angle;
             }
-        });
-
-        canvas.addEventListener('pointerup', function(event) {
-            if(event.pointerType == "touch" && event.isPrimary) {
-                touchStart = null;
-                initialDistance = null;
-            }
-        });
+        }, false);
 
     </script>
 </body>
