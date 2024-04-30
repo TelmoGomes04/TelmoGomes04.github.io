@@ -60,7 +60,10 @@
                 
                         // Agora adicionamos a mesh à cena
                         for(var i = 0; i < meshes.length; i++) {
-                            scene.addMesh(meshes[i]);
+                            var hitResult = results[0];
+                            meshes[0].position = hitResult.transformationMatrix.getTranslation();
+                            initialY = meshes[0].position.y; // Armazenamos a posição y do plano detectado
+                            meshes[i].isVisible = true;
                         }
                     }
                 });
@@ -74,12 +77,6 @@
 
         engine.runRenderLoop(function () {
             if (scene) {
-                // Verifique se um plano foi detectado e se a mesh ainda não foi adicionada à cena
-                if (planeDetected && meshes && meshes[0] && !meshes[0].isInScene()) {
-                    for(var i = 0; i < meshes.length; i++) {
-                        scene.addMesh(meshes[i]);
-                    }
-                }
                 scene.render();
             }
         });
@@ -98,7 +95,7 @@
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
                         meshes[0].position.x += delta.x;
                         meshes[0].position.z += delta.z;
-                        meshes[0].position.y = initialY;
+                        meshes[0].position.y = initialY; // Usamos a posição y do plano detectado para posicionar a mesh
                         touchStart = pointerInfo.pickInfo.pickedPoint;
                     }
                     break; 
