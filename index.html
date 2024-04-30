@@ -46,7 +46,7 @@
             light00.shadowMaxZ = 40; 
 
             var shadowGenerator00 = new BABYLON.ShadowGenerator(512, light00);
-            shadowGenerator00.getShadowMap().renderList.push(box00);
+            shadowGenerator00.getShadowMap().renderList.push(meshes);
             shadowGenerator00.useContactHardeningShadow = true;
             shadowGenerator00.contactHardeningLightSizeUVRatio = 0.0075;
 
