@@ -40,6 +40,16 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
+            // Shadows
+            var light00 = new BABYLON.SpotLight("*spot00", new BABYLON.Vector3(0, 20, 20), new BABYLON.Vector3(0, -1, -1), 1.2, 24, scene);
+            light00.shadowMinZ = 15;
+            light00.shadowMaxZ = 40; 
+
+            var shadowGenerator00 = new BABYLON.ShadowGenerator(512, light00);
+            shadowGenerator00.getShadowMap().renderList.push(box00);
+            shadowGenerator00.useContactHardeningShadow = true;
+            shadowGenerator00.contactHardeningLightSizeUVRatio = 0.0075;
+
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                 
                 meshes = loadedMeshes;
