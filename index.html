@@ -52,10 +52,11 @@
                         planeDetected = true; // Um plano foi detetado
                 
                         // Carregando a mesh logo no início
-                        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", null, function (loadedMeshes) {
+                        BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                             meshes = loadedMeshes;
                             meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                             for(var i = 0; i < meshes.length; i++) {
+                                
                                 meshes[i].isVisible = false;
                             }
                         });
@@ -83,7 +84,7 @@
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
                     touchStart = pointerInfo.pickInfo.pickedPoint;
-                    break;
+                break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if(meshes && meshes[0].isVisible && touchStart) {
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
@@ -92,7 +93,7 @@
                         meshes[0].position.y = initialY; // Usamos a posição y do plano detectado para posicionar a mesh
                         touchStart = pointerInfo.pickInfo.pickedPoint;
                     }
-                    break; 
+                break; 
             }
         });
 
