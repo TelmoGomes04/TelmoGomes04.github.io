@@ -100,12 +100,15 @@
                             meshes[0].position.x += delta.x;
                             meshes[0].position.z += delta.z;
                             meshes[0].position.y = initialY;
-                        } else {
+                        }else if(!touchedMesh && (delta.y)){
                             // Scale and rotate the car
                             var scaleFactor = 1 + delta.y * 0.01;
-                            var rotationFactor = delta.x * 0.01;
                             meshes[0].scaling = initialScale.scale(scaleFactor);
+                            
+                        }else{
+                            var rotationFactor = delta.x * 0.01;
                             meshes[0].rotation.y = initialRotation.y + rotationFactor;
+
                         }
                         touchStart = pointerInfo.pickInfo.pickedPoint;
                     }
