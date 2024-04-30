@@ -103,28 +103,36 @@
             }
         });
 
-        canvas.addEventListener('touchstart', function(event) {
-            if (event.touches.length == 2) {
-                var dx = event.touches[0].clientX - event.touches[1].clientX;
-                var dy = event.touches[0].clientY - event.touches[1].clientY;
+        canvas.addEventListener('pointerdown', function(event) {
+            if (event.pointerId === 1) {
+                touchStart = new BABYLON.Vector3(event.clientX, event.clientY, 0);
+            } else if (event.pointerId === 2) {
+                var dx = event.clientX - touchStart.x;
+                var dy = event.clientY - touchStart.y;
                 initialDistance = Math.sqrt(dx * dx + dy * dy);
                 initialAngle = Math.atan2(dy, dx);
             }
         }, false);
-    
-        canvas.addEventListener('touchmove', function(event) {
-            if (event.touches.length == 2 && meshes && meshes[0].isVisible) {
-                var dx = event.touches[0].clientX - event.touches[1].clientX;
-                var dy = event.touches[0].clientY - event.touches[1].clientY;
+        
+        canvas.addEventListener('pointermove', function(event) {
+            if (event.pointerId === 1 && meshes && meshes[0].isVisible) {
+                var delta = new BABYLON.Vector3(event.clientX, event.clientY, 0).subtract(touchStart);
+                meshes[0].position.x += delta.x;
+                meshes[0].position.z += delta.z;
+                meshes[0].position.y = initialY; // Usamos a posição y do plano detectado para posicionar a mesh
+                touchStart = new BABYLON.Vector3(event.clientX, event.clientY, 0);
+            } else if (event.pointerId === 2 && meshes && meshes[0].isVisible && initialDistance !== null && initialAngle !== null) {
+                var dx = event.clientX - touchStart.x;
+                var dy = event.clientY - touchStart.y;
                 var distance = Math.sqrt(dx * dx + dy * dy);
                 var angle = Math.atan2(dy, dx);
-    
+        
                 var scale = distance / initialDistance;
                 meshes[0].scaling.scaleInPlace(scale);
-    
+        
                 var rotation = angle - initialAngle;
                 meshes[0].rotation.y += rotation;
-    
+        
                 initialDistance = distance;
                 initialAngle = angle;
             }
