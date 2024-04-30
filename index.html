@@ -85,6 +85,9 @@
             engine.resize();
         });
 
+        var position = false ;
+        var scaling = false ;
+        var rotation = false ;
 
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
@@ -101,25 +104,23 @@
                     }
                     if(meshes && meshes[0].isVisible && touchStart) {
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
-                        if (touchedMesh) {
+                        if (touchedMesh && position) {
                             // Move the car
                             meshes[0].position.x += delta.x;
                             meshes[0].position.z += delta.z;
                             meshes[0].position.y = initialY;
-                        } else {
-                            // Scale and rotate the car
-                            if(delta.y != 0){
-                                var scaleFactor = 1 + delta.y * 0.01;
-                                meshes[0].scaling = initialScale.scale(scaleFactor);
-                            }
-                            if(delta.x != 0){
-                                var rotationFactor = delta.x * 0.01;
-                                meshes[0].rotation.y = initialRotation.y + rotationFactor;
-                            }
+                        }else if(delta.y != 0 && scaling) {
+                            var scaleFactor = 1 + delta.y * 0.01;
+                            meshes[0].scaling = initialScale.scale(scaleFactor);
+                        }else if(delta.x != 0 && rotation) {
+                            var rotationFactor = delta.x * 0.01;
+                            meshes[0].rotation.y = initialRotation.y + rotationFactor;
                         }
                         touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     }
                     break; 
+                case BABYLON.PointerEventTypes.: //UP
+                break;
             }
         });
 
@@ -135,7 +136,7 @@
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         moveButton.top = "10px";
         moveButton.onPointerUpObservable.add(function() {
-            // Add code to move the car
+            position = true;
         });
         advancedTexture.addControl(moveButton); 
 
