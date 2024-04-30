@@ -50,6 +50,7 @@
                     meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                     meshes[i].isVisible = false;
                 }
+                objectMesh = scene.getMeshByName("Object_32");
             });
 
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
@@ -89,7 +90,7 @@
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
                     touchStart = pointerInfo.pickInfo.pickedPoint;
-                    touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == meshes[0];
+                    touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if(meshes && meshes[0].isVisible && touchStart) {
