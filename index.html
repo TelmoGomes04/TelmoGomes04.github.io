@@ -100,6 +100,37 @@
             }
         });
 
+        var initialDistance = null;
+        var initialScale = null;
+
+        canvas.addEventListener('pointerdown', function(event) {
+            if(event.pointerType == "touch" && event.isPrimary) {
+                touchStart = {x: event.clientX, y: event.clientY};
+                initialScale = meshes[0].scaling.clone();
+            }
+        });
+
+        canvas.addEventListener('pointermove', function(event) {
+            if(event.pointerType == "touch" && event.isPrimary && touchStart) {
+                var currentTouch = {x: event.clientX, y: event.clientY};
+                var delta = Math.sqrt(Math.pow(currentTouch.x - touchStart.x, 2) + Math.pow(currentTouch.y - touchStart.y, 2));
+
+                if(initialDistance === null) {
+                    initialDistance = delta;
+                }
+
+                var scaleRatio = delta / initialDistance;
+                meshes[0].scaling = initialScale.scale(scaleRatio);
+            }
+        });
+
+        canvas.addEventListener('pointerup', function(event) {
+            if(event.pointerType == "touch" && event.isPrimary) {
+                touchStart = null;
+                initialDistance = null;
+            }
+        });
+
     </script>
 </body>
 </html>
