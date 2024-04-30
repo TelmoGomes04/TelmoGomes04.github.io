@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>AR Test</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/loaders/GLTFLoader.js"></script>
     <style>
         body {
             overflow: hidden;
@@ -52,7 +53,7 @@
             light.position.set(0, 1, 0);
             scene.add(light);
 
-            // Load 3D model (e.g., GLTF model)
+            // Create a loader for GLTF models
             const loader = new THREE.GLTFLoader();
             loader.load('media/gltf/F3_Car/scene.gltf', (gltf) => {
                 const model = gltf.scene;
