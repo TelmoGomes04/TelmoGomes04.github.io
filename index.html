@@ -56,14 +56,15 @@
 
                 xrTest.onHitTestResultObservable.add((results) => {
                     if (results.length > 0 && !planeDetected) {
-                        planeDetected = true; // Um plano foi detectado
-
+                        planeDetected = true; // Um plano foi detetado
+                
                         // Agora adicionamos a mesh à cena
                         for(var i = 0; i < meshes.length; i++) {
                             scene.addMesh(meshes[i]);
                         }
                     }
                 });
+                
             });
 
             return scene;
