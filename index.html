@@ -74,6 +74,12 @@
 
         engine.runRenderLoop(function () {
             if (scene) {
+                // Verifique se um plano foi detectado e se a mesh ainda não foi adicionada à cena
+                if (planeDetected && meshes && meshes[0] && !meshes[0].isInScene()) {
+                    for(var i = 0; i < meshes.length; i++) {
+                        scene.addMesh(meshes[i]);
+                    }
+                }
                 scene.render();
             }
         });
