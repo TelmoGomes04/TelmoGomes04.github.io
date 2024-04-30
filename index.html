@@ -89,7 +89,7 @@
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
                     touchStart = pointerInfo.pickInfo.pickedPoint;
-                    touchedMesh = pointerInfo.pickInfo.pickedMesh == meshes[0];
+                    touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == meshes[0];
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if(meshes && meshes[0].isVisible && touchStart) {
@@ -101,16 +101,10 @@
                             meshes[0].position.y = initialY;
                         } else {
                             // Scale and rotate the car
-                            if (delta.y > 0) {
-                                meshes[0].scaling = initialScale.scale(1 + delta.y);
-                            } else if (delta.y < 0) {
-                                meshes[0].scaling = initialScale.scale(1 / (1 - delta.y));
-                            }
-                            if (delta.x > 0) {
-                                meshes[0].rotation.y = initialRotation.y + delta.x;
-                            } else if (delta.x < 0) {
-                                meshes[0].rotation.y = initialRotation.y - delta.x;
-                            }
+                            var scaleFactor = 1 + delta.y * 0.01;
+                            var rotationFactor = delta.x * 0.01;
+                            meshes[0].scaling = initialScale.scale(scaleFactor);
+                            meshes[0].rotation.y = initialRotation.y + rotationFactor;
                         }
                         touchStart = pointerInfo.pickInfo.pickedPoint;
                     }
