@@ -130,11 +130,10 @@
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
-                            var direction1 = Math.sign(delta.y);
-                            var rotationIncrement = 0.01; // Valor de ajuste da rotação
+                            var rotationIncrement = 0.1; // Valor de ajuste da rotação
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                carMesh.rotation.y += direction1 * rotationIncrement;
+                                carMesh.rotation.y += delta.y * rotationIncrement;
 
                                 //carMesh.rotation.x = carMesh.rotation.x;
                                 //carMesh.rotation.z = carMesh.rotation.z;
