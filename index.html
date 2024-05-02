@@ -52,7 +52,7 @@
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[i].isVisible = false;
                 }
-                var car = meshes[0];
+                car = meshes[0];
                 car.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                 
                 
@@ -105,44 +105,52 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
                         return;
                     }
+                    // Captura o ponto onde o ponteiro foi pressionado
                     touchStart = pointerInfo.pickInfo.pickedPoint.clone();
-                    touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
-                
+                    // Verifica se houve colisão com uma malha e se é a malha correta
+                    //touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
                     break;
+        
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
                         return;
                     }
-                    if(car.isVisible && touchStart) {
+                    // Verifica se a malha do carro está visível e se houve um toque inicial
+                    if (car.isVisible && touchStart) {
+                        // Calcula a diferença entre a posição atual do ponteiro e a posição inicial do toque
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
+        
                         if (position) {
-                            // Move the car
+                            // Move o carro na direção do movimento do ponteiro, mantendo a altura inicial
                             car.position.x += delta.x;
                             car.position.z += delta.z;
                             car.position.y = initialY;
-                        }else if(scaling) {
-                            // scale the car
+                        } else if (scaling) {
+                            // Escala o carro com base no movimento vertical do ponteiro
                             var scaleFactor = 1 + delta.y * 0.01;
                             car.scaling = initialScale.scale(scaleFactor);
-                        }else if(rotation) {
-                            // Rotate the car
+                        } else if (rotation) {
+                            // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
                             var rotationFactor = delta.x * 0.01;
                             car.rotation.y = initialRotation.y + rotationFactor;
-                        }
-                        else{
+                        } else {
                             console.log("Default");
                         }
+        
+                        // Atualiza o ponto inicial do toque para o ponto atual do ponteiro
                         touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     }
-                    break; 
+                    break;
+        
                 case BABYLON.PointerEventTypes.POINTERUP:
-                break;
+                    // Lidar com ação quando o botão do ponteiro é solto
+                    break;
             }
         });
+        
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
