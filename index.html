@@ -132,11 +132,17 @@
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
-                        /*
-                            // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
-                            var rotationFactor = delta.x * 0.01;
-                            carMesh.rotation.y = initialRotation.y + rotationFactor;
-                        */
+                            var rotationIncrement = 0.01; // Valor de ajuste da rotação
+
+                            try {
+                                // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal
+                                carMesh.rotation.y += delta.x * rotationIncrement;
+            
+                                // Atualizar o ponto inicial do toque
+                                touchStart = pointerInfo.pickInfo.pickedPoint.clone();
+                            } catch (error) {
+                                console.error("Erro na aplicação da rotação:", error);
+                            }
                         } else {
                             console.log("Default");
                         }
