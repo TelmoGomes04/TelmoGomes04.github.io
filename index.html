@@ -120,33 +120,24 @@
                             //carMesh.scaling = new BABYLON.Vector3(1, 1, 1);
                             var direction = Math.sign(delta.y); // 1 se movendo para cima, -1 se movendo para baixo
                             var scaleIncrement = 0.005; // Valor de ajuste da escala
-            
                             try {
                                 // Ajustar a escala incrementalmente com base na direção do movimento
                                 carMesh.scaling.y += direction * scaleIncrement;
-            
                                 // Manter a proporção nos eixos x e z para preservar a forma original
                                 carMesh.scaling.x = carMesh.scaling.y; // Manter a proporção nos eixos x e z
                                 carMesh.scaling.z = carMesh.scaling.y;
-            
-                                // Atualizar o ponto inicial do toque
-                                //touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                             } catch (error) {
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
-                            var direction = Math.sign(delta.y);
+                            var direction1 = Math.sign(delta.y);
                             var rotationIncrement = 0.01; // Valor de ajuste da rotação
-
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                carMesh.rotation.y += direction * rotationIncrement;
+                                carMesh.rotation.y += direction1 * rotationIncrement;
 
-                                carMesh.rotation.x = carMesh.rotation.x;
-                                carMesh.rotation.z = carMesh.rotation.z;
-            
-                                // Atualizar o ponto inicial do toque
-                                //touchStart = pointerInfo.pickInfo.pickedPoint.clone();
+                                //carMesh.rotation.x = carMesh.rotation.x;
+                                //carMesh.rotation.z = carMesh.rotation.z;
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
                             }
