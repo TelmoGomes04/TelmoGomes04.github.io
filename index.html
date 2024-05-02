@@ -137,7 +137,9 @@
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         moveButton.top = "10px";
         moveButton.onPointerUpObservable.add(function() {
-            position = true;
+            position = !position;
+            scaling = false;
+            rotation = false;
         });
         advancedTexture.addControl(moveButton); 
 
@@ -151,7 +153,9 @@
         scaleButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         scaleButton.top = "60px";
         scaleButton.onPointerUpObservable.add(function() {
-            // Add code to scale the car
+            scaling = !scaling;
+            position = false;
+            rotation = false;
         });
         advancedTexture.addControl(scaleButton); 
 
@@ -165,7 +169,9 @@
         rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         rotateButton.top = "110px";
         rotateButton.onPointerUpObservable.add(function() {
-            // Add code to rotate the car
+            rotation = !rotation;
+            position = false;
+            scaling = false;
         });
         advancedTexture.addControl(rotateButton); 
 
