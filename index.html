@@ -199,9 +199,9 @@
             rotation = false;
             console.log("Position :",scaling);
             if(scaling) {
-                moveButton.background = "green";
+                scaleButton.background = "green";
             } else if(!scaling || position || rotation){
-                moveButton.background = "gray";
+                scaleButton.background = "gray";
             }
 
         });
@@ -222,9 +222,9 @@
             scaling = false;
             console.log("Position :",rotation);
             if(rotation) {
-                moveButton.background = "green";
+                rotateButton.background = "green";
             } else {
-                moveButton.background = "gray";
+                rotateButton.background = "gray";
             }
 
         });
