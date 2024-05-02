@@ -52,6 +52,7 @@
                     meshes[i].isVisible = false;
                 }
                 meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
+                var Car = meshes[0];
                 //test
                 //material.freeze();
             });
@@ -61,15 +62,15 @@
                 const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (!planeDetected && results.length > 0 && meshes && !meshes[0].isVisible) {
+                    if (!planeDetected && results.length > 0 && !Car.isVisible) {
                         var hitResult = results[0];
                         for(var i = 0; i < meshes.length; i++) {
                             meshes[i].isVisible = true;
                         }
-                            meshes[0].position = hitResult.transformationMatrix.getTranslation();
-                            initialY = meshes[0].position.y;
-                            initialScale = meshes[0].scaling.clone();
-                            initialRotation = meshes[0].rotation.clone();
+                        Car.position = hitResult.transformationMatrix.getTranslation();
+                            initialY = Car.position.y;
+                            initialScale = Car.scaling.clone();
+                            initialRotation = Car.rotation.clone();
 
                         planeDetected = true;
 
@@ -101,33 +102,33 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                /*
+                
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
                         return;
                     }
                     touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
-                */
+                
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
                         return;
                     }
-                    if(meshes && meshes[0].isVisible && touchStart) {
+                    if(Car.isVisible && touchStart) {
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
                         if (position) {
                             // Move the car
-                            meshes[0].position.x += delta.x;
-                            meshes[0].position.z += delta.z;
-                            meshes[0].position.y = initialY;
+                            Car.position.x += delta.x;
+                            Car.position.z += delta.z;
+                            Car.position.y = initialY;
                         }else if(scaling) {
                             // scale the car
                             var scaleFactor = 1 + delta.y * 0.01;
-                            meshes[0].scaling = initialScale.scale(scaleFactor);
+                            Car.scaling = initialScale.scale(scaleFactor);
                         }else if(rotation) {
                             // Rotate the car
                             var rotationFactor = delta.x * 0.01;
-                            meshes[0].rotation.y = initialRotation.y + rotationFactor;
+                            Car.rotation.y = initialRotation.y + rotationFactor;
                         }
                         else{
                             console.log("Default");
