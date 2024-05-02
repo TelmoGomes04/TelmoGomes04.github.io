@@ -117,10 +117,20 @@
                             carMesh.position.z += delta.z;
                             carMesh.position.y = initialY;
                         } else if (scaling) {
-                            // Calcula o fator de escala com base no movimento vertical do ponteiro
-                            var scaleFactor = 1 + delta.y * 0.005; // Ajuste o valor do multiplicador conforme necessário
-                            //carMesh.scaling = initialScale.multiplyByFloats(scaleFactor, scaleFactor, scaleFactor);
-                            carMesh.scaling = new BABYLON.Vector3(scaleFactor, scaleFactor, scaleFactor);
+                            // Calcula a diferença vertical entre a posição atual do ponteiro e a posição inicial do toque
+                            var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
+
+                            // Determina a direção do movimento vertical
+                            var direction = Math.sign(delta.y); // Retorna 1 se delta.y for positivo, -1 se for negativo
+
+                            // Calcula o fator de escala com base na direção do movimento
+                            var scaleFactor = 1 + direction * 0.01; // Ajuste o valor do multiplicador conforme necessário
+
+                            // Aplica a escala à malha do carro
+                            carMesh.scaling = initialScale.multiplyByFloats(scaleFactor, scaleFactor, scaleFactor);
+
+                            // Atualiza o ponto inicial do toque para o ponto atual do ponteiro
+                            touchStart = pointerInfo.pickInfo.pickedPoint.clone();
     
                         } else if (rotation) {
                             // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
