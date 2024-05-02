@@ -119,7 +119,8 @@
                         } else if (scaling) {
                             // Calcula o fator de escala com base no movimento vertical do ponteiro
                             var scaleFactor = 1 + delta.y * 0.005; // Ajuste o valor do multiplicador conforme necessário
-                            carMesh.scaling = initialScale.multiplyByFloats(scaleFactor, scaleFactor, scaleFactor);
+                            //carMesh.scaling = initialScale.multiplyByFloats(scaleFactor, scaleFactor, scaleFactor);
+                            carMesh.scaling = new BABYLON.Vector3(scaleFactor, scaleFactor, scaleFactor);
     
                         } else if (rotation) {
                             // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
