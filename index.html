@@ -31,6 +31,7 @@
         var initialScale = null;
         var initialRotation = null;
         var touchedMesh = false;
+        var planeDetected = false;
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -58,7 +59,7 @@
                 const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (results.length > 0 && meshes && !meshes[0].isVisible) {
+                    if (!planeDetected && results.length > 0 && meshes && !meshes[0].isVisible) {
                         var hitResult = results[0];
                         for(var i = 0; i < meshes.length; i++) {
                             meshes[0].position = hitResult.transformationMatrix.getTranslation();
@@ -67,6 +68,7 @@
                             initialRotation = meshes[0].rotation.clone();
                             meshes[i].isVisible = true;
                         }
+                        planeDetected = true;
                     }
                 });
             });
@@ -140,6 +142,7 @@
             position = !position;
             scaling = false;
             rotation = false;
+            console.log("Position :",position)
         });
         advancedTexture.addControl(moveButton); 
 
@@ -156,6 +159,7 @@
             scaling = !scaling;
             position = false;
             rotation = false;
+            console.log("Position :",scaling)
         });
         advancedTexture.addControl(scaleButton); 
 
@@ -172,6 +176,7 @@
             rotation = !rotation;
             position = false;
             scaling = false;
+            console.log("Position :",rotation)
         });
         advancedTexture.addControl(rotateButton); 
 
