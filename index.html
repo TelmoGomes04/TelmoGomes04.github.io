@@ -166,7 +166,7 @@
         moveButton.height = "80px";
         moveButton.color = "white";
         moveButton.cornerRadius = 20;
-        moveButton.background = "green";
+        moveButton.background = "gray";
         moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         moveButton.top = "-40px";
@@ -174,7 +174,13 @@
             position = !position;
             scaling = false;
             rotation = false;
-            console.log("Position :",position)
+            console.log("Position :",position);
+            if(position) {
+                moveButton.background = "green";
+            } else {
+                moveButton.background = "gray";
+            }
+
         });
         advancedTexture.addControl(moveButton); 
 
@@ -183,7 +189,7 @@
         scaleButton.height = "80px";
         scaleButton.color = "white";
         scaleButton.cornerRadius = 20;
-        scaleButton.background = "green";
+        scaleButton.background = "gray";
         scaleButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         scaleButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         scaleButton.top = "60px";
@@ -191,7 +197,13 @@
             scaling = !scaling;
             position = false;
             rotation = false;
-            console.log("Position :",scaling)
+            console.log("Position :",scaling);
+            if(scaling) {
+                moveButton.background = "green";
+            } else {
+                moveButton.background = "gray";
+            }
+
         });
         advancedTexture.addControl(scaleButton); 
 
@@ -200,7 +212,7 @@
         rotateButton.height = "80px";
         rotateButton.color = "white";
         rotateButton.cornerRadius = 20;
-        rotateButton.background = "green";
+        rotateButton.background = "gray";
         rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         rotateButton.top = "160px";
@@ -208,7 +220,13 @@
             rotation = !rotation;
             position = false;
             scaling = false;
-            console.log("Position :",rotation)
+            console.log("Position :",rotation);
+            if(rotation) {
+                moveButton.background = "green";
+            } else {
+                moveButton.background = "gray";
+            }
+
         });
         advancedTexture.addControl(rotateButton); 
 
