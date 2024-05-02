@@ -25,14 +25,17 @@
     <canvas id="renderCanvas"></canvas>
     <script>
 
-        var meshes;
-        var car;
+        var carMesh = null;
         var touchStart = null;
         var initialY = null;
         var initialScale = null;
         var initialRotation = null;
         var touchedMesh = false;
         var planeDetected = false;
+
+        var position = false ;
+        var scaling = false ;
+        var rotation = false ;
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -45,40 +48,29 @@
 
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
-            //Load car
-            BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
-                
-                meshes = loadedMeshes;
-                for(var i = 0; i < meshes.length; i++) {
-                    meshes[i].isVisible = false;
-                }
-                car = meshes[0];
-                car.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
-                
-                
-                //test
-                //material.freeze();
-            });
+
+            function loadCarMesh(scene) {
+                BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
+                    carMesh = loadedMeshes[0]; // Assumindo que a mesh do carro está no índice 0
+                    carMesh.isVisible = false; // Inicialmente ocultar a mesh
+                    carMesh.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3); // Definir escala desejada
+                });
+            }
+
+            loadCarMesh(scene);
             
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 const fm = xrHelper.baseExperience.featuresManager;
                 const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (!planeDetected && results.length > 0 && !car.isVisible) {
+                    if (!planeDetected && results.length > 0 && carMesh && !carMesh.isVisible) {
+                        // Plane detection bem-sucedido, exiba a mesh do carro no plano detectado
                         var hitResult = results[0];
-                        for(var i = 0; i < meshes.length; i++) {
-                            meshes[i].isVisible = true;
-                        }
-                        car.position = hitResult.transformationMatrix.getTranslation();
-                            initialY = car.position.y;
-                            initialScale = car.scaling.clone();
-                            initialRotation = car.rotation.clone();
-
-                        planeDetected = true;
-
-                        //test 
-                        //mesh.freezeWorldMatrix();
+                        carMesh.isVisible = true;
+                        carMesh.position = hitResult.transformationMatrix.getTranslation();
+                        // Outras configurações necessárias após o plane detection
+                        planeDetected = true; // Marque o plane detection como concluído
                     }
                 });
             });
@@ -98,10 +90,6 @@
             engine.resize();
         });
 
-        var position = false ;
-        var scaling = false ;
-        var rotation = false ;
-
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
@@ -119,23 +107,23 @@
                         return;
                     }
                     // Verifica se a malha do carro está visível e se houve um toque inicial
-                    if (car.isVisible && touchStart) {
+                    if (carMesh.isVisible && touchStart) {
                         // Calcula a diferença entre a posição atual do ponteiro e a posição inicial do toque
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
         
                         if (position) {
                             // Move o carro na direção do movimento do ponteiro, mantendo a altura inicial
-                            car.position.x += delta.x;
-                            car.position.z += delta.z;
-                            car.position.y = initialY;
+                            carMesh.position.x += delta.x;
+                            carMesh.position.z += delta.z;
+                            carMesh.position.y = initialY;
                         } else if (scaling) {
                             // Escala o carro com base no movimento vertical do ponteiro
                             var scaleFactor = 1 + delta.y * 0.01;
-                            car.scaling = initialScale.scale(scaleFactor);
+                            carMesh.scaling = initialScale.scale(scaleFactor);
                         } else if (rotation) {
                             // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
                             var rotationFactor = delta.x * 0.01;
-                            car.rotation.y = initialRotation.y + rotationFactor;
+                            carMesh.rotation.y = initialRotation.y + rotationFactor;
                         } else {
                             console.log("Default");
                         }
