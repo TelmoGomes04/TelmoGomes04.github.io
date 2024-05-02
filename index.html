@@ -130,20 +130,21 @@
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
-                            var rotationIncrement = 0.1; // Valor de ajuste da rotação
+                            var rotationAmount = delta.x * 0.01; // Valor de ajuste da rotação
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                carMesh.rotation.y += delta.y * rotationIncrement;
+                                carMesh.rotation.y += rotationAmount;
 
-                                //carMesh.rotation.x = carMesh.rotation.x;
-                                //carMesh.rotation.z = carMesh.rotation.z;
+                                carMesh.rotation.x = 0;
+                                carMesh.rotation.z = 0;
+
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
                             }
                         } else {
                             console.log("Default");
                         }
-        
+                        
                         // Atualiza o ponto inicial do toque para o ponto atual do ponteiro
                         touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     }
