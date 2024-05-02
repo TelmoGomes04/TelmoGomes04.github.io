@@ -114,7 +114,8 @@
                             carMesh.position.z += delta.z;
                             carMesh.position.y = initialY;
                         } else if (scaling) {
-/*
+                            carMesh.scaling = new BABYLON.Vector3(1, 1, 1);
+                        /*
                             // Determina a direção do movimento vertical
                             var direction = Math.sign(delta.y); // Retorna 1 se delta.y for positivo, -1 se for negativo
                             // Calcula o fator de escala com base na direção do movimento
@@ -130,11 +131,14 @@
                                 touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                             } catch (error) {
                                 console.error("Erro na aplicação da escala:", error);
-                            }*/
+                            }
+                        */
                         } else if (rotation) {
-                        /*    // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
+                        /*
+                            // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
                             var rotationFactor = delta.x * 0.01;
-                            carMesh.rotation.y = initialRotation.y + rotationFactor;*/
+                            carMesh.rotation.y = initialRotation.y + rotationFactor;
+                        */
                         } else {
                             console.log("Default");
                         }
