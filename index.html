@@ -31,7 +31,6 @@
         var initialScale = null;
         var initialRotation = null;
         var planeDetected = false;
-        var direction = Math.sign(delta.y);
 
         var position = false ;
         var scaling = false ;
@@ -119,7 +118,7 @@
                             carMesh.position.y = initialY;
                         } else if (scaling) {
                             //carMesh.scaling = new BABYLON.Vector3(1, 1, 1);
-                             // 1 se movendo para cima, -1 se movendo para baixo
+                            var direction = Math.sign(delta.y); // 1 se movendo para cima, -1 se movendo para baixo
                             var scaleIncrement = 0.005; // Valor de ajuste da escala
             
                             try {
@@ -136,6 +135,7 @@
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
+                            var direction = Math.sign(delta.x);
                             var rotationIncrement = 0.01; // Valor de ajuste da rotação
 
                             try {
