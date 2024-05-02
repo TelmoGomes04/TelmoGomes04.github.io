@@ -65,7 +65,7 @@
                 const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (!planeDetected && results.length > 0 && !Car.isVisible) {
+                    if (!planeDetected && results.length > 0 && !mesh[0].isVisible) {
                         var hitResult = results[0];
                         for(var i = 0; i < meshes.length; i++) {
                             meshes[i].isVisible = true;
