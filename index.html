@@ -177,7 +177,10 @@
             console.log("Position :",position);
             if(position) {
                 moveButton.background = "green";
-            } else if(!position || scaling || rotation){
+
+                scaleButton.background = "gray";
+                rotateButton.background = "gray";
+            } else{
                 moveButton.background = "gray";
             }
 
@@ -200,7 +203,10 @@
             console.log("Position :",scaling);
             if(scaling) {
                 scaleButton.background = "green";
-            } else if(!scaling || position || rotation){
+
+                moveButton.background = "gray";
+                rotateButton.background = "gray";
+            } else{
                 scaleButton.background = "gray";
             }
 
@@ -223,6 +229,9 @@
             console.log("Position :",rotation);
             if(rotation) {
                 rotateButton.background = "green";
+
+                moveButton.background = "gray";
+                scaleButton.background = "gray";
             } else {
                 rotateButton.background = "gray";
             }
