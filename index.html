@@ -130,7 +130,7 @@
                                 carMesh.scaling.z = carMesh.scaling.y;
             
                                 // Atualizar o ponto inicial do toque
-                                touchStart = pointerInfo.pickInfo.pickedPoint.clone();
+                                //touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                             } catch (error) {
                                 console.error("Erro na aplicação da escala:", error);
                             }
@@ -138,11 +138,14 @@
                             var rotationIncrement = 0.01; // Valor de ajuste da rotação
 
                             try {
-                                // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal
+                                // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
                                 carMesh.rotation.y += delta.x * rotationIncrement;
+
+                                carMesh.rotation.x = carMesh.rotation.x;
+                                carMesh.rotation.z = carMesh.rotation.z;
             
                                 // Atualizar o ponto inicial do toque
-                                touchStart = pointerInfo.pickInfo.pickedPoint.clone();
+                                //touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
                             }
