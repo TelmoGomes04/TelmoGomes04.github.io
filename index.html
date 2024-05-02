@@ -117,9 +117,10 @@
                             carMesh.position.z += delta.z;
                             carMesh.position.y = initialY;
                         } else if (scaling) {
-                            // Escala o carro com base no movimento vertical do ponteiro
-                            var scaleFactor = 1 + delta.y * 0.01;
-                            carMesh.scaling = initialScale.scale(scaleFactor);
+                            // Calcula o fator de escala com base no movimento vertical do ponteiro
+                            var scaleFactor = 1 + delta.y * 0.005; // Ajuste o valor do multiplicador conforme necessário
+                            carMesh.scaling = initialScale.multiplyByFloats(scaleFactor, scaleFactor, scaleFactor);
+    
                         } else if (rotation) {
                             // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
                             var rotationFactor = delta.x * 0.01;
@@ -143,8 +144,8 @@
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
         var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
-        moveButton.width = "150px";
-        moveButton.height = "40px";
+        moveButton.width = "300px";
+        moveButton.height = "80px";
         moveButton.color = "white";
         moveButton.cornerRadius = 20;
         moveButton.background = "green";
@@ -160,8 +161,8 @@
         advancedTexture.addControl(moveButton); 
 
         var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale");
-        scaleButton.width = "150px";
-        scaleButton.height = "40px";
+        scaleButton.width = "300px";
+        scaleButton.height = "80px";
         scaleButton.color = "white";
         scaleButton.cornerRadius = 20;
         scaleButton.background = "green";
@@ -177,8 +178,8 @@
         advancedTexture.addControl(scaleButton); 
 
         var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate");
-        rotateButton.width = "150px";
-        rotateButton.height = "40px";
+        rotateButton.width = "300px";
+        rotateButton.height = "80px";
         rotateButton.color = "white";
         rotateButton.cornerRadius = 20;
         rotateButton.background = "green";
