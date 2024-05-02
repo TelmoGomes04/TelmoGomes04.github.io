@@ -123,7 +123,7 @@
                             try {
 
 
-                                if(0.2>= carMesh && carMesh<=0.8){
+                                if(0.2<= carMesh && carMesh<=0.8){
                                     carMesh.scaling.y += direction * scaleIncrement;
                                 }
                         
@@ -133,13 +133,11 @@
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
-                            var rotationAmount = delta.x * 0.01; // Valor de ajuste da rotação
+                            var direction = Math.sign(delta.y);
+                            var rotationIncrement = 0.01;  // Valor de ajuste da rotação
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                carMesh.rotation.y += rotationAmount;
-
-                                carMesh.rotation.x = 0;
-                                carMesh.rotation.z = 0;
+                                carMesh.rotation.y += direction * rotationIncrement;
 
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
