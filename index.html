@@ -44,14 +44,14 @@
 
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
-
+            //Load car
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                 
                 meshes = loadedMeshes;
                 for(var i = 0; i < meshes.length; i++) {
-                    meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                     meshes[i].isVisible = false;
                 }
+                meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                 //test
                 //material.freeze();
             });
@@ -93,7 +93,7 @@
         window.addEventListener("resize", function () {
             engine.resize();
         });
-/*
+
         var position = false ;
         var scaling = false ;
         var rotation = false ;
@@ -101,11 +101,13 @@
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
+                /*
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
                         return;
                     }
                     touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
+                */
                     break;
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
@@ -113,17 +115,22 @@
                     }
                     if(meshes && meshes[0].isVisible && touchStart) {
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
-                        if (touchedMesh && position) {
+                        if (position) {
                             // Move the car
                             meshes[0].position.x += delta.x;
                             meshes[0].position.z += delta.z;
                             meshes[0].position.y = initialY;
-                        }else if(delta.y != 0 && scaling) {
+                        }else if(scaling) {
+                            // scale the car
                             var scaleFactor = 1 + delta.y * 0.01;
                             meshes[0].scaling = initialScale.scale(scaleFactor);
-                        }else if(delta.x != 0 && rotation) {
+                        }else if(rotation) {
+                            // Rotate the car
                             var rotationFactor = delta.x * 0.01;
                             meshes[0].rotation.y = initialRotation.y + rotationFactor;
+                        }
+                        else{
+                            console.log("Default");
                         }
                         touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     }
@@ -135,13 +142,13 @@
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-        var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move Car");
+        var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
         moveButton.width = "150px";
         moveButton.height = "40px";
         moveButton.color = "white";
         moveButton.cornerRadius = 20;
         moveButton.background = "green";
-        moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         moveButton.top = "10px";
         moveButton.onPointerUpObservable.add(function() {
@@ -152,13 +159,13 @@
         });
         advancedTexture.addControl(moveButton); 
 
-        var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale Car");
+        var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale");
         scaleButton.width = "150px";
         scaleButton.height = "40px";
         scaleButton.color = "white";
         scaleButton.cornerRadius = 20;
         scaleButton.background = "green";
-        scaleButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        scaleButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         scaleButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         scaleButton.top = "60px";
         scaleButton.onPointerUpObservable.add(function() {
@@ -169,13 +176,13 @@
         });
         advancedTexture.addControl(scaleButton); 
 
-        var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate Car");
+        var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate");
         rotateButton.width = "150px";
         rotateButton.height = "40px";
         rotateButton.color = "white";
         rotateButton.cornerRadius = 20;
         rotateButton.background = "green";
-        rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         rotateButton.top = "110px";
         rotateButton.onPointerUpObservable.add(function() {
@@ -185,7 +192,7 @@
             console.log("Position :",rotation)
         });
         advancedTexture.addControl(rotateButton); 
-*/
+
     </script>
 </body>
 </html>
