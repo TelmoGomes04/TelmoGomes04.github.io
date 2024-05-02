@@ -26,7 +26,7 @@
     <script>
 
         var meshes;
-        var Car;
+        var car;
         var touchStart = null;
         var initialY = null;
         var initialScale = null;
@@ -52,8 +52,8 @@
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[i].isVisible = false;
                 }
-                var Car = meshes[0];
-                Car.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
+                var car = meshes[0];
+                car.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                 
                 
                 //test
@@ -65,15 +65,15 @@
                 const xrTest = fm.enableFeature(BABYLON.WebXRHitTest, "latest");
 
                 xrTest.onHitTestResultObservable.add((results) => {
-                    if (!planeDetected && results.length > 0 && !mesh[0].isVisible) {
+                    if (!planeDetected && results.length > 0 && !car.isVisible) {
                         var hitResult = results[0];
                         for(var i = 0; i < meshes.length; i++) {
                             meshes[i].isVisible = true;
                         }
-                        Car.position = hitResult.transformationMatrix.getTranslation();
-                            initialY = Car.position.y;
-                            initialScale = Car.scaling.clone();
-                            initialRotation = Car.rotation.clone();
+                        car.position = hitResult.transformationMatrix.getTranslation();
+                            initialY = car.position.y;
+                            initialScale = car.scaling.clone();
+                            initialRotation = car.rotation.clone();
 
                         planeDetected = true;
 
@@ -117,21 +117,21 @@
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
                         return;
                     }
-                    if(Car.isVisible && touchStart) {
+                    if(car.isVisible && touchStart) {
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
                         if (position) {
                             // Move the car
-                            Car.position.x += delta.x;
-                            Car.position.z += delta.z;
-                            Car.position.y = initialY;
+                            car.position.x += delta.x;
+                            car.position.z += delta.z;
+                            car.position.y = initialY;
                         }else if(scaling) {
                             // scale the car
                             var scaleFactor = 1 + delta.y * 0.01;
-                            Car.scaling = initialScale.scale(scaleFactor);
+                            car.scaling = initialScale.scale(scaleFactor);
                         }else if(rotation) {
                             // Rotate the car
                             var rotationFactor = delta.x * 0.01;
-                            Car.rotation.y = initialRotation.y + rotationFactor;
+                            car.rotation.y = initialRotation.y + rotationFactor;
                         }
                         else{
                             console.log("Default");
