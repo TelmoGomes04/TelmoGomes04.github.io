@@ -121,10 +121,13 @@
                             var direction = Math.sign(delta.y); // 1 se movendo para cima, -1 se movendo para baixo
                             var scaleIncrement = 0.005; // Valor de ajuste da escala
                             try {
-                                // Ajustar a escala incrementalmente com base na direção do movimento
-                                carMesh.scaling.y += direction * scaleIncrement;
-                                // Manter a proporção nos eixos x e z para preservar a forma original
-                                carMesh.scaling.x = carMesh.scaling.y; // Manter a proporção nos eixos x e z
+
+
+                                if(0.2>= carMesh && carMesh<=0.8){
+                                    carMesh.scaling.y += direction * scaleIncrement;
+                                }
+                        
+                                carMesh.scaling.x = carMesh.scaling.x;
                                 carMesh.scaling.z = carMesh.scaling.y;
                             } catch (error) {
                                 console.error("Erro na aplicação da escala:", error);
