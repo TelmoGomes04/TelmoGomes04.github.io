@@ -23,7 +23,6 @@
 </head>
 <body>
     <canvas id="renderCanvas"></canvas>
-    <button id="startButton">Iniciar</button>
     <script>
 
         var meshes;
@@ -33,9 +32,6 @@
         var initialRotation = null;
         var touchedMesh = false;
         var planeDetected = false;
-
-        var startButton = document.getElementById("startButton");
-        startButton.disabled = true;
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -50,13 +46,14 @@
             light.intensity = 0.7;
 
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
+                
                 meshes = loadedMeshes;
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                     meshes[i].isVisible = false;
                 }
-                // A malha terminou de carregar, então habilite o botão de iniciar
-                startButton.disabled = false;
+                //test
+                material.freeze();
             });
 
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
@@ -67,13 +64,17 @@
                     if (!planeDetected && results.length > 0 && meshes && !meshes[0].isVisible) {
                         var hitResult = results[0];
                         for(var i = 0; i < meshes.length; i++) {
+                            meshes[i].isVisible = true;
+                        }
                             meshes[0].position = hitResult.transformationMatrix.getTranslation();
                             initialY = meshes[0].position.y;
                             initialScale = meshes[0].scaling.clone();
                             initialRotation = meshes[0].rotation.clone();
-                            meshes[i].isVisible = true;
-                        }
+
                         planeDetected = true;
+
+                        //test
+                        mesh.freezeWorldMatrix();
                     }
                 });
             });
