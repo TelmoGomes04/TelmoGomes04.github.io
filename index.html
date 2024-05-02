@@ -123,12 +123,11 @@
                             try {
 
 
-                                if(0.2<= carMesh.scaling.y && carMesh.scaling.y <=0.8){
+                                if(0.2 <= carMesh.scaling.y && carMesh.scaling.y <= 0.8){
                                     carMesh.scaling.y += direction * scaleIncrement;
                                 }
-                        
-                                carMesh.scaling.x = carMesh.scaling.x;
-                                carMesh.scaling.z = carMesh.scaling.y;
+                                //carMesh.scaling.x = carMesh.scaling.x;
+                                //carMesh.scaling.z = carMesh.scaling.y;
                             } catch (error) {
                                 console.error("Erro na aplicação da escala:", error);
                             }
