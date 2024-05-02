@@ -30,7 +30,6 @@
         var initialY = null;
         var initialScale = null;
         var initialRotation = null;
-        var touchedMesh = false;
         var planeDetected = false;
 
         var position = false ;
@@ -98,8 +97,6 @@
                     }
                     // Captura o ponto onde o ponteiro foi pressionado
                     touchStart = pointerInfo.pickInfo.pickedPoint.clone();
-                    // Verifica se houve colisão com uma malha e se é a malha correta
-                    //touchedMesh = pointerInfo.pickInfo.hit && pointerInfo.pickInfo.pickedMesh == objectMesh;
                     break;
         
                 case BABYLON.PointerEventTypes.POINTERMOVE:
@@ -117,21 +114,23 @@
                             carMesh.position.z += delta.z;
                             carMesh.position.y = initialY;
                         } else if (scaling) {
-                            // Calcula a diferença vertical entre a posição atual do ponteiro e a posição inicial do toque
-                            var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
 
                             // Determina a direção do movimento vertical
                             var direction = Math.sign(delta.y); // Retorna 1 se delta.y for positivo, -1 se for negativo
-
                             // Calcula o fator de escala com base na direção do movimento
                             var scaleFactor = 1 + direction * 0.01; // Ajuste o valor do multiplicador conforme necessário
-
                             // Aplica a escala à malha do carro
                             carMesh.scaling = initialScale.multiplyByFloats(scaleFactor, scaleFactor, scaleFactor);
-
-                            // Atualiza o ponto inicial do toque para o ponto atual do ponteiro
-                            touchStart = pointerInfo.pickInfo.pickedPoint.clone();
-    
+                            // Atualiza o pnto inicial do toque para o ponto atual do ponteiro
+                            try {
+                                // Aplicar a escala à malha do carro
+                                carMesh.scaling = initialScale.multiplyByFloats(scaleFactor, scaleFactor, scaleFactor);
+            
+                                // Atualizar o ponto inicial do toque
+                                touchStart = pointerInfo.pickInfo.pickedPoint.clone();
+                            } catch (error) {
+                                console.error("Erro na aplicação da escala:", error);
+                            }
                         } else if (rotation) {
                             // Rotaciona o carro ao redor do eixo Y com base no movimento horizontal do ponteiro
                             var rotationFactor = delta.x * 0.01;
