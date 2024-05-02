@@ -23,6 +23,7 @@
 </head>
 <body>
     <canvas id="renderCanvas"></canvas>
+    <button id="startButton">Iniciar</button>
     <script>
 
         var meshes;
@@ -32,6 +33,9 @@
         var initialRotation = null;
         var touchedMesh = false;
         var planeDetected = false;
+
+        var startButton = document.getElementById("startButton");
+        startButton.disabled = true;
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -46,12 +50,13 @@
             light.intensity = 0.7;
 
             BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
-                
                 meshes = loadedMeshes;
                 for(var i = 0; i < meshes.length; i++) {
                     meshes[0].scaling = new BABYLON.Vector3(0.3, 0.3, 0.3);
                     meshes[i].isVisible = false;
                 }
+                // A malha terminou de carregar, então habilite o botão de iniciar
+                startButton.disabled = false;
             });
 
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
