@@ -123,7 +123,7 @@
                             try {
 
 
-                                if(0.2<= carMesh && carMesh<=0.8){
+                                if(0.2<= carMesh.scaling.y && carMesh.scaling.y <=0.8){
                                     carMesh.scaling.y += direction * scaleIncrement;
                                 }
                         
@@ -179,7 +179,9 @@
                 moveButton.background = "green";
 
                 scaleButton.background = "gray";
+                scaling = false;
                 rotateButton.background = "gray";
+                rotation = false;
             } else{
                 moveButton.background = "gray";
             }
@@ -206,7 +208,9 @@
                 scaleButton.background = "green";
 
                 moveButton.background = "gray";
+                position = false;
                 rotateButton.background = "gray";
+                rotation = false;
             } else{
                 scaleButton.background = "gray";
             }
@@ -233,7 +237,9 @@
                 rotateButton.background = "green";
 
                 moveButton.background = "gray";
+                position = false;
                 scaleButton.background = "gray";
+                scaling = false;
             } else {
                 rotateButton.background = "gray";
             }
