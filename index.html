@@ -177,7 +177,7 @@
             console.log("Position :",position);
             if(position) {
                 moveButton.background = "green";
-            } else {
+            } else if(!position || scaling || rotation){
                 moveButton.background = "gray";
             }
 
@@ -200,7 +200,7 @@
             console.log("Position :",scaling);
             if(scaling) {
                 moveButton.background = "green";
-            } else {
+            } else if(!scaling || position || rotation){
                 moveButton.background = "gray";
             }
 
