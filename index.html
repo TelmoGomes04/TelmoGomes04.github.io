@@ -70,6 +70,9 @@
                         carMesh.position = hitResult.transformationMatrix.getTranslation();
                         // Outras configurações necessárias após o plane detection
                         planeDetected = true; // Marque o plane detection como concluído
+                        moveButton.isVisible = true;
+                        scaleButton.isVisible = true;
+                        rotateButton.isVisible = true;
                     }
                 });
             });
@@ -170,6 +173,7 @@
         moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         moveButton.top = "-40px";
+        moveButton.isVisible = false;
         moveButton.onPointerUpObservable.add(function() {
             position = !position;
             scaling = false;
@@ -196,6 +200,7 @@
         scaleButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         scaleButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         scaleButton.top = "60px";
+        scaleButton.isVisible = false;
         scaleButton.onPointerUpObservable.add(function() {
             scaling = !scaling;
             position = false;
@@ -222,6 +227,7 @@
         rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         rotateButton.top = "160px";
+        rotateButton.isVisible = false;
         rotateButton.onPointerUpObservable.add(function() {
             rotation = !rotation;
             position = false;
