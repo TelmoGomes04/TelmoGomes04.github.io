@@ -110,7 +110,7 @@
                     if (carMesh.isVisible && touchStart) {
                         // Calcula a diferença entre a posição atual do ponteiro e a posição inicial do toque
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
-                        var direction = Math.sign(delta.y);
+                        
         
                         if (position) {
                             // Move o carro na direção do movimento do ponteiro, mantendo a altura inicial
@@ -120,8 +120,9 @@
                         } else if (scaling) {
                             //carMesh.scaling = new BABYLON.Vector3(1, 1, 1);
                             var scaleIncrement = 0.005; // Valor de ajuste da escala
+                            var directiony = Math.sign(delta.y);
                             try {
-                                var newScale = carMesh.scaling.y + (direction * scaleIncrement);
+                                var newScale = carMesh.scaling.y + (directiony * scaleIncrement);
 
                                 // Aplica limites mínimo e máximo à escala
                                 if (newScale >= 0.2 && newScale <= 0.8) {
@@ -135,10 +136,11 @@
                             }
                         } else if (rotation) {
                             var rotationIncrement = 0.01;  // Valor de ajuste da rotação
+                            var directionx = Math.sign(delta.x);
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
                                 //carMesh.rotation.y += direction * rotationIncrement;
-                                carMesh.rotate(BABYLON.Axis.Y, direction * rotationIncrement);
+                                carMesh.rotate(BABYLON.Axis.Y, directionx * rotationIncrement);
 
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
