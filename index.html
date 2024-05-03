@@ -125,12 +125,8 @@
                             var directiony = Math.sign(delta.y);
                             try {
                                 var newScale = carMesh.scaling.y + (directiony * scaleIncrement);
-                                if(delta.y == delta.y){
-                                    // Aplica limites mínimo e máximo à escala
-                                    if (newScale >= 0.2 && newScale <= 0.8) {
-                                    // Atualiza a escala apenas se estiver dentro dos limites
+                                if((delta.y == delta.y) && (newScale >= 0.2 && newScale <= 0.8)){
                                     carMesh.scaling = new BABYLON.Vector3(newScale, newScale, newScale);
-                                    }
                                 }
                                 
                             } catch (error) {
