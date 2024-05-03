@@ -156,7 +156,8 @@
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-        var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
+        var imageMove = "media/Logos/move.png";
+        var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move", imageMove);
         moveButton.width = "300px";
         moveButton.height = "80px";
         moveButton.color = "white";
@@ -185,7 +186,8 @@
         });
         advancedTexture.addControl(moveButton); 
 
-        var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale");
+        var imageScale = "media/Logos/scale.png";
+        var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale" ,imageScale);
         scaleButton.width = "300px";
         scaleButton.height = "80px";
         scaleButton.color = "white";
@@ -214,7 +216,8 @@
         });
         advancedTexture.addControl(scaleButton); 
 
-        var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate");
+        var imageRotation = "media/Logos/rotation.png";
+        var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate" ,imageRotation);
         rotateButton.width = "300px";
         rotateButton.height = "80px";
         rotateButton.color = "white";
