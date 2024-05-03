@@ -92,6 +92,89 @@
                     }
                     
                 });
+                // Criar botão "Move"
+                var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
+                moveButton.width = "110px";
+                moveButton.height = "110px";
+                moveButton.color = "black";
+                moveButton.cornerRadius = 20;
+                moveButton.background = "gray";
+                moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM; // Alinhamento vertical no fundo
+                moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER; // Alinhamento horizontal no centro
+                moveButton.left = "-120px";
+                moveButton.isVisible = false;
+                moveButton.onPointerUpObservable.add(function() {
+                    position = !position;
+                    scaling = false;
+                    rotation = false;
+                    console.log("Position :",position);
+                    if(position) {
+                        moveButton.background = "green";
+                        scaleButton.background = "gray";
+                        scaling = false;
+                        rotateButton.background = "gray";
+                        rotation = false;
+                    } else {
+                        moveButton.background = "gray";
+                    }
+                });
+                advancedTexture.addControl(moveButton); 
+
+                // Criar botão "Scale"
+                var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale");
+                scaleButton.width = "110px";
+                scaleButton.height = "110px";
+                scaleButton.color = "black";
+                scaleButton.cornerRadius = 20;
+                scaleButton.background = "gray";
+                scaleButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM; // Alinhamento vertical no fundo
+                scaleButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER; // Alinhamento horizontal no centro
+                //scaleButton.left = "0px";
+                scaleButton.isVisible = false;
+                scaleButton.onPointerUpObservable.add(function() {
+                    scaling = !scaling;
+                    position = false;
+                    rotation = false;
+                    console.log("Position :",scaling);
+                    if(scaling) {
+                        scaleButton.background = "green";
+                        moveButton.background = "gray";
+                        position = false;
+                        rotateButton.background = "gray";
+                        rotation = false;
+                    } else {
+                        scaleButton.background = "gray";
+                    }
+                });
+                advancedTexture.addControl(scaleButton); 
+
+                // Criar botão "Rotate"
+                var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate");
+                rotateButton.width = "110px";
+                rotateButton.height = "110px";
+                rotateButton.color = "black";
+                rotateButton.cornerRadius = 20;
+                rotateButton.background = "gray";
+                rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM; // Alinhamento vertical no fundo
+                rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER; // Alinhamento horizontal no centro
+                rotateButton.left = "120px"; // Distância do botão "Scale"
+                rotateButton.isVisible = false;
+                rotateButton.onPointerUpObservable.add(function() {
+                    rotation = !rotation;
+                    position = false;
+                    scaling = false;
+                    console.log("Position :",rotation);
+                    if(rotation) {
+                        rotateButton.background = "green";
+                        moveButton.background = "gray";
+                        position = false;
+                        scaleButton.background = "gray";
+                        scaling = false;
+                    } else {
+                        rotateButton.background = "gray";
+                    }
+                });
+                advancedTexture.addControl(rotateButton);  
             });
 
             return scene;
@@ -177,89 +260,7 @@
          
 
 
-        // Criar botão "Move"
-        var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
-        moveButton.width = "110px";
-        moveButton.height = "110px";
-        moveButton.color = "black";
-        moveButton.cornerRadius = 20;
-        moveButton.background = "gray";
-        moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM; // Alinhamento vertical no fundo
-        moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER; // Alinhamento horizontal no centro
-        moveButton.left = "-120px";
-        moveButton.isVisible = false;
-        moveButton.onPointerUpObservable.add(function() {
-            position = !position;
-            scaling = false;
-            rotation = false;
-            console.log("Position :",position);
-            if(position) {
-                moveButton.background = "green";
-                scaleButton.background = "gray";
-                scaling = false;
-                rotateButton.background = "gray";
-                rotation = false;
-            } else {
-                moveButton.background = "gray";
-            }
-        });
-        advancedTexture.addControl(moveButton); 
-
-        // Criar botão "Scale"
-        var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale");
-        scaleButton.width = "110px";
-        scaleButton.height = "110px";
-        scaleButton.color = "black";
-        scaleButton.cornerRadius = 20;
-        scaleButton.background = "gray";
-        scaleButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM; // Alinhamento vertical no fundo
-        scaleButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER; // Alinhamento horizontal no centro
-        //scaleButton.left = "0px"; // Distância do botão "Move"
-        scaleButton.isVisible = false;
-        scaleButton.onPointerUpObservable.add(function() {
-            scaling = !scaling;
-            position = false;
-            rotation = false;
-            console.log("Position :",scaling);
-            if(scaling) {
-                scaleButton.background = "green";
-                moveButton.background = "gray";
-                position = false;
-                rotateButton.background = "gray";
-                rotation = false;
-            } else {
-                scaleButton.background = "gray";
-            }
-        });
-        advancedTexture.addControl(scaleButton); 
-
-        // Criar botão "Rotate"
-        var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate");
-        rotateButton.width = "110px";
-        rotateButton.height = "110px";
-        rotateButton.color = "black";
-        rotateButton.cornerRadius = 20;
-        rotateButton.background = "gray";
-        rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM; // Alinhamento vertical no fundo
-        rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER; // Alinhamento horizontal no centro
-        rotateButton.left = "120px"; // Distância do botão "Scale"
-        rotateButton.isVisible = false;
-        rotateButton.onPointerUpObservable.add(function() {
-            rotation = !rotation;
-            position = false;
-            scaling = false;
-            console.log("Position :",rotation);
-            if(rotation) {
-                rotateButton.background = "green";
-                moveButton.background = "gray";
-                position = false;
-                scaleButton.background = "gray";
-                scaling = false;
-            } else {
-                rotateButton.background = "gray";
-            }
-        });
-        advancedTexture.addControl(rotateButton);  
+        
     });
     </script>
 </body>
