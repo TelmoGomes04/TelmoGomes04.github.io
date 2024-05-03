@@ -160,8 +160,8 @@
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
         var image = new BABYLON.GUI.Image("image", "media/Logos/move.png");
-        moveButton.addControl(image);
         var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
+        moveButton.addControl(image);
         moveButton.width = "300px";
         moveButton.height = "80px";
         moveButton.color = "white";
