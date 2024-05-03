@@ -24,7 +24,7 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <script>
-
+    document.addEventListener("DOMContentLoaded", function () {
         var carMesh = null;
         var touchStart = null;
         var initialY = null;
@@ -262,7 +262,7 @@
             }
         });
         advancedTexture.addControl(rotateButton);  
-
+    });
     </script>
 </body>
 </html>
