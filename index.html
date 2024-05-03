@@ -162,7 +162,7 @@
 
         // Criar um botão com uma imagem
         var moveButton = BABYLON.GUI.Button.CreateImageOnlyButton("moveButton", "media/Logos/move.png");
-        moveButton.width = "300px";
+        moveButton.width = "80px";
         moveButton.height = "80px";
         moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
@@ -185,13 +185,11 @@
         });
 
         // Adicionar o botão à tela
-        advancedTexture.addControl(moveButton);
-
         advancedTexture.addControl(moveButton); 
 
         var imageScale = "media/Logos/scale.png";
         var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale" ,imageScale);
-        scaleButton.width = "300px";
+        scaleButton.width = "80px";
         scaleButton.height = "80px";
         scaleButton.color = "white";
         scaleButton.cornerRadius = 20;
@@ -221,7 +219,7 @@
 
         var imageRotation = "media/Logos/rotation.png";
         var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate" ,imageRotation);
-        rotateButton.width = "300px";
+        rotateButton.width = "80px";
         rotateButton.height = "80px";
         rotateButton.color = "white";
         rotateButton.cornerRadius = 20;
