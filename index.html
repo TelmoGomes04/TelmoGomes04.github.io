@@ -121,8 +121,12 @@
                             //carMesh.scaling = new BABYLON.Vector3(1, 1, 1);
                             var scaleIncrement = 0.005; // Valor de ajuste da escala
                             try {
-                                if(0.2 < carMesh.scaling.y && carMesh.scaling.y < 0.8){
-                                    carMesh.scaling += direction * scaleIncrement;
+                                var newScale = carMesh.scaling.y + (direction * scaleIncrement);
+
+                                // Aplica limites mínimo e máximo à escala
+                                if (newScale >= 0.2 && newScale <= 0.8) {
+                                    // Atualiza a escala apenas se estiver dentro dos limites
+                                    carMesh.scaling = new BABYLON.Vector3(newScale, newScale, newScale);
                                 }
                                 //carMesh.scaling.x = carMesh.scaling.x;
                                 //carMesh.scaling.z = carMesh.scaling.y;
@@ -156,13 +160,10 @@
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-        var imageMove = "media/Logos/move.png";
-        var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move", imageMove);
+        // Criar um botão com uma imagem
+        var moveButton = BABYLON.GUI.Button.CreateImageOnlyButton("moveButton", "media/Logos/move.png");
         moveButton.width = "300px";
         moveButton.height = "80px";
-        moveButton.color = "white";
-        moveButton.cornerRadius = 20;
-        moveButton.background = "gray";
         moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         moveButton.top = "-40px";
@@ -173,17 +174,19 @@
             rotation = false;
             console.log("Position :",position);
             if(position) {
-                moveButton.background = "green";
-
-                scaleButton.background = "gray";
+                moveButton.color = "green"; // Alterar a cor do botão quando ativado
+                scaleButton.color = "white";
                 scaling = false;
-                rotateButton.background = "gray";
+                rotateButton.color = "white";
                 rotation = false;
-            } else{
-                moveButton.background = "gray";
+            } else {
+                moveButton.color = "white"; // Reverter para a cor padrão
             }
-
         });
+
+        // Adicionar o botão à tela
+        advancedTexture.addControl(moveButton);
+
         advancedTexture.addControl(moveButton); 
 
         var imageScale = "media/Logos/scale.png";
