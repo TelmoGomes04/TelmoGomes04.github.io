@@ -48,6 +48,18 @@
             var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
             light.intensity = 0.7;
 
+            var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+            var loadingText = new BABYLON.GUI.TextBlock();
+            loadingText.text = "Loading...";
+            loadingText.color = "white";
+            loadingText.fontSize = 24;
+            loadingText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+            loadingText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+            loadingText.isVisible = false;
+
+            advancedTexture.addControl(loadingText);
+
             function loadCarMesh(scene) {
                 BABYLON.SceneLoader.ImportMesh("", "media/gltf/F3_Car/", "scene.gltf", scene, function (loadedMeshes) {
                     carMesh = loadedMeshes[0]; // Assumindo que a mesh do carro está no índice 0
@@ -161,17 +173,7 @@
         });
         
 
-        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-        var loadingText = new BABYLON.GUI.TextBlock();
-        loadingText.text = "Loading...";
-        loadingText.color = "white";
-        loadingText.fontSize = 24;
-        loadingText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        loadingText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-        loadingText.isVisible = false;
-
-        advancedTexture.addControl(loadingText); 
+         
 
 
         // Criar botão "Move"
