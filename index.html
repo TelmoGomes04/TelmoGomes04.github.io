@@ -139,7 +139,7 @@
                             var directionx = Math.tanh(delta.x);
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                if (delta.x != delta.x) {
+                                if (delta.x == delta.x) {
                                     carMesh.rotate(BABYLON.Axis.Y, directionx * rotationIncrement);
                                 }
                             } catch (error) {
