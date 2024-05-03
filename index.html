@@ -66,8 +66,11 @@
                     carMesh.isVisible = false; // Inicialmente ocultar a mesh
                     carMesh.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3); // Definir escala desejada
                     loadingText.isVisible = false;
+                },
+                // Função de progresso
+                function (event) {
+                    loadingText.text = "Loading: " + (event.loaded * 100 / event.total).toFixed() + "%";
                 });
-                
             }
 
             loadCarMesh(scene);
@@ -255,12 +258,6 @@
                     break;
             }
         });
-        
-
-         
-
-
-        
     });
     </script>
 </body>
