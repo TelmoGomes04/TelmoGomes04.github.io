@@ -160,6 +160,9 @@
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
+        // Adicionar o botão à tela
+        advancedTexture.addControl(moveButton); 
+        
         // Criar um contêiner para o botão
         var buttonContainer = new BABYLON.GUI.Rectangle();
         buttonContainer.width = "100px";
