@@ -136,23 +136,11 @@
                             }
                         } else if (rotation) {
                             var rotationIncrement = 0.1;  // Valor de ajuste da rotação
-                            var directionx = Math.sign(delta.x);
-                            var previousDeltaX = delta.x;  // Armazena o valor anterior de delta.x
-                            var unchangedDeltaXCount = 0;  // Conta quantas vezes delta.x não mudou
-
+                            var directionx = Math.tanh(delta.x);
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                if (delta.x != 0) {
+                                if (delta.x != delta.x) {
                                     carMesh.rotate(BABYLON.Axis.Y, directionx * rotationIncrement);
-                                    if (delta.x == previousDeltaX) {
-                                        unchangedDeltaXCount++;
-                                    } else {
-                                        unchangedDeltaXCount = 0;
-                                    }
-                                    previousDeltaX = delta.x;
-                                }
-                                if (unchangedDeltaXCount > 10) {  // Se delta.x não mudou durante 10 atualizações, pare a rotação
-                                    carMesh.rotation.y = carMesh.rotation.y;  // Pare a rotação
                                 }
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
