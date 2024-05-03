@@ -57,6 +57,7 @@
             }
 
             loadCarMesh(scene);
+            loadingText.isVisible = false;
             
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 const fm = xrHelper.baseExperience.featuresManager;
@@ -103,7 +104,7 @@
                     // Captura o ponto onde o ponteiro foi pressionado
                     touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     break;
-        
+
                 case BABYLON.PointerEventTypes.POINTERMOVE:
                     if (!pointerInfo.pickInfo || !pointerInfo.pickInfo.pickedPoint) {
                         return;
@@ -112,8 +113,7 @@
                     if (carMesh.isVisible && touchStart) {
                         // Calcula a diferença entre a posição atual do ponteiro e a posição inicial do toque
                         var delta = pointerInfo.pickInfo.pickedPoint.subtract(touchStart);
-                        
-        
+
                         if (position) {
                             // Move o carro na direção do movimento do ponteiro, mantendo a altura inicial
                             carMesh.position.x += delta.x;
@@ -152,7 +152,7 @@
                         touchStart = pointerInfo.pickInfo.pickedPoint.clone();
                     }
                     break;
-        
+
                 case BABYLON.PointerEventTypes.POINTERUP:
                     // Lidar com ação quando o botão do ponteiro é solto
                     break;
@@ -168,6 +168,7 @@
         loadingText.fontSize = 24;
         loadingText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
         loadingText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        loadingText.isVisible = false;
 
         advancedTexture.addControl(loadingText); 
 
