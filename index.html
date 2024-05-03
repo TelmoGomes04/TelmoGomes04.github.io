@@ -70,10 +70,12 @@
                         carMesh.position = hitResult.transformationMatrix.getTranslation();
                         // Outras configurações necessárias após o plane detection
                         planeDetected = true; // Marque o plane detection como concluído
+                        carMesh.position.y = initialY;
                         moveButton.isVisible = true;
                         scaleButton.isVisible = true;
                         rotateButton.isVisible = true;
                     }
+                    
                 });
             });
 
@@ -135,7 +137,7 @@
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
-                            var rotationIncrement = 0.01;  // Valor de ajuste da rotação
+                            var rotationIncrement = 0.1;  // Valor de ajuste da rotação
                             var directionx = Math.sign(delta.x);
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
