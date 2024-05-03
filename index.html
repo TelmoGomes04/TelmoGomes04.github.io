@@ -160,20 +160,30 @@
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-        // Criar um botão com uma imagem
-        var moveButton = BABYLON.GUI.Button.CreateImageOnlyButton("moveButton", "media/Logos/move.png");
-        moveButton.width = "100px";
-        moveButton.height = "100px";
-        scaleButton.background = "gray";
-        moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-        moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        moveButton.top = "-50px";
-        moveButton.isVisible = false;
-        moveButton.onPointerUpObservable.add(function() {
+        // Criar um contêiner para o botão
+        var buttonContainer = new BABYLON.GUI.Rectangle();
+        buttonContainer.width = "100px";
+        buttonContainer.height = "100px";
+        buttonContainer.background = "gray";
+        buttonContainer.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        buttonContainer.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        buttonContainer.top = "-50px";
+        buttonContainer.isVisible = false;
+        advancedTexture.addControl(buttonContainer);
+
+        // Criar uma imagem
+        var buttonImage = new BABYLON.GUI.Image("moveButton", "media/Logos/move.png");
+        buttonImage.width = "80px";
+        buttonImage.height = "80px";
+        buttonImage.stretch = BABYLON.GUI.Image.STRETCH_UNIFORM;
+        buttonContainer.addControl(buttonImage);
+
+        // Manipular eventos do botão
+        buttonContainer.onPointerUpObservable.add(function() {
             position = !position;
             scaling = false;
             rotation = false;
-            console.log("Position :",position);
+            console.log("Position:", position);
             if(position) {
                 moveButton.color = "green"; // Alterar a cor do botão quando ativado
                 scaleButton.color = "white";
