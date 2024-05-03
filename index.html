@@ -54,10 +54,11 @@
                     carMesh.isVisible = false; // Inicialmente ocultar a mesh
                     carMesh.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3); // Definir escala desejada
                 });
+                loadingText.isVisible = false;
             }
 
             loadCarMesh(scene);
-            loadingText.isVisible = false;
+            
             
             scene.createDefaultXRExperienceAsync({ floorMeshes: [], uiOptions: { sessionMode: "immersive-ar" } }).then((xrHelper) => {
                 const fm = xrHelper.baseExperience.featuresManager;
