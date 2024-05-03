@@ -162,6 +162,16 @@
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
+        var loadingText = new BABYLON.GUI.TextBlock();
+        loadingText.text = "Loading...";
+        loadingText.color = "white";
+        loadingText.fontSize = 24;
+        loadingText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+        loadingText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+
+        advancedTexture.addControl(loadingText); 
+
+
         // Criar botão "Move"
         var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
         moveButton.width = "110px";
