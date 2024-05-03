@@ -131,25 +131,33 @@
                                     // Atualiza a escala apenas se estiver dentro dos limites
                                     carMesh.scaling = new BABYLON.Vector3(newScale, newScale, newScale);
                                 }
-                                //carMesh.scaling.x = carMesh.scaling.x;
-                                //carMesh.scaling.z = carMesh.scaling.y;
                             } catch (error) {
                                 console.error("Erro na aplicação da escala:", error);
                             }
                         } else if (rotation) {
                             var rotationIncrement = 0.1;  // Valor de ajuste da rotação
                             var directionx = Math.sign(delta.x);
+                            var previousDeltaX = delta.x;  // Armazena o valor anterior de delta.x
+                            var unchangedDeltaXCount = 0;  // Conta quantas vezes delta.x não mudou
+
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                //carMesh.rotation.y += direction * rotationIncrement;
-                                if (delta.x != 0){
+                                if (delta.x != 0) {
                                     carMesh.rotate(BABYLON.Axis.Y, directionx * rotationIncrement);
+                                    if (delta.x == previousDeltaX) {
+                                        unchangedDeltaXCount++;
+                                    } else {
+                                        unchangedDeltaXCount = 0;
+                                    }
+                                    previousDeltaX = delta.x;
                                 }
-                                
-
+                                if (unchangedDeltaXCount > 10) {  // Se delta.x não mudou durante 10 atualizações, pare a rotação
+                                    carMesh.rotation.y = carMesh.rotation.y;  // Pare a rotação
+                                }
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
                             }
+
                         } else {
                             console.log("Default");
                         }
