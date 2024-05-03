@@ -137,7 +137,8 @@
                             var rotationIncrement = 0.01;  // Valor de ajuste da rotação
                             try {
                                 // Ajustar a rotação ao redor do eixo Y com base no movimento horizontal 
-                                carMesh.rotation.y += direction * rotationIncrement;
+                                //carMesh.rotation.y += direction * rotationIncrement;
+                                carMesh.rotate(BABYLON.Axis.Y, direction * rotationIncrement);
 
                             } catch (error) {
                                 console.error("Erro na aplicação da rotação:", error);
