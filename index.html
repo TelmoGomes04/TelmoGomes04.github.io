@@ -56,7 +56,7 @@
             loadingText.fontSize = 24;
             loadingText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
             loadingText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-            loadingText.isVisible = false;
+            loadingText.isVisible = true;
 
             advancedTexture.addControl(loadingText);
 
@@ -65,8 +65,9 @@
                     carMesh = loadedMeshes[0]; // Assumindo que a mesh do carro está no índice 0
                     carMesh.isVisible = false; // Inicialmente ocultar a mesh
                     carMesh.scaling = new BABYLON.Vector3(0.3, 0.3, 0.3); // Definir escala desejada
+                    loadingText.isVisible = false;
                 });
-                loadingText.isVisible = false;
+                
             }
 
             loadCarMesh(scene);
