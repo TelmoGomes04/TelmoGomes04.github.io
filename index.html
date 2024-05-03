@@ -162,11 +162,14 @@
 
         // Criar um botão com uma imagem
         var moveButton = BABYLON.GUI.Button.CreateImageOnlyButton("moveButton", "media/Logos/move.png");
-        moveButton.width = "80px";
-        moveButton.height = "80px";
+        moveButton.width = "100px";
+        moveButton.height = "100px";
+        scaleButton.color = "white";
+        scaleButton.cornerRadius = 20;
+        scaleButton.background = "gray";
         moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        moveButton.top = "-40px";
+        moveButton.top = "-50px";
         moveButton.isVisible = false;
         moveButton.onPointerUpObservable.add(function() {
             position = !position;
@@ -187,10 +190,9 @@
         // Adicionar o botão à tela
         advancedTexture.addControl(moveButton); 
 
-        var imageScale = "media/Logos/scale.png";
-        var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale" ,imageScale);
-        scaleButton.width = "80px";
-        scaleButton.height = "80px";
+        var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "media/Logos/scale.png");
+        scaleButton.width = "100px";
+        scaleButton.height = "100px";
         scaleButton.color = "white";
         scaleButton.cornerRadius = 20;
         scaleButton.background = "gray";
@@ -217,16 +219,15 @@
         });
         advancedTexture.addControl(scaleButton); 
 
-        var imageRotation = "media/Logos/rotation.png";
-        var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate" ,imageRotation);
-        rotateButton.width = "80px";
-        rotateButton.height = "80px";
+        var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "media/Logos/rotation.png");
+        rotateButton.width = "100px";
+        rotateButton.height = "100px";
         rotateButton.color = "white";
         rotateButton.cornerRadius = 20;
         rotateButton.background = "gray";
         rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        rotateButton.top = "160px";
+        rotateButton.top = "170px";
         rotateButton.isVisible = false;
         rotateButton.onPointerUpObservable.add(function() {
             rotation = !rotation;
