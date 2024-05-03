@@ -159,17 +159,17 @@
         
 
         var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        var image = new BABYLON.GUI.Image("image", "media/Logos/move.png");
+        var imagemove = new BABYLON.GUI.Image("imagemove", "media/Logos/move.png");
         var moveButton = BABYLON.GUI.Button.CreateSimpleButton("moveButton", "Move");
-        moveButton.addControl(image);
-        moveButton.width = "300px";
-        moveButton.height = "80px";
-        moveButton.color = "white";
+        moveButton.addControl(imagemove);
+        moveButton.width = "100px";
+        moveButton.height = "100px";
+        moveButton.color = "black";
         moveButton.cornerRadius = 20;
         moveButton.background = "gray";
         moveButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         moveButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        moveButton.top = "-40px";
+        moveButton.top = "-50px";
         moveButton.isVisible = false;
         moveButton.onPointerUpObservable.add(function() {
             position = !position;
@@ -190,10 +190,12 @@
         });
         advancedTexture.addControl(moveButton); 
 
+        var imagescale = new BABYLON.GUI.Image("imagescale", "media/Logos/scale.png");
         var scaleButton = BABYLON.GUI.Button.CreateSimpleButton("scaleButton", "Scale");
-        scaleButton.width = "300px";
-        scaleButton.height = "80px";
-        scaleButton.color = "white";
+        moveButton.addControl(imagescale);
+        scaleButton.width = "100px";
+        scaleButton.height = "100px";
+        scaleButton.color = "black";
         scaleButton.cornerRadius = 20;
         scaleButton.background = "gray";
         scaleButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -219,15 +221,17 @@
         });
         advancedTexture.addControl(scaleButton); 
 
+        var imagerotation = new BABYLON.GUI.Image("imagerotation", "media/Logos/rotation.png");
         var rotateButton = BABYLON.GUI.Button.CreateSimpleButton("rotateButton", "Rotate");
-        rotateButton.width = "300px";
-        rotateButton.height = "80px";
-        rotateButton.color = "white";
+        moveButton.addControl(imagerotation);
+        rotateButton.width = "100px";
+        rotateButton.height = "100px";
+        rotateButton.color = "black";
         rotateButton.cornerRadius = 20;
         rotateButton.background = "gray";
         rotateButton.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         rotateButton.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        rotateButton.top = "160px";
+        rotateButton.top = "170px";
         rotateButton.isVisible = false;
         rotateButton.onPointerUpObservable.add(function() {
             rotation = !rotation;
